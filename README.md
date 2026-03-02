@@ -1,4 +1,4 @@
-# 🌟 ServiçosComunidade - Plataforma de Voluntariado
+# 🌟 Impact - Plataforma de Voluntariado
 
 Uma plataforma web moderna desenvolvida em React para conectar pessoas interessadas em trabalho voluntário e serviços comunitários.
 

@@ -11,7 +11,7 @@ const Header = () => {
         <nav className="navbar">
           <div className="logo">
             <Link to="/">
-              <h2>ServiçosComunidade</h2>
+              <h2>Impact</h2>
             </Link>
           </div>
           
