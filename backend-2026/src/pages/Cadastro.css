@@ -1,0 +1,330 @@
+/* Cadastro Page Styles */
+.cadastro-page {
+  min-height: 100vh;
+  padding: 40px 0;
+  background: linear-gradient(135deg, var(--cinza-claro), var(--branco));
+}
+
+.cadastro-container {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.cadastro-card {
+  padding: 48px;
+  margin: 0;
+  border-radius: 0;
+  min-height: 800px;
+  overflow-y: auto;
+}
+
+.cadastro-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.cadastro-header h1 {
+  font-size: 2rem;
+  color: var(--preto);
+  margin-bottom: 8px;
+}
+
+.cadastro-header p {
+  color: var(--cinza-escuro);
+  font-size: 1rem;
+}
+
+.cadastro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--preto);
+  font-size: 14px;
+}
+
+.form-group input {
+  padding: 14px 16px;
+  border: 2px solid var(--cinza-medio);
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background-color: var(--branco);
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--amarelo-solar);
+  box-shadow: 0 0 0 3px rgba(255, 195, 0, 0.1);
+}
+
+.form-group input.error {
+  border-color: #e74c3c;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.submit-error {
+  text-align: center;
+  padding: 12px;
+  background-color: rgba(231, 76, 60, 0.1);
+  border-radius: 6px;
+  margin-top: 0;
+}
+
+/* Checkbox Styles */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--preto);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.checkbox-item:hover {
+  background-color: var(--cinza-claro);
+}
+
+.checkbox-item input[type="checkbox"] {
+  margin: 0;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.checkbox-item.termos {
+  margin-top: 8px;
+  padding: 12px;
+  border: 1px solid var(--cinza-medio);
+  border-radius: 8px;
+}
+
+.checkbox-item.termos a {
+  color: var(--laranja-vibrante);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.checkbox-item.termos a:hover {
+  text-decoration: underline;
+}
+
+.cadastro-btn {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+.cadastro-btn.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--branco);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.cadastro-footer {
+  text-align: center;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--cinza-medio);
+}
+
+.cadastro-footer p {
+  color: var(--cinza-escuro);
+  font-size: 14px;
+}
+
+.login-link {
+  color: var(--laranja-vibrante);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+/* Cadastro Side */
+.cadastro-side {
+  background: linear-gradient(135deg, var(--amarelo-solar), var(--laranja-vibrante));
+  padding: 48px;
+  display: flex;
+  align-items: center;
+  color: var(--branco);
+}
+
+.side-content h2 {
+  font-size: 2.25rem;
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.side-content p {
+  font-size: 1.125rem;
+  margin-bottom: 40px;
+  opacity: 0.9;
+  line-height: 1.6;
+}
+
+.join-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .cadastro-container {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+  }
+  
+  .cadastro-side {
+    order: -1;
+    padding: 32px;
+    text-align: center;
+  }
+  
+  .side-content h2 {
+    font-size: 1.75rem;
+  }
+  
+  .side-content p {
+    font-size: 1rem;
+  }
+  
+  .join-stats {
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 16px;
+  }
+  
+  .stat {
+    padding: 16px;
+    flex: 1;
+  }
+  
+  .stat-number {
+    font-size: 1.5rem;
+  }
+  
+  .stat-label {
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .cadastro-page {
+    padding: 20px;
+  }
+  
+  .cadastro-card {
+    padding: 32px;
+    min-height: auto;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .join-stats {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cadastro-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .cadastro-card {
+    padding: 24px;
+  }
+  
+  .side-content {
+    padding: 20px 0;
+  }
+}

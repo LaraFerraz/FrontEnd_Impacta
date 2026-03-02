@@ -1,0 +1,103 @@
+.header {
+  background: linear-gradient(135deg, var(--amarelo-solar), var(--laranja-vibrante));
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(255, 195, 0, 0.3);
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+}
+
+.logo h2 {
+  color: var(--branco);
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.logo a {
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 32px;
+}
+
+.nav-links a {
+  color: var(--branco);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--branco);
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-login {
+  color: var(--branco);
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-login:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-cadastro {
+  background-color: var(--branco);
+  color: var(--laranja-vibrante);
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-cadastro:hover {
+  background-color: var(--cinza-claro);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .nav-links {
+    gap: 16px;
+  }
+  
+  .auth-buttons {
+    gap: 8px;
+  }
+  
+  .logo h2 {
+    font-size: 20px;
+  }
+}
