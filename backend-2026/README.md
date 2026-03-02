@@ -1,49 +1,132 @@
-# Getting Started with Create React App
+# 🌟 ServiçosComunidade - Plataforma de Voluntariado
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Uma plataforma web moderna desenvolvida em React para conectar pessoas interessadas em trabalho voluntário e serviços comunitários.
 
-## Available Scripts
+## 🎨 Paleta de Cores
 
-In the project directory, you can run:
+- **Amarelo Solar**: `#FFC300`
+- **Laranja Vibrante**: `#FF7A00`  
+- **Branco**: `#FFFFFF`
+- **Cinza Claro**: `#F7F7F7`
 
-### `npm start`
+## 🚀 Funcionalidades
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### ✅ Implementadas
+- ✅ Página inicial com apresentação dos serviços
+- ✅ Sistema de cadastro de usuários
+- ✅ Sistema de login
+- ✅ Navegação responsiva
+- ✅ Design moderno e acessível
+- ✅ Validação de formulários
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### 🔄 Em Desenvolvimento
+- 🔄 Página de serviços detalhada
+- 🔄 Página sobre
+- 🔄 Dashboard do usuário
+- 🔄 Sistema de projetos
+- 🔄 Integração com backend
 
-### `npm test`
+## 🛠️ Tecnologias Utilizadas
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **React 19.2.4**
+- **React Router DOM** - Navegação entre páginas
+- **CSS3** - Estilização com variáveis CSS customizadas
+- **JavaScript ES6+**
 
-### `npm run build`
+## 📦 Instalação e Execução
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Pré-requisitos
+- Node.js (versão 14 ou superior)
+- npm ou yarn
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Passos para execução
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. **Clone o repositório**
+   ```bash
+   git clone [url-do-repositorio]
+   cd backend-2026
+   ```
 
-### `npm run eject`
+2. **Instale as dependências**
+   ```bash
+   npm install
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. **Execute o projeto**
+   ```bash
+   npm start
+   ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. **Acesse o aplicativo**
+   - Abra [http://localhost:3000](http://localhost:3000) no seu navegador
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📋 Scripts Disponíveis
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- `npm start` - Executa o app em modo de desenvolvimento
+- `npm test` - Executa os testes
+- `npm run build` - Cria a build de produção
+- `npm run eject` - Remove as abstrações do Create React App (irreversível)
 
-## Learn More
+## 🗂️ Estrutura do Projeto
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```
+src/
+├── components/          # Componentes reutilizáveis
+│   ├── Header.js       # Cabeçalho/Navegação
+│   ├── Header.css
+│   ├── Footer.js       # Rodapé
+│   └── Footer.css
+├── pages/              # Páginas principais
+│   ├── Home.js         # Página inicial
+│   ├── Home.css
+│   ├── Login.js        # Página de login
+│   ├── Login.css
+│   ├── Cadastro.js     # Página de cadastro
+│   └── Cadastro.css
+├── styles/             # Estilos globais
+│   └── colors.css      # Variáveis de cores
+├── App.js              # Componente principal
+├── App.css             # Estilos gerais
+└── index.js            # Ponto de entrada
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## 🎯 Próximos Passos
+
+1. **Integração Backend**
+   - Configurar APIs para autenticação
+   - Sistema de gerenciamento de usuários
+   - Base de dados para projetos
+
+2. **Funcionalidades Avançadas**
+   - Sistema de notificações
+   - Chat entre voluntários
+   - Sistema de avaliações
+   - Geolocalização de projetos
+
+3. **Otimizações**
+   - PWA (Progressive Web App)
+   - Lazy loading de componentes
+   - Otimização de performance
+
+## 🤝 Como Contribuir
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+## 📞 Contato
+
+Projeto desenvolvido para conectar e fortalecer comunidades através do voluntariado.
+
+---
+
+**Desenvolvido com ❤️ para transformar comunidades**
 
 ### Code Splitting
 
