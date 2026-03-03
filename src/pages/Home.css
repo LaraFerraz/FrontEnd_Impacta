@@ -173,7 +173,14 @@
 /* Stats Section */
 .stats {
   padding: 60px 0;
-  background: linear-gradient(135deg, var(--amarelo-solar), var(--laranja-vibrante));
+  background:
+    linear-gradient(
+      135deg,
+      var(--amarelo-solar) 0%,
+      var(--laranja-vibrante) 40%,
+      #ff7a1a 60%,
+      #243b55 100%
+    );
 }
 
 .stats-grid {

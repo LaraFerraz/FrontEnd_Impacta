@@ -1,10 +1,16 @@
 .header {
-  background: linear-gradient(135deg, var(--amarelo-solar), var(--laranja-vibrante));
+  background: linear-gradient(
+    135deg,
+    var(--amarelo-solar) 10%,
+    var(--laranja-vibrante) 35%,
+    #ff7a1a 65%,
+    #243b55 100%
+  );
   padding: 0;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 20px rgba(255, 195, 0, 0.3);
+  box-shadow: 0 4px 25px rgba(36, 59, 85, 0.25);
 }
 
 .navbar {
@@ -14,15 +20,21 @@
   padding: 16px 0;
 }
 
-.logo h2 {
-  color: var(--branco);
-  font-size: 24px;
-  font-weight: bold;
+.logo a {
+  display: flex;
+  align-items: center;
+  gap: 10px; 
   text-decoration: none;
 }
 
-.logo a {
-  text-decoration: none;
+.logo-img {
+  height: 55px;
+}
+
+.logo h2 {
+  margin: 0;
+  font-size: 1.6rem;
+  color: #1e2a38; 
 }
 
 .nav-links {
