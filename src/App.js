@@ -1,26 +1,17 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Cadastro from './pages/Cadastro';
-import './styles/colors.css';
-import './App.css';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Header from './views/layouts/Header';
+import Footer from './views/layouts/Footer';
+import AppRoutes from './routes/AppRoutes';
+import './assets/styles/colors.css';
+import './assets/styles/App.css';
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Header />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/cadastro" element={<Cadastro />} />
-          {/* Rotas futuras */}
-          <Route path="/servicos" element={<div style={{padding: '80px 20px', textAlign: 'center'}}><h2>Página de Serviços em desenvolvimento</h2></div>} />
-          <Route path="/sobre" element={<div style={{padding: '80px 20px', textAlign: 'center'}}><h2>Página Sobre em desenvolvimento</h2></div>} />
-        </Routes>
+        <AppRoutes />
         <Footer />
       </div>
     </Router>
