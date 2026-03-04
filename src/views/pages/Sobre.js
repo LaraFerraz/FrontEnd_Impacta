@@ -37,61 +37,56 @@ function Sobre() {
             </div>
 
             <div className="como-funciona">
+                <h2>Como Funciona</h2>
 
-                <div className="como-funciona">
-                    <h2>Como Funciona</h2>
+                <div className="passos">
+                    <div className="card-passo">
+                        <div className="numero">1</div>
+                        <h3>Crie sua conta</h3>
+                        <p>Cadastre-se gratuitamente e faça parte da nossa comunidade.</p>
+                    </div>
 
-                    <div className="passos">
+                    <div className="card-passo">
+                        <div className="numero">2</div>
+                        <h3>Encontre projetos</h3>
+                        <p>Descubra campanhas e iniciativas sociais que combinam com você.</p>
+                    </div>
 
-                        <div className="card-passo">
-                            <div className="numero">1</div>
-                            <h3>Crie sua conta</h3>
-                            <p>Cadastre-se gratuitamente e faça parte da nossa comunidade.</p>
-                        </div>
-
-                        <div className="card-passo">
-                            <div className="numero">2</div>
-                            <h3>Encontre projetos</h3>
-                            <p>Descubra campanhas e iniciativas sociais que combinam com você.</p>
-                        </div>
-
-                        <div className="card-passo">
-                            <div className="numero">3</div>
-                            <h3>Gere impacto</h3>
-                            <p>Participe das ações e acompanhe a diferença que você está fazendo.</p>
-                        </div>
-
+                    <div className="card-passo">
+                        <div className="numero">3</div>
+                        <h3>Gere impacto</h3>
+                        <p>Participe das ações e acompanhe a diferença que você está fazendo.</p>
                     </div>
                 </div>
+            </div>
 
-                <div className="impacto">
-                    <h2>Nosso Impacto</h2>
+            <div className="impacto">
+                <h2>Nosso Impacto</h2>
 
-                    <div className="impacto-grid">
-                        <div className="impacto-card">
-                            <h3>+120</h3>
-                            <p>Campanhas Criadas</p>
-                        </div>
+                <div className="impacto-grid">
+                    <div className="impacto-card">
+                        <h3>+120</h3>
+                        <p>Campanhas Criadas</p>
+                    </div>
 
-                        <div className="impacto-card">
-                            <h3>+3.500</h3>
-                            <p>Pessoas Engajadas</p>
-                        </div>
+                    <div className="impacto-card">
+                        <h3>+3.500</h3>
+                        <p>Pessoas Engajadas</p>
+                    </div>
 
-                        <div className="impacto-card">
-                            <h3>+15.000</h3>
-                            <p>Impactos Gerados</p>
-                        </div>
+                    <div className="impacto-card">
+                        <h3>+15.000</h3>
+                        <p>Impactos Gerados</p>
                     </div>
                 </div>
+            </div>
 
-                <div className="cta-sobre">
-                    <h3>Pronto para fazer parte da mudança?</h3>
-                    <p>Junte-se à Impacta e transforme pequenas ações em grandes resultados.</p>
-                    <button className="btn-secondary">
-                        Explorar Campanhas
-                    </button>
-                </div>
+            <div className="cta-sobre">
+                <h3>Pronto para fazer parte da mudança?</h3>
+                <p>Junte-se à Impacta e transforme pequenas ações em grandes resultados.</p>
+                <button className="btn-secondary">
+                    Explorar Campanhas
+                </button>
             </div>
         </section >
     );

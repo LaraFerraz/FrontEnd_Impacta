@@ -104,17 +104,20 @@
   padding: 24px;
   border-radius: 14px;
   box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-  transition: 0.3s ease;
+
 }
 
-.mvv-card:hover {
-  transform: translateY(-5px);
-}
 
 .mvv-card h3 {
   color: var(--laranja-vibrante);
   margin-bottom: 12px;
 }
+
+
+.mvv-card p {
+  text-align:left
+}
+
 
 .impacto {
   margin-top: 80px;

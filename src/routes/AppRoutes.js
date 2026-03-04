@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from '../views/pages/Home';
 import Login from '../views/pages/Login';
 import Cadastro from '../views/pages/Cadastro';
+import Sobre from '../views/pages/Sobre';
 
 /**
  * Configuração de rotas da aplicação
@@ -22,14 +23,7 @@ const AppRoutes = () => {
           </div>
         } 
       />
-      <Route 
-        path="/sobre" 
-        element={
-          <div style={{padding: '80px 20px', textAlign: 'center'}}>
-            <h2>Página Sobre em desenvolvimento</h2>
-          </div>
-        } 
-      />
+      <Route path="/sobre" element={<Sobre />} />
     </Routes>
   );
 };
