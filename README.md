@@ -9,6 +9,55 @@ Uma plataforma web moderna desenvolvida em React para conectar pessoas interessa
 - **Branco**: `#FFFFFF`
 - **Cinza Claro**: `#F7F7F7`
 
+## 📁 Estrutura de Pastas (MVC)
+
+```
+src/
+├── models/                  # Modelos de dados (Model)
+│   └── (modelos futuros)
+├── views/                   # Interface do usuário (View)
+│   ├── components/          # Componentes reutilizáveis
+│   ├── layouts/             # Layouts (Header, Footer)
+│   │   ├── Header.js
+│   │   ├── Header.css
+│   │   ├── Footer.js
+│   │   └── Footer.css
+│   └── pages/               # Páginas da aplicação
+│       ├── Home.js
+│       ├── Home.css
+│       ├── Login.js
+│       ├── Login.css
+│       ├── Cadastro.js
+│       └── Cadastro.css
+├── controllers/             # Lógica de controle (Controller)
+│   ├── contexts/            # Contextos React (Estado Global)
+│   │   ├── AuthContext.js
+│   │   └── index.js
+│   ├── hooks/               # Custom hooks (Lógica Reutilizável)
+│   │   ├── useFetch.js
+│   │   ├── useForm.js
+│   │   └── index.js
+│   ├── services/            # Serviços de API
+│   │   ├── api.js
+│   │   ├── authService.js
+│   │   ├── userService.js
+│   │   └── index.js
+│   └── utils/               # Funções utilitárias
+│       ├── validation.js
+│       └── formatters.js
+├── routes/                  # Configuração de rotas
+│   └── AppRoutes.js
+├── config/                  # Configurações da aplicação
+│   └── api.config.js
+├── assets/                  # Recursos estáticos
+│   └── styles/              # Estilos globais
+│       ├── colors.css
+│       ├── App.css
+│       └── index.css
+├── App.js                   # Componente principal
+└── index.js                 # Ponto de entrada
+```
+
 ## 🚀 Funcionalidades
 
 ### ✅ Implementadas
