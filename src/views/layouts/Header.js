@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import logo from "../assets/logo.png";
 import './Header.css';
 
 const Header = () => {
@@ -11,7 +12,8 @@ const Header = () => {
         <nav className="navbar">
           <div className="logo">
             <Link to="/">
-              <h2>Impact</h2>
+               <img src={logo} alt="Impacta Logo" className="logo-img" />
+               <h2>IMPACTA</h2>
             </Link>
           </div>
           
