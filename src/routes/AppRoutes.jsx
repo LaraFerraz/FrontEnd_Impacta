@@ -1,9 +1,9 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Home from '../views/pages/Home';
-import Login from '../views/pages/Login';
-import Cadastro from '../views/pages/Cadastro';
-import Sobre from '../views/pages/Sobre';
+import Home from '../views/pages/Home.jsx';
+import Login from '../views/pages/Login.jsx';
+import Cadastro from '../views/pages/Cadastro.jsx';
+import Sobre from '../views/pages/Sobre.jsx';
 
 /**
  * Configuração de rotas da aplicação

@@ -253,10 +253,10 @@ const Cadastro = () => {
               </div>
               
               <div className="form-group">
-                <label>Seus Interesses</label>
-                <div className="checkbox-grid">
+                <label>Áreas de Interesse</label>
+                <div className="interests-grid">
                   {interessesOptions.map(interesse => (
-                    <label key={interesse} className="checkbox-item">
+                    <label key={interesse} className="interest-item">
                       <input
                         type="checkbox"
                         name="interesses"
@@ -272,7 +272,7 @@ const Cadastro = () => {
               </div>
               
               <div className="form-group">
-                <label className="checkbox-item termos">
+                <label className="terms-checkbox">
                   <input
                     type="checkbox"
                     name="termos"
@@ -280,7 +280,8 @@ const Cadastro = () => {
                     onChange={handleChange}
                   />
                   <span>
-                    Eu aceito os <Link to="/termos">termos e condições</Link> e a <Link to="/privacidade">política de privacidade</Link>
+                    Concordo com os <Link to="/termos">Termos de Uso</Link> e 
+                    <Link to="/privacidade"> Política de Privacidade</Link>
                   </span>
                 </label>
                 {errors.termos && <span className="error-message">{errors.termos}</span>}
@@ -309,7 +310,7 @@ const Cadastro = () => {
             <div className="cadastro-footer">
               <p>
                 Já tem uma conta? 
-                <Link to="/login" className="login-link"> Faça login</Link>
+                <Link to="/login" className="login-link"> Entre aqui</Link>
               </p>
             </div>
           </div>
