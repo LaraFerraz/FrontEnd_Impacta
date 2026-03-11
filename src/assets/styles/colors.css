@@ -51,8 +51,8 @@ body {
 }
 
 .btn-secondary {
-  background-color: transparent;
-  color: var(--laranja-vibrante);
+  background-color: #ffdebb;
+  color: #b75800;
   padding: 12px 24px;
   border: 2px solid var(--laranja-vibrante);
   border-radius: 8px;
@@ -76,6 +76,7 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 
 .card:hover {
   transform: translateY(-5px);
