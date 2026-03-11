@@ -1,5 +1,9 @@
 import React from 'react';
 import './Home.css';
+import ServiceCard from "../components/ServiceCard";
+import CTA from "../components/CTA";
+
+
 
 const Home = () => {
   const servicos = [
@@ -29,29 +33,28 @@ const Home = () => {
     }
   ];
 
-  return (
+ return (
     <main className="home">
-      {/* Seção Hero */}
       <section className="hero">
         <div className="container">
           <div className="hero-content">
             <h1 className="hero-title">
-              Conectando comunidades através do 
+              Conectando comunidades através do
               <span className="highlight"> voluntariado</span>
             </h1>
+
             <p className="hero-description">
-              Descubra oportunidades de voluntariado, conecte-se com sua comunidade 
-              e faça a diferença. Junte-se a nós para construir um mundo melhor.
+              Descubra oportunidades de voluntariado, conecte-se com sua comunidade
+              e faça a diferença.
             </p>
+
             <div className="hero-buttons">
-              <button className="btn-primary hero-btn">
-                Começar Agora
-              </button>
-              <button className="btn-secondary hero-btn">
-                Saiba Mais
-              </button>
+              <button className="btn-primary hero-btn">Começar Agora</button>
+              <button className="btn-secondary hero-btn">Saiba Mais</button>
             </div>
           </div>
+        </div>     
+
           <div className="hero-image">
             <div className="hero-graphic">
               <div className="community-icon">👥</div>
@@ -63,7 +66,6 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </div>
       </section>
 
       {/* Seção de Serviços */}
@@ -73,20 +75,18 @@ const Home = () => {
             <h2>Nossos Serviços Comunitários</h2>
             <p>Explore as diferentes maneiras de contribuir com sua comunidade</p>
           </div>
-          
+
           <div className="services-grid">
-            {servicos.map(servico => (
-              <div key={servico.id} className="service-card card">
-                <div className="service-icon">
-                  <span>{servico.icone}</span>
-                </div>
-                <h3>{servico.titulo}</h3>
-                <p>{servico.descricao}</p>
-                <button className="btn-secondary">
-                  Ver Mais
-                </button>
-              </div>
-            ))}
+            <div className="services-grid">
+              {servicos.map(servico => (
+                <ServiceCard
+                  key={servico.id}
+                  icone={servico.icone}
+                  titulo={servico.titulo}
+                  descricao={servico.descricao}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -116,17 +116,11 @@ const Home = () => {
       </section>
 
       {/* Seção de Call to Action */}
-      <section className="cta">
-        <div className="container">
-          <div className="cta-content">
-            <h2>Pronto para fazer a diferença?</h2>
-            <p>Cadastre-se agora e comece a contribuir com sua comunidade hoje mesmo!</p>
-            <button className="btn-primary cta-btn">
-              Cadastrar-se Gratuitamente
-            </button>
-          </div>
-        </div>
-      </section>
+      <CTA
+        titulo="Pronto para fazer a diferença?"
+        descricao="Cadastre-se agora e comece a contribuir com sua comunidade hoje mesmo!"
+        botaoTexto="Cadastrar-se Gratuitamente"
+      />
     </main>
   );
 };
