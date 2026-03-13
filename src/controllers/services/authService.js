@@ -5,9 +5,9 @@ class AuthService {
     try {
       const response = await api.post('/auth/login', { email, password });
       
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
       }
 
       return response;
@@ -18,16 +18,41 @@ class AuthService {
 
   async register(userData) {
     try {
-      const response = await api.post('/auth/register', userData);
+      // Transformar dados para o formato esperado pelo backend
+      const registerData = {
+        nome: userData.nome,
+        email: userData.email,
+        password: userData.password,
+        telefone: userData.telefone,
+        cidade: userData.cidade,
+        interesses: userData.interesses || []
+      };
+
+      const response = await api.post('/auth/register', registerData);
       
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+      if (response.token) {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('user', JSON.stringify(response.user));
       }
 
       return response;
     } catch (error) {
       throw error;
+    }
+  }
+
+  async verifyToken() {
+    try {
+      const token = this.getToken();
+      if (!token) {
+        return null;
+      }
+
+      const response = await api.post('/auth/verify');
+      return response.data;
+    } catch (error) {
+      this.logout();
+      return null;
     }
   }
 

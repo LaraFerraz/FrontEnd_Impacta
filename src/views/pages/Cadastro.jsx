@@ -19,7 +19,7 @@ const Cadastro = () => {
 
   const interessesOptions = [
     'Limpeza Comunitária',
-    'Assistência Social',
+    'Assistência Social', 
     'Educação',
     'Meio Ambiente',
     'Esportes',

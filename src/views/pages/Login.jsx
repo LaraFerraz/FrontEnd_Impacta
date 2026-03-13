@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../controllers/contexts/AuthContext';
+import { useToast } from '../../controllers/hooks/useToast';
+import Toast from '../components/Toast';
 import './Login.css';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const { toasts, showSuccess, showError, removeToast } = useToast();
+  
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -57,13 +64,30 @@ const Login = () => {
     setErrors({});
     
     try {
-      // Simular chamada de API
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Login realizado:', formData);
-      // Aqui você faria a chamada para sua API de login
-      alert('Login realizado com sucesso!');
+      // Usar serviço de autenticação real
+      const response = await login(formData.email, formData.password);
+      const userName = response.data?.user?.nome?.split(' ')[0] || 'Usuário';
+      
+      // Mostrar mensagem de sucesso
+      showSuccess(`Bem-vindo de volta, ${userName}!`);
+      
+      // Redirecionar para home após login bem-sucedido
+      setTimeout(() => navigate('/'), 1500);
+      
     } catch (error) {
-      setErrors({ submit: 'Erro ao fazer login. Tente novamente.' });
+      console.error('Erro no login:', error);
+      
+      // Tratar erros específicos
+      if (error.response?.data?.field) {
+        setErrors({ 
+          [error.response.data.field]: error.response.data.message 
+        });
+        showError(error.response.data.message);
+      } else {
+        const errorMsg = error.response?.data?.message || 'Erro ao fazer login. Tente novamente.';
+        setErrors({ submit: errorMsg });
+        showError(errorMsg);
+      }
     } finally {
       setLoading(false);
     }
@@ -171,6 +195,9 @@ const Login = () => {
           </div>
         </div>
       </div>
+
+      {/* Toast notifications */}
+      <Toast toasts={toasts} onRemove={removeToast} />
     </main>
   );
 };
