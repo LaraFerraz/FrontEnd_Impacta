@@ -3,10 +3,15 @@
   min-height: 100vh;
 }
 
-/* Hero Section */
 .hero {
-  background: linear-gradient(135deg, var(--cinza-claro), var(--branco));
   padding: 80px 0;
+
+  background-image:
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url("../../assets/banner.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .hero-content {
@@ -19,7 +24,7 @@
 .hero-title {
   font-size: 3.5rem;
   font-weight: 700;
-  color: var(--preto);
+  color: white; 
   line-height: 1.2;
   margin-bottom: 24px;
 }
@@ -33,7 +38,7 @@
 
 .hero-description {
   font-size: 1.25rem;
-  color: var(--cinza-escuro);
+  color: var(--branco);
   margin-bottom: 32px;
   line-height: 1.6;
 }
@@ -107,68 +112,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* Services Section */
-.services {
-  padding: 80px 0;
-  background-color: var(--branco);
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 60px;
-}
-
-.section-header h2 {
-  font-size: 2.5rem;
-  color: var(--preto);
-  margin-bottom: 16px;
-}
-
-.section-header p {
-  font-size: 1.125rem;
-  color: var(--cinza-escuro);
-}
-
-.services-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 32px;
-}
-
-.service-card {
-  text-align: center;
-  padding: 40px 24px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.service-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 40px rgba(255, 195, 0, 0.2);
-}
-
-.service-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 24px;
-  background: linear-gradient(135deg, var(--amarelo-solar), var(--laranja-vibrante));
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 40px;
-}
-
-.service-card h3 {
-  font-size: 1.5rem;
-  color: var(--preto);
-  margin-bottom: 16px;
-}
-
-.service-card p {
-  color: var(--cinza-escuro);
-  margin-bottom: 24px;
-  line-height: 1.6;
-}
 
 /* Stats Section */
 .stats {
@@ -205,34 +148,6 @@
   opacity: 0.9;
 }
 
-/* CTA Section */
-.cta {
-  padding: 80px 0;
-  background-color: var(--cinza-claro);
-}
-
-.cta-content {
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.cta-content h2 {
-  font-size: 2.5rem;
-  color: var(--preto);
-  margin-bottom: 16px;
-}
-
-.cta-content p {
-  font-size: 1.125rem;
-  color: var(--cinza-escuro);
-  margin-bottom: 32px;
-}
-
-.cta-btn {
-  padding: 18px 36px;
-  font-size: 18px;
-}
 
 /* Responsividade */
 @media (max-width: 768px) {

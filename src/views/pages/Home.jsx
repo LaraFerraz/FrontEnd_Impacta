@@ -2,6 +2,10 @@ import React from 'react';
 import { useAuth } from '../../controllers/contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import './Home.css';
+import ServiceCard from "../components/ServiceCard";
+import CTA from "../components/CTA";
+
+
 
 const Home = () => {
   const { user, isAuthenticated } = useAuth();
@@ -33,53 +37,30 @@ const Home = () => {
     }
   ];
 
-  return (
+ return (
     <main className="home">
-      {/* Seção Hero */}
       <section className="hero">
         <div className="container">
           <div className="hero-content">
-            {isAuthenticated ? (
-              // Mensagem personalizada para usuários logados
-              <>
-                <h1 className="hero-title">
-                  Bem-vindo(a), <span className="highlight">{user?.nome?.split(' ')[0] || 'Usuário'}</span>!
-                </h1>
-                <p className="hero-description">
-                  É ótimo ter você conosco! Explore as oportunidades de voluntariado 
-                  disponíveis e continue fazendo a diferença em sua comunidade.
-                </p>
-                <div className="hero-buttons">
-                  <button className="btn-primary hero-btn">
-                    Explorar Oportunidades
-                  </button>
-                  <button className="btn-secondary hero-btn">
-                    Meus Projetos
-                  </button>
-                </div>
-              </>
-            ) : (
-              // Mensagem para usuários não logados
-              <>
-                <h1 className="hero-title">
-                  Conectando comunidades através do 
-                  <span className="highlight"> voluntariado</span>
-                </h1>
-                <p className="hero-description">
-                  Descubra oportunidades de voluntariado, conecte-se com sua comunidade 
-                  e faça a diferença. Junte-se a nós para construir um mundo melhor.
-                </p>
-                <div className="hero-buttons">
-                  <Link to="/cadastro" className="btn-primary hero-btn">
-                    Começar Agora
-                  </Link>
-                  <Link to="/sobre" className="btn-secondary hero-btn">
-                    Saiba Mais
-                  </Link>
-                </div>
-              </>
-            )}
+            <h1 className="hero-title">
+              Conectando comunidades através do 
+              <span className="highlight"> voluntariado</span>
+            </h1>
+            <p className="hero-description">
+              Descubra oportunidades de voluntariado, conecte-se com sua comunidade 
+              e faça a diferença. Junte-se a nós para construir um mundo melhor.
+            </p>
+            <div className="hero-buttons">
+              <button className="btn-primary hero-btn">
+                Começar Agora
+              </button>
+              <button className="btn-secondary hero-btn">
+                Saiba Mais
+              </button>
+            </div>
           </div>
+        </div>     
+
           <div className="hero-image">
             <div className="hero-graphic">
               <div className="community-icon">👥</div>
@@ -91,7 +72,6 @@ const Home = () => {
               </div>
             </div>
           </div>
-        </div>
       </section>
 
       {/* Seção de Serviços */}
@@ -101,20 +81,18 @@ const Home = () => {
             <h2>Nossos Serviços Comunitários</h2>
             <p>Explore as diferentes maneiras de contribuir com sua comunidade</p>
           </div>
-          
+
           <div className="services-grid">
-            {servicos.map(servico => (
-              <div key={servico.id} className="service-card card">
-                <div className="service-icon">
-                  <span>{servico.icone}</span>
-                </div>
-                <h3>{servico.titulo}</h3>
-                <p>{servico.descricao}</p>
-                <button className="btn-secondary">
-                  Ver Mais
-                </button>
-              </div>
-            ))}
+            <div className="services-grid">
+              {servicos.map(servico => (
+                <ServiceCard
+                  key={servico.id}
+                  icone={servico.icone}
+                  titulo={servico.titulo}
+                  descricao={servico.descricao}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -147,23 +125,11 @@ const Home = () => {
       <section className="cta">
         <div className="container">
           <div className="cta-content">
-            {isAuthenticated ? (
-              <>
-                <h2>Continue fazendo a diferença!</h2>
-                <p>Que tal participar de um novo projeto ou inicializar uma nova ação em sua comunidade?</p>
-                <button className="btn-primary cta-btn">
-                  Ver Projetos Disponíveis
-                </button>
-              </>
-            ) : (
-              <>
-                <h2>Pronto para fazer a diferença?</h2>
-                <p>Cadastre-se agora e comece a contribuir com sua comunidade hoje mesmo!</p>
-                <Link to="/cadastro" className="btn-primary cta-btn">
-                  Cadastrar-se Gratuitamente
-                </Link>
-              </>
-            )}
+            <h2>Pronto para fazer a diferença?</h2>
+            <p>Cadastre-se agora e comece a contribuir com sua comunidade hoje mesmo!</p>
+            <button className="btn-primary cta-btn">
+              Cadastrar-se Gratuitamente
+            </button>
           </div>
         </div>
       </section>

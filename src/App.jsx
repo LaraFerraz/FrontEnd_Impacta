@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { AuthProvider } from './controllers/contexts/AuthContext';
 import Header from './views/layouts/Header.jsx';
 import Footer from './views/layouts/Footer.jsx';
 import AppRoutes from './routes/AppRoutes.jsx';
