@@ -46,8 +46,25 @@
   gap: 24px;
 }
 
-.form-row {
-  display: grid;
+/* Indicador de força de senha */
+.password-strength {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.strength-bar {
+  height: 4px;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.strength-fill {
+  height: 100%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
@@ -99,7 +116,48 @@
   margin-top: 0;
 }
 
-/* Checkbox Styles */
+/* Interests Grid - Área de Interesses */
+.interests-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.interest-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--preto);
+  cursor: pointer;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--cinza-medio);
+  background-color: var(--branco);
+  transition: border-color 0.2s ease;
+}
+
+.interest-item:hover {
+  border-color: var(--amarelo-solar);
+}
+
+.interest-item input[type="checkbox"] {
+  margin: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.interest-item input[type="checkbox"]:checked {
+  accent-color: var(--laranja-vibrante);
+}
+
+.interest-item:has(input[type="checkbox"]:checked) {
+  border-color: var(--laranja-vibrante);
+  background-color: rgba(255, 122, 0, 0.05);
+}
+
+/* Checkbox Genéricos */
 .checkbox-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -128,6 +186,35 @@
   padding: 0;
   width: 16px;
   height: 16px;
+}
+
+/* Termos e Condições */
+.terms-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px;
+  border: 2px solid var(--cinza-medio);
+  border-radius: 8px;
+  background-color: var(--cinza-claro);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.terms-checkbox:hover {
+  border-color: var(--amarelo-solar);
+  background-color: rgba(255, 195, 0, 0.1);
+}
+
+.terms-checkbox input[type="checkbox"] {
+  margin: 0;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  margin-top: 2px;
 }
 
 .checkbox-item.termos {
@@ -306,6 +393,10 @@
   }
   
   .checkbox-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .interests-grid {
     grid-template-columns: 1fr;
   }
   

@@ -1,10 +1,16 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../../controllers/contexts/AuthContext';
+import UserMenu from '../components/UserMenu';
 import logo from "../../assets/logo.png";
 import './Header.css';
 
 const Header = () => {
   const location = useLocation();
+  const { user, loading } = useAuth();
+
+  // Não mostrar botões de auth nas páginas de login/cadastro
+  const isAuthPage = ['/login', '/cadastro'].includes(location.pathname);
 
   return (
     <header className="header">
@@ -44,14 +50,24 @@ const Header = () => {
             </li>
           </ul>
 
-          <div className="auth-buttons">
-            <Link to="/login" className="btn-login">
-              Entrar
-            </Link>
-            <Link to="/cadastro" className="btn-cadastro">
-              Cadastrar
-            </Link>
-          </div>
+          {!isAuthPage && (
+            <div className="auth-buttons">
+              {loading ? (
+                <div className="loading">Carregando...</div>
+              ) : user ? (
+                <UserMenu />
+              ) : (
+                <>
+                  <Link to="/login" className="btn-login">
+                    Entrar
+                  </Link>
+                  <Link to="/cadastro" className="btn-cadastro">
+                    Cadastrar
+                  </Link>
+                </>
+              )}
+            </div>
+          )}
         </nav>
       </div>
     </header>
