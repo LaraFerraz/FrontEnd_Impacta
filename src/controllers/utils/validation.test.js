@@ -1,7 +1,3 @@
-/**
- * Testes para validações do frontend
- */
-
 import {
   validateEmail,
   validateCPF,

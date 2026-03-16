@@ -49,7 +49,7 @@ class AuthService {
       }
 
       const response = await api.post('/auth/verify');
-      return response.data;
+      return response.user || null;
     } catch (error) {
       this.logout();
       return null;

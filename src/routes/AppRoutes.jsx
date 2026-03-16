@@ -16,15 +16,6 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/cadastro" element={<Cadastro />} />
       <Route path="/perfil" element={<Perfil />} />
-      {/* Rotas futuras */}
-      <Route 
-        path="/servicos" 
-        element={
-          <div style={{padding: '80px 20px', textAlign: 'center'}}>
-            <h2>Página de Serviços em desenvolvimento</h2>
-          </div>
-        } 
-      />
       <Route path="/sobre" element={<Sobre />} />
     </Routes>
   );

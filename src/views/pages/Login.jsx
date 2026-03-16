@@ -66,7 +66,7 @@ const Login = () => {
     try {
       // Usar serviço de autenticação real
       const response = await login(formData.email, formData.password);
-      const userName = response.data?.user?.nome?.split(' ')[0] || 'Usuário';
+      const userName = response.user?.nome?.split(' ')[0] || 'Usuário';
       
       // Mostrar mensagem de sucesso
       showSuccess(`Bem-vindo de volta, ${userName}!`);
