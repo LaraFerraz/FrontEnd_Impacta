@@ -1,3 +1,4 @@
+
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import authService from '../services/authService';
 
@@ -28,7 +29,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await authService.login(email, password);
-      setUser(response.data.user);
+      setUser(response.user);
       return response;
     } catch (error) {
       throw error;
@@ -38,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await authService.register(userData);
-      setUser(response.data.user);
+      setUser(response.user);
       return response;
     } catch (error) {
       throw error;

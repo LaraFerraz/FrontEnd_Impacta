@@ -94,6 +94,35 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Estilos para menu de usuário logado - DEPRECATED - usar UserMenu.jsx */
+.user-greeting {
+  color: var(--branco);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.btn-logout {
+  background-color: transparent;
+  color: var(--branco);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-logout:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.loading {
+  color: var(--branco);
+  font-size: 14px;
+  font-style: italic;
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
   .navbar {

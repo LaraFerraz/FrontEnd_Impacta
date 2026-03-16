@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../controllers/contexts/AuthContext';
+import { useToast } from '../../controllers/hooks/useToast';
+import Toast from '../components/Toast';
 import './Cadastro.css';
 
 const Cadastro = () => {
+  const navigate = useNavigate();
+  const { register } = useAuth();
+  const { toasts, showSuccess, showError, removeToast } = useToast();
+
   const [formData, setFormData] = useState({
     nome: '',
     email: '',
@@ -16,17 +23,6 @@ const Cadastro = () => {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-
-  const interessesOptions = [
-    'Limpeza Comunitária',
-    'Assistência Social',
-    'Educação',
-    'Meio Ambiente',
-    'Esportes',
-    'Arte e Cultura',
-    'Tecnologia',
-    'Saúde'
-  ];
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -92,14 +88,6 @@ const Cadastro = () => {
       newErrors.cidade = 'Cidade é obrigatória';
     }
     
-    if (formData.interesses.length === 0) {
-      newErrors.interesses = 'Selecione pelo menos um interesse';
-    }
-    
-    if (!formData.termos) {
-      newErrors.termos = 'Você deve aceitar os termos e condições';
-    }
-    
     return newErrors;
   };
 
@@ -116,12 +104,32 @@ const Cadastro = () => {
     setErrors({});
     
     try {
-      // Simular chamada de API
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      console.log('Cadastro realizado:', formData);
-      alert('Cadastro realizado com sucesso! Bem-vindo(a) à comunidade!');
+      // Separar confirmPassword do resto dos dados
+      const { confirmPassword, termos, ...registerData } = formData;
+      
+      // Chamar serviço de registro real
+      const response = await register(registerData);
+      const userName = response.user?.nome?.split(' ')[0] || 'Usuário';
+      
+      // Mostrar mensagem de sucesso
+      showSuccess(`Bem-vindo(a), ${userName}! Sua conta foi criada com sucesso!`);
+      
+      // Redirecionar para home após cadastro bem-sucedido
+      setTimeout(() => navigate('/'), 1500);
     } catch (error) {
-      setErrors({ submit: 'Erro ao criar conta. Tente novamente.' });
+      console.error('Erro no cadastro:', error);
+      
+      // Tratar erros específicos
+      if (error.response?.data?.field) {
+        setErrors({ 
+          [error.response.data.field]: error.response.data.message 
+        });
+        showError(error.response.data.message);
+      } else {
+        const errorMsg = error.response?.data?.message || 'Erro ao criar conta. Tente novamente.';
+        setErrors({ submit: errorMsg });
+        showError(errorMsg);
+      }
     } finally {
       setLoading(false);
     }
@@ -252,41 +260,6 @@ const Cadastro = () => {
                 </div>
               </div>
               
-              <div className="form-group">
-                <label>Áreas de Interesse</label>
-                <div className="interests-grid">
-                  {interessesOptions.map(interesse => (
-                    <label key={interesse} className="interest-item">
-                      <input
-                        type="checkbox"
-                        name="interesses"
-                        value={interesse}
-                        checked={formData.interesses.includes(interesse)}
-                        onChange={handleChange}
-                      />
-                      <span>{interesse}</span>
-                    </label>
-                  ))}
-                </div>
-                {errors.interesses && <span className="error-message">{errors.interesses}</span>}
-              </div>
-              
-              <div className="form-group">
-                <label className="terms-checkbox">
-                  <input
-                    type="checkbox"
-                    name="termos"
-                    checked={formData.termos}
-                    onChange={handleChange}
-                  />
-                  <span>
-                    Concordo com os <Link to="/termos">Termos de Uso</Link> e 
-                    <Link to="/privacidade"> Política de Privacidade</Link>
-                  </span>
-                </label>
-                {errors.termos && <span className="error-message">{errors.termos}</span>}
-              </div>
-              
               {errors.submit && (
                 <div className="error-message submit-error">{errors.submit}</div>
               )}
@@ -316,6 +289,9 @@ const Cadastro = () => {
           </div>
         </div>
       </div>
+
+      {/* Toast notifications */}
+      <Toast toasts={toasts} onRemove={removeToast} />
     </main>
   );
 };

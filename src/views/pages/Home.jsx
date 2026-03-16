@@ -1,4 +1,6 @@
 import React from 'react';
+import { useAuth } from '../../controllers/contexts/AuthContext';
+import { Link } from 'react-router-dom';
 import './Home.css';
 import ServiceCard from "../components/ServiceCard";
 import CTA from "../components/CTA";
@@ -6,6 +8,8 @@ import CTA from "../components/CTA";
 
 
 const Home = () => {
+  const { user, isAuthenticated } = useAuth();
+  
   const servicos = [
     {
       id: 1,
@@ -39,18 +43,20 @@ const Home = () => {
         <div className="container">
           <div className="hero-content">
             <h1 className="hero-title">
-              Conectando comunidades através do
+              Conectando comunidades através do 
               <span className="highlight"> voluntariado</span>
             </h1>
-
             <p className="hero-description">
-              Descubra oportunidades de voluntariado, conecte-se com sua comunidade
-              e faça a diferença.
+              Descubra oportunidades de voluntariado, conecte-se com sua comunidade 
+              e faça a diferença. Junte-se a nós para construir um mundo melhor.
             </p>
-
             <div className="hero-buttons">
-              <button className="btn-primary hero-btn">Começar Agora</button>
-              <button className="btn-secondary hero-btn">Saiba Mais</button>
+              <button className="btn-primary hero-btn">
+                Começar Agora
+              </button>
+              <button className="btn-secondary hero-btn">
+                Saiba Mais
+              </button>
             </div>
             
           </div>
@@ -117,11 +123,17 @@ const Home = () => {
       </section>
 
       {/* Seção de Call to Action */}
-      <CTA
-        titulo="Pronto para fazer a diferença?"
-        descricao="Cadastre-se agora e comece a contribuir com sua comunidade hoje mesmo!"
-        botaoTexto="Cadastrar-se Gratuitamente"
-      />
+      <section className="cta">
+        <div className="container">
+          <div className="cta-content">
+            <h2>Pronto para fazer a diferença?</h2>
+            <p>Cadastre-se agora e comece a contribuir com sua comunidade hoje mesmo!</p>
+            <button className="btn-primary cta-btn">
+              Cadastrar-se Gratuitamente
+            </button>
+          </div>
+        </div>
+      </section>
     </main>
   );
 };

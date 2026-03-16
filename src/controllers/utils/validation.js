@@ -3,38 +3,44 @@ export const validateEmail = (email) => {
   return re.test(email);
 };
 
-export const validatePassword = (password) => {
-  // Mínimo 8 caracteres
-  return password.length >= 8;
+export const validateCPF = (cpf) => {
+  const cpfLimpo = cpf.replace(/\D/g, '');
+
+  if (cpfLimpo.length !== 11) return false;
+  if (/^(\d)\1{10}$/.test(cpfLimpo)) return false;
+
+  let soma = 0;
+  for (let i = 0; i < 9; i++) {
+    soma += parseInt(cpfLimpo.charAt(i)) * (10 - i);
+  }
+  const primeiroDigito = 11 - (soma % 11);
+
+  soma = 0;
+  for (let i = 0; i < 10; i++) {
+    soma += parseInt(cpfLimpo.charAt(i)) * (11 - i);
+  }
+  const segundoDigito = 11 - (soma % 11);
+
+  return primeiroDigito === parseInt(cpfLimpo.charAt(10)) &&
+         segundoDigito === parseInt(cpfLimpo.charAt(11));
 };
 
-export const validateRequired = (value) => {
-  return value && value.trim() !== '';
-};
+export const validatePasswordStrength = (senha) => {
+  const criterios = {
+    tamanho: senha.length >= 8,
+    maiuscula: /[A-Z]/.test(senha),
+    minuscula: /[a-z]/.test(senha),
+    numero: /\d/.test(senha),
+    especial: /[!@#$%^&*()_+\-=\[\]{};:'",.<>?/\\|`~]/.test(senha)
+  };
 
-export const validateForm = (values, rules) => {
-  const errors = {};
+  const criteriosAtingidos = Object.values(criterios).filter(Boolean).length;
+  let nivel = criteriosAtingidos >= 4 ? 'forte' : criteriosAtingidos >= 3 ? 'media' : 'fraca';
 
-  Object.keys(rules).forEach((field) => {
-    const rule = rules[field];
-    const value = values[field];
-
-    if (rule.required && !validateRequired(value)) {
-      errors[field] = `${field} é obrigatório`;
-    }
-
-    if (rule.email && !validateEmail(value)) {
-      errors[field] = 'Email inválido';
-    }
-
-    if (rule.minLength && value.length < rule.minLength) {
-      errors[field] = `${field} deve ter no mínimo ${rule.minLength} caracteres`;
-    }
-
-    if (rule.custom && !rule.custom(value)) {
-      errors[field] = rule.customMessage || 'Valor inválido';
-    }
-  });
-
-  return errors;
+  return {
+    valida: criteriosAtingidos >= 2 && senha.length >= 6,
+    nivel,
+    criterios,
+    score: criteriosAtingidos
+  };
 };
