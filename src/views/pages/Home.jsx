@@ -52,8 +52,9 @@ const Home = () => {
               <button className="btn-primary hero-btn">Começar Agora</button>
               <button className="btn-secondary hero-btn">Saiba Mais</button>
             </div>
+            
           </div>
-        </div>     
+        </div>
 
           <div className="hero-image">
             <div className="hero-graphic">
