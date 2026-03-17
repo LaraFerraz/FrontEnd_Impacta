@@ -107,6 +107,27 @@
 .service-icons span:nth-child(3) { bottom: 0; left: 50%; transform: translateX(-50%); }
 .service-icons span:nth-child(4) { top: 50%; left: 0; transform: translateY(-50%); }
 
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cta-content {
+  text-align: center;
+  padding: 50px
+}
+
+.cta-content h2 {
+  margin-bottom: 16px;
+}
+
+.cta-content p {
+  margin-bottom: 24px;
+}
+
+
+
 @keyframes rotate {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

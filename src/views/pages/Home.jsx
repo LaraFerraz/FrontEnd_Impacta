@@ -3,13 +3,14 @@ import { useAuth } from '../../controllers/contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import './Home.css';
 import ServiceCard from "../components/ServiceCard";
+import '../components/btn-primary.css';
 import CTA from "../components/CTA";
 
 
 
 const Home = () => {
   const { user, isAuthenticated } = useAuth();
-  
+
   const servicos = [
     {
       id: 1,
@@ -37,17 +38,17 @@ const Home = () => {
     }
   ];
 
- return (
+  return (
     <main className="home">
       <section className="hero">
         <div className="container">
           <div className="hero-content">
             <h1 className="hero-title">
-              Conectando comunidades através do 
+              Conectando comunidades através do
               <span className="highlight"> voluntariado</span>
             </h1>
             <p className="hero-description">
-              Descubra oportunidades de voluntariado, conecte-se com sua comunidade 
+              Descubra oportunidades de voluntariado, conecte-se com sua comunidade
               e faça a diferença. Junte-se a nós para construir um mundo melhor.
             </p>
             <div className="hero-buttons">
@@ -58,21 +59,21 @@ const Home = () => {
                 Saiba Mais
               </button>
             </div>
-            
+
           </div>
         </div>
 
-          <div className="hero-image">
-            <div className="hero-graphic">
-              <div className="community-icon">👥</div>
-              <div className="service-icons">
-                <span>🤝</span>
-                <span>🌱</span>
-                <span>📚</span>
-                <span>🏠</span>
-              </div>
+        <div className="hero-image">
+          <div className="hero-graphic">
+            <div className="community-icon">👥</div>
+            <div className="service-icons">
+              <span>🤝</span>
+              <span>🌱</span>
+              <span>📚</span>
+              <span>🏠</span>
             </div>
           </div>
+        </div>
       </section>
 
       {/* Seção de Serviços */}
@@ -128,9 +129,9 @@ const Home = () => {
           <div className="cta-content">
             <h2>Pronto para fazer a diferença?</h2>
             <p>Cadastre-se agora e comece a contribuir com sua comunidade hoje mesmo!</p>
-            <button className="btn-primary cta-btn">
-              Cadastrar-se Gratuitamente
-            </button>
+            <Link to="/cadastro" className="btn-primary">
+              Cadastrar
+            </Link>
           </div>
         </div>
       </section>
