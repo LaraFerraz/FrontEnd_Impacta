@@ -6,6 +6,8 @@ import Footer from './views/components/Footer.jsx';
 import AppRoutes from './routes/AppRoutes.jsx';
 import './assets/styles/colors.css';
 import './assets/styles/App.css';
+import './views/components/btn-primary.css';
+import './views/components/btn-secondary.css';
 
 function App() {
   return (
