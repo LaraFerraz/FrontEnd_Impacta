@@ -1,6 +1,7 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import authService from '../services/authService';
+import api from '../services/api';
 
 const AuthContext = createContext();
 
@@ -15,11 +16,21 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const loadUser = () => {
       const currentUser = authService.getCurrentUser();
+      const token = authService.getToken();
+      
       setUser(currentUser);
+      setIsAuthenticated(!!token);
+      
+      // Sincroniza o token com Axios se existir
+      if (token) {
+        api.setToken(token);
+      }
+      
       setLoading(false);
     };
 
@@ -30,6 +41,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authService.login(email, password);
       setUser(response.user);
+      setIsAuthenticated(true);
       return response;
     } catch (error) {
       throw error;
@@ -40,6 +52,7 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await authService.register(userData);
       setUser(response.user);
+      setIsAuthenticated(true);
       return response;
     } catch (error) {
       throw error;
@@ -49,6 +62,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     authService.logout();
     setUser(null);
+    setIsAuthenticated(false);
   };
 
   const value = {
@@ -56,7 +70,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
-    isAuthenticated: authService.isAuthenticated(),
+    isAuthenticated,
     loading
   };
 

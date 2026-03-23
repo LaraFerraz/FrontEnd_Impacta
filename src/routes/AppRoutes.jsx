@@ -5,6 +5,7 @@ import Login from '../views/pages/Login.jsx';
 import Cadastro from '../views/pages/Cadastro.jsx';
 import Sobre from '../views/pages/Sobre.jsx';
 import Perfil from '../views/pages/Perfil.jsx';
+import NotFound from '../views/pages/NotFound.jsx';
 
 /**
  * Configuração de rotas da aplicação
@@ -17,6 +18,7 @@ const AppRoutes = () => {
       <Route path="/cadastro" element={<Cadastro />} />
       <Route path="/perfil" element={<Perfil />} />
       <Route path="/sobre" element={<Sobre />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
