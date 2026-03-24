@@ -34,13 +34,20 @@
   justify-content: center;
   color: var(--branco);
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .social-links a:hover {
   background: var(--amarelo-solar);
   color: var(--preto);
-  transform: translateY(-3px);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(255, 195, 0, 0.3);
+}
+
+.social-links a:active {
+  transform: translateY(-1px);
 }
 
 .footer-bottom {

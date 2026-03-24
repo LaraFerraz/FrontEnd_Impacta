@@ -16,6 +16,7 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  animation: slideInUp 0.8s ease-out forwards;
 }
 
 .login-card {
@@ -31,6 +32,7 @@
 .login-header {
   text-align: center;
   margin-bottom: 32px;
+  animation: slideInDown 0.6s ease-out forwards;
 }
 
 .login-header h1 {

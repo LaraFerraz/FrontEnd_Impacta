@@ -9,9 +9,6 @@ const Header = () => {
   const location = useLocation();
   const { user, loading } = useAuth();
 
-  // Não mostrar botões de auth nas páginas de login/cadastro
-  const isAuthPage = ['/login', '/cadastro'].includes(location.pathname);
-
   return (
     <header className="header">
       <div className="container">
@@ -42,24 +39,22 @@ const Header = () => {
             </li>
           </ul>
 
-          {!isAuthPage && (
-            <div className="auth-buttons">
-              {loading ? (
-                <div className="loading">Carregando...</div>
-              ) : user ? (
-                <UserMenu />
-              ) : (
-                <>
-                  <Link to="/login" className="btn-login">
-                    Entrar
-                  </Link>
-                  <Link to="/cadastro" className="btn-cadastro">
-                    Cadastrar
-                  </Link>
-                </>
-              )}
-            </div>
-          )}
+          <div className="auth-buttons">
+            {loading ? (
+              <div className="loading">Carregando...</div>
+            ) : user ? (
+              <UserMenu />
+            ) : (
+              <>
+                <Link to="/login" className="btn-login">
+                  Entrar
+                </Link>
+                <Link to="/cadastro" className="btn-cadastro">
+                  Cadastrar
+                </Link>
+              </>
+            )}
+          </div>
         </nav>
       </div>
     </header>

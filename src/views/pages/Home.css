@@ -27,6 +27,7 @@
   color: white; 
   line-height: 1.2;
   margin-bottom: 24px;
+  animation: slideInDown 0.8s ease-out forwards;
 }
 
 .highlight {
@@ -41,11 +42,15 @@
   color: var(--branco);
   margin-bottom: 32px;
   line-height: 1.6;
+  animation: slideInUp 0.8s ease-out 0.2s forwards;
+  opacity: 0;
 }
 
 .hero-buttons {
   display: flex;
   gap: 16px;
+  animation: slideInUp 0.8s ease-out 0.4s forwards;
+  opacity: 0;
 }
 
 .hero-btn {
