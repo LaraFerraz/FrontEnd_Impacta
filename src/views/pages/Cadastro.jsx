@@ -17,6 +17,7 @@ const Cadastro = () => {
     confirmPassword: '',
     telefone: '',
     cidade: '',
+    cpf: '',
     interesses: [],
     termos: false
   });
@@ -26,11 +27,11 @@ const Cadastro = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
+
     if (type === 'checkbox' && name === 'interesses') {
       setFormData(prev => ({
         ...prev,
-        interesses: checked 
+        interesses: checked
           ? [...prev.interesses, value]
           : prev.interesses.filter(interesse => interesse !== value)
       }));
@@ -46,7 +47,6 @@ const Cadastro = () => {
       }));
     }
 
-    // Remove error quando usuário começa a digitar
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -57,72 +57,78 @@ const Cadastro = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
+    // Nome
     if (!formData.nome.trim()) {
       newErrors.nome = 'Nome é obrigatório';
     }
-    
+
+    // Email
     if (!formData.email) {
       newErrors.email = 'Email é obrigatório';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Email inválido';
     }
-    
+
+    // Senha
     if (!formData.password) {
       newErrors.password = 'Senha é obrigatória';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Senha deve ter pelo menos 6 caracteres';
+    } else if (!/(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(formData.password)) {
+      newErrors.password = 'Senha deve ter maiúscula, número e símbolo';
     }
-    
+
+    // Confirmar senha
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Confirmação de senha é obrigatória';
     } else if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Senhas não coincidem';
     }
-    
+
+    // Telefone
     if (!formData.telefone) {
       newErrors.telefone = 'Telefone é obrigatório';
     }
-    
+
+    // Cidade
     if (!formData.cidade) {
       newErrors.cidade = 'Cidade é obrigatória';
     }
-    
+
+    // CPF
+    if (!formData.cpf) {
+      newErrors.cpf = 'CPF é obrigatório';
+    } else if (!/^\d{11}$/.test(formData.cpf.replace(/\D/g, ''))) {
+      newErrors.cpf = 'CPF inválido';
+    }
+
     return newErrors;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const newErrors = validateForm();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
     }
-    
+
     setLoading(true);
     setErrors({});
-    
+
     try {
-      // Separar confirmPassword do resto dos dados
       const { confirmPassword, termos, ...registerData } = formData;
-      
-      // Chamar serviço de registro real
+
       const response = await register(registerData);
       const userName = response.user?.nome?.split(' ')[0] || 'Usuário';
-      
-      // Mostrar mensagem de sucesso
+
       showSuccess(`Bem-vindo(a), ${userName}! Sua conta foi criada com sucesso!`);
-      
-      // Redirecionar para home após cadastro bem-sucedido
+
       setTimeout(() => navigate('/'), 1500);
     } catch (error) {
-      console.error('Erro no cadastro:', error);
-      
-      // Tratar erros específicos
       if (error.response?.data?.field) {
-        setErrors({ 
-          [error.response.data.field]: error.response.data.message 
+        setErrors({
+          [error.response.data.field]: error.response.data.message
         });
         showError(error.response.data.message);
       } else {
@@ -144,155 +150,93 @@ const Cadastro = () => {
               <h2>Junte-se à nossa comunidade!</h2>
               <p>
                 Cadastre-se gratuitamente e comece a fazer a diferença em sua
-                comunidade hoje mesmo. Conecte-se, colabore e transforme!
+                comunidade hoje mesmo.
               </p>
-              <div className="join-stats">
-                <div className="stat">
-                  <span className="stat-number">500+</span>
-                  <span className="stat-label">Voluntários</span>
-                </div>
-                <div className="stat">
-                  <span className="stat-number">120+</span>
-                  <span className="stat-label">Projetos</span>
-                </div>
-                <div className="stat">
-                  <span className="stat-number">50+</span>
-                  <span className="stat-label">Cidades</span>
-                </div>
-              </div>
             </div>
           </div>
-          
+
           <div className="cadastro-card card">
             <div className="cadastro-header">
               <h1>Criar Conta</h1>
-              <p>Preencha os dados abaixo para se cadastrar</p>
+              <p>Preencha os dados abaixo</p>
             </div>
-            
+
             <form onSubmit={handleSubmit} className="cadastro-form">
+
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="nome">Nome Completo</label>
-                  <input
-                    type="text"
-                    id="nome"
-                    name="nome"
-                    value={formData.nome}
-                    onChange={handleChange}
-                    className={errors.nome ? 'error' : ''}
-                    placeholder="Seu nome completo"
-                  />
-                  {errors.nome && <span className="error-message">{errors.nome}</span>}
+                  <label>Nome</label>
+                  <input name="nome" value={formData.nome} onChange={handleChange} />
+                  {errors.nome && <span>{errors.nome}</span>}
                 </div>
-                
+
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className={errors.email ? 'error' : ''}
-                    placeholder="seu@email.com"
-                  />
-                  {errors.email && <span className="error-message">{errors.email}</span>}
+                  <label>Email</label>
+                  <input name="email" value={formData.email} onChange={handleChange} />
+                  {errors.email && <span>{errors.email}</span>}
                 </div>
               </div>
-              
+
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="password">Senha</label>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className={errors.password ? 'error' : ''}
-                    placeholder="Sua senha"
-                  />
-                  {errors.password && <span className="error-message">{errors.password}</span>}
+                  <label>Senha</label>
+                  <input type="password" name="password" value={formData.password} onChange={handleChange} />
+                  {errors.password && <span>{errors.password}</span>}
                 </div>
-                
+
                 <div className="form-group">
-                  <label htmlFor="confirmPassword">Confirmar Senha</label>
-                  <input
-                    type="password"
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    className={errors.confirmPassword ? 'error' : ''}
-                    placeholder="Confirme sua senha"
-                  />
-                  {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+                  <label>Confirmar Senha</label>
+                  <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
+                  {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
                 </div>
               </div>
-              
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="telefone">Telefone</label>
-                  <input
-                    type="tel"
-                    id="telefone"
-                    name="telefone"
-                    value={formData.telefone}
-                    onChange={handleChange}
-                    className={errors.telefone ? 'error' : ''}
-                    placeholder="(11) 99999-9999"
-                  />
-                  {errors.telefone && <span className="error-message">{errors.telefone}</span>}
-                </div>
-                
-                <div className="form-group">
-                  <label htmlFor="cidade">Cidade</label>
-                  <input
-                    type="text"
-                    id="cidade"
-                    name="cidade"
-                    value={formData.cidade}
-                    onChange={handleChange}
-                    className={errors.cidade ? 'error' : ''}
-                    placeholder="Sua cidade"
-                  />
-                  {errors.cidade && <span className="error-message">{errors.cidade}</span>}
-                </div>
+
+              <div className="form-group">
+                <label>CPF</label>
+                <input
+                  type="text"
+                  name="cpf"
+                  value={formData.cpf}
+                  onChange={handleChange}
+                  placeholder="000.000.000-00"
+                  className={errors.cpf ? 'error' : ''}
+                />
+                {errors.cpf && <span className="error-message">{errors.cpf}</span>}
               </div>
-              
-              {errors.submit && (
-                <div className="error-message submit-error">{errors.submit}</div>
-              )}
-              
-              <button 
-                type="submit" 
-                className={`btn-primary cadastro-btn ${loading ? 'loading' : ''}`}
+
+
+              <div className="form-group">
+                <label>Telefone</label>
+                <input name="telefone" value={formData.telefone} onChange={handleChange} />
+                {errors.telefone && <span>{errors.telefone}</span>}
+              </div>
+
+              <div className="form-group">
+                <label>Cidade</label>
+                <input name="cidade" value={formData.cidade} onChange={handleChange} />
+                {errors.cidade && <span>{errors.cidade}</span>}
+              </div>
+
+              {errors.submit && <span>{errors.submit}</span>}
+
+              <button
+                type="submit"
+                className="btn-primary"
                 disabled={loading}
               >
-                {loading ? (
-                  <span className="loading-spinner">
-                    <span className="spinner"></span>
-                    Criando conta...
-                  </span>
-                ) : (
-                  'Criar Conta'
-                )}
+                {loading ? 'Criando...' : 'Criar Conta'}
               </button>
             </form>
-            
-            <div className="cadastro-footer">
-              <p>
-                Já tem uma conta? 
-                <Link to="/login" className="login-link"> Entre aqui</Link>
-              </p>
-            </div>
+
+            <p>
+              Já tem conta? <Link to="/login">Login</Link>
+            </p>
           </div>
         </div>
       </div>
 
-      {/* Toast notifications */}
       <Toast toasts={toasts} onRemove={removeToast} />
-    </main>
+    </main >
   );
 };
 
