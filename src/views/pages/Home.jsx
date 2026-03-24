@@ -1,15 +1,14 @@
 import React from 'react';
-import { useAuth } from '../../controllers/contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import './Home.css';
 import ServiceCard from "../components/ServiceCard";
 import '../components/btn-primary.css';
-import CTA from "../components/CTA";
 
 
 
 const Home = () => {
-  const { user, isAuthenticated } = useAuth();
+  // useAuth pode ser usado futuramente para mostrar conteúdo personalizado
+  // const { user, isAuthenticated } = useAuth();
 
   const servicos = [
     {

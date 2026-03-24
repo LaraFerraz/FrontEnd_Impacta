@@ -1,5 +1,5 @@
 import api from './api';
-import { setToken as setTokenStorage, removeToken as removeTokenStorage, getToken as getTokenStorage, TOKEN_KEY } from '../../config/api.config';
+import { setToken as setTokenStorage, removeToken as removeTokenStorage, getToken as getTokenStorage } from '../../config/api.config';
 
 /**
  * ====================================================================
@@ -295,4 +295,6 @@ class AuthService {
  * authService.isAuthenticated();
  * authService.getCurrentUser();
  */
-export default new AuthService();
+const authService = new AuthService();
+
+export default authService;
