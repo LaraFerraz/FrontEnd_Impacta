@@ -18,7 +18,7 @@ const Perfil = () => {
         <div className="perfil-header">
           <div className="perfil-avatar">
             <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
             </svg>
           </div>
           <h1>Meu Perfil</h1>
@@ -27,7 +27,7 @@ const Perfil = () => {
         <div className="perfil-card">
           <div className="card-section">
             <h2>Informações Pessoais</h2>
-            
+
             <div className="info-group">
               <label>Nome Completo</label>
               <p className="info-value">{user.nome}</p>
@@ -78,7 +78,7 @@ const Perfil = () => {
           {user.endereco && (
             <div className="card-section">
               <h2>Endereço</h2>
-              
+
               <div className="info-group">
                 <label>Logradouro</label>
                 <p className="info-value">{user.endereco}</p>
@@ -119,7 +119,7 @@ const Perfil = () => {
           {user.pais && (
             <div className="card-section">
               <h2>Localização</h2>
-              
+
               {user.pais && (
                 <div className="info-group">
                   <label>País</label>
@@ -143,8 +143,12 @@ const Perfil = () => {
             </div>
           )}
 
+          <button onClick={() => navigate('/editar-perfil')}>
+            Editar Perfil
+          </button>
+
           <div className="card-actions">
-            <button 
+            <button
               className="btn-secondary"
               onClick={() => navigate('/')}
             >

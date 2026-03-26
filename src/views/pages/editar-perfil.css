@@ -1,0 +1,152 @@
+.editar-container {
+  min-height: 100vh;
+  padding: 80px 20px 60px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.editar-content {
+  max-width: 800px;
+  margin: 0 auto;
+  animation: slideInUp 0.8s ease-out forwards;
+}
+
+.editar-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 40px;
+  padding: 24px;
+  background: var(--branco);
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(36, 59, 85, 0.1);
+}
+
+.editar-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  color: #1e2a38;
+}
+
+.editar-card {
+  background: var(--branco);
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(36, 59, 85, 0.1);
+  overflow: hidden;
+}
+
+.form-section {
+  padding: 28px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: var(--cinza-medio);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  transition: 0.3s;
+  background-color: #f8f8f8;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--laranja-vibrante);
+  background-color: #fff;
+}
+
+.form-group input:disabled {
+  background-color: #e5e5e5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 13px;
+  margin-top: 4px;
+  display: block;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  padding: 20px 28px;
+  background-color: #f8f8f8;
+  justify-content: flex-end;
+  border-top: 1px solid #e5e5e5;
+}
+
+/* Botões reaproveitados */
+.btn-primary,
+.btn-secondary {
+  padding: 11px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--amarelo-solar), var(--laranja-vibrante));
+  color: var(--branco);
+  box-shadow: 0 4px 12px rgba(255, 154, 0, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 154, 0, 0.4);
+}
+
+.btn-secondary {
+  background-color: #e5e5e5;
+  color: #1e2a38;
+}
+
+.btn-secondary:hover {
+  background-color: #d0d0d0;
+  transform: translateY(-2px);
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .editar-container {
+    padding: 70px 15px 50px;
+  }
+
+  .editar-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .editar-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .form-section {
+    padding: 20px;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+  }
+}

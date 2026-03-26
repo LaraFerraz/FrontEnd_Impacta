@@ -6,10 +6,10 @@ import Cadastro from '../views/pages/Cadastro.jsx';
 import Sobre from '../views/pages/Sobre.jsx';
 import Perfil from '../views/pages/Perfil.jsx';
 import NotFound from '../views/pages/NotFound.jsx';
+import EditarPerfil from '../views/pages/editar-perfil.jsx';
 
-/**
- * Configuração de rotas da aplicação
- */
+
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -19,6 +19,7 @@ const AppRoutes = () => {
       <Route path="/perfil" element={<Perfil />} />
       <Route path="/sobre" element={<Sobre />} />
       <Route path="*" element={<NotFound />} />
+      <Route path="/editar-perfil" element={<EditarPerfil />} />
     </Routes>
   );
 };

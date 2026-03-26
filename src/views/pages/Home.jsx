@@ -51,12 +51,13 @@ const Home = () => {
               e faça a diferença. Junte-se a nós para construir um mundo melhor.
             </p>
             <div className="hero-buttons">
-              <button className="btn-primary hero-btn">
+
+              <Link to="/serviços" className="btn-primary">
                 Começar Agora
-              </button>
-              <button className="btn-secondary hero-btn">
+              </Link>
+              <Link to="/sobre" className="btn-secondary">
                 Saiba Mais
-              </button>
+              </Link>
             </div>
 
           </div>
