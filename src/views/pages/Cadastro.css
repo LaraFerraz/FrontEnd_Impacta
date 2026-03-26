@@ -5,6 +5,7 @@
   background: linear-gradient(135deg, var(--cinza-claro), var(--branco));
 }
 
+
 .cadastro-container {
   display: grid;
   grid-template-columns: 1fr 1.2fr;
