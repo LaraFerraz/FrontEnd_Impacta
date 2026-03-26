@@ -73,8 +73,8 @@ const Cadastro = () => {
     // Senha
     if (!formData.password) {
       newErrors.password = 'Senha é obrigatória';
-    } else if (!/(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(formData.password)) {
-      newErrors.password = 'Senha deve ter maiúscula, número e símbolo';
+    } else if (!/(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
+      newErrors.password = 'Senha deve ter pelo menos 1 letra maiúscula e 1 número';
     }
 
     // Confirmar senha
