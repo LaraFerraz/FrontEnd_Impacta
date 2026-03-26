@@ -1,5 +1,8 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 import "./Sobre.css";
+import '../components/btn-primary.css';
+
 
 function Sobre() {
     return (
@@ -84,9 +87,9 @@ function Sobre() {
             <div className="cta-sobre">
                 <h3>Pronto para fazer parte da mudança?</h3>
                 <p>Junte-se à Impacta e transforme pequenas ações em grandes resultados.</p>
-                <button className="btn-secondary">
-                    Explorar Campanhas
-                </button>
+                <Link to="/serviços" className="btn-primary">
+                    Começar Agora
+                </Link>
             </div>
         </section >
     );
