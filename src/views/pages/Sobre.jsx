@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 import "./Sobre.css";
-import '../components/btn-primary.css';
 
 
 function Sobre() {

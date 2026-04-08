@@ -5,10 +5,10 @@ import Header from './views/components/Header.jsx';
 import Footer from './views/components/Footer.jsx';
 import AppRoutes from './routes/AppRoutes.jsx';
 import ScrollToTop from './components/ScrollToTop.jsx';
+import './assets/styles/index.css';
 import './assets/styles/colors.css';
+import './assets/styles/components.css';
 import './assets/styles/App.css';
-import './views/components/btn-primary.css';
-import './views/components/btn-secondary.css';
 
 function App() {
   return (
