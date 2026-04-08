@@ -1,0 +1,309 @@
+/* CampanhaDetalhes Styles */
+.campanha-detalhes-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+/* Loading e Erro */
+.loading-full,
+.error-full {
+  text-align: center;
+  padding: 80px 20px;
+  font-size: 18px;
+}
+
+.loading-full {
+  color: #1976d2;
+}
+
+.error-full {
+  color: #c62828;
+}
+
+/* Header */
+.detalhes-header {
+  margin-bottom: 30px;
+}
+
+.btn-voltar {
+  padding: 8px 16px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-voltar:hover {
+  background-color: #da190b;
+}
+
+.titulo-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.titulo-section h1 {
+  margin: 0;
+  font-size: 36px;
+  color: #2c3e50;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 25px;
+  color: white;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+/* Info Principais */
+.info-principais {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.info-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.info-card h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  font-size: 18px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-item .label {
+  font-weight: 600;
+  color: #666;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+
+.info-item .value {
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+/* Avaliações Stats */
+.avaliacoes-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.avaliacoes-stats {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.media-avaliacoes {
+  text-align: center;
+}
+
+.nota-grande {
+  font-size: 48px;
+  font-weight: 700;
+  color: #4CAF50;
+  line-height: 1;
+}
+
+.media-avaliacoes small {
+  color: #666;
+  display: block;
+  margin-top: 5px;
+}
+
+.stars {
+  font-size: 24px;
+  letter-spacing: 5px;
+  color: #ddd;
+}
+
+.stars .star.filled {
+  color: #ffc107;
+}
+
+/* Descrição */
+.descricao-section {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.descricao-section h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.descricao-section p {
+  color: #555;
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+/* Informações Detalhadas */
+.informacoes-detalhadas {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.informacoes-detalhadas h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.detalhes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 25px;
+}
+
+.detalhe-item {
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  border-left: 4px solid #4CAF50;
+}
+
+.detalhe-item h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #2c3e50;
+}
+
+.detalhe-item p {
+  margin: 0;
+  color: #555;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+/* Serviços */
+.servicos-section {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.servicos-section h3 {
+  margin-top: 0;
+  color: #2c3e50;
+}
+
+.servicos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 15px;
+}
+
+.servico-card {
+  padding: 15px;
+  border: 2px solid #eee;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.servico-card:hover {
+  border-color: #4CAF50;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);
+}
+
+.servico-card h4 {
+  margin: 0 0 10px 0;
+  color: #2c3e50;
+}
+
+.servico-card .descricao {
+  margin: 10px 0;
+  color: #666;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.servico-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #999;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #eee;
+}
+
+.servico-info .status {
+  background: #e8f5e9;
+  color: #2e7d32;
+  padding: 3px 8px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .campanha-detalhes-container {
+    padding: 15px 10px;
+  }
+
+  .titulo-section {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .titulo-section h1 {
+    font-size: 28px;
+  }
+
+  .info-principais {
+    grid-template-columns: 1fr;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .detalhes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .servicos-grid {
+    grid-template-columns: 1fr;
+  }
+}
