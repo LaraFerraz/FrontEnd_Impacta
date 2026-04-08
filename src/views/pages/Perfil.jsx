@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '../../controllers/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+
 import './Perfil.css';
 
 const Perfil = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  if (!user) {
-    navigate('/login');
-    return null;
-  }
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
+  if (!user) return null;
 
   return (
     <div className="perfil-container">

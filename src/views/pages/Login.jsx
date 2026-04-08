@@ -44,8 +44,8 @@ const Login = () => {
     
     if (!formData.password) {
       newErrors.password = 'Senha é obrigatória';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Senha deve ter pelo menos 6 caracteres';
+    } else if (!/(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
+      newErrors.password = 'Senha deve ter pelo menos 1 letra maiúscula e 1 número';
     }
     
     return newErrors;
@@ -68,16 +68,13 @@ const Login = () => {
       const response = await login(formData.email, formData.password);
       const userName = response.user?.nome?.split(' ')[0] || 'Usuário';
       
-      // Mostrar mensagem de sucesso
       showSuccess(`Bem-vindo de volta, ${userName}!`);
       
-      // Redirecionar para home após login bem-sucedido
       setTimeout(() => navigate('/'), 1500);
       
     } catch (error) {
       console.error('Erro no login:', error);
       
-      // Tratar erros específicos
       if (error.response?.data?.field) {
         setErrors({ 
           [error.response.data.field]: error.response.data.message 
@@ -196,7 +193,6 @@ const Login = () => {
         </div>
       </div>
 
-      {/* Toast notifications */}
       <Toast toasts={toasts} onRemove={removeToast} />
     </main>
   );
