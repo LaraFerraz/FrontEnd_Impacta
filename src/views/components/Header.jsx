@@ -31,6 +31,14 @@ const Header = () => {
             </li>
             <li>
               <Link 
+                to="/campanhas" 
+                className={location.pathname === '/campanhas' || location.pathname.startsWith('/campanhas/') ? 'active' : ''}
+              >
+                Campanhas
+              </Link>
+            </li>
+            <li>
+              <Link 
                 to="/sobre" 
                 className={location.pathname === '/sobre' ? 'active' : ''}
               >

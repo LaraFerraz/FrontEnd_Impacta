@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useAuth } from '../../controllers/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
-
+import CadastrarCampanha from '../components/CadastrarCampanha';
 import './Perfil.css';
 
 const Perfil = () => {
@@ -150,6 +150,15 @@ const Perfil = () => {
           <button onClick={() => navigate('/editar-perfil')}>
             Editar Perfil
           </button>
+
+          {/* Seção de Cadastro de Campanha */}
+          <CadastrarCampanha 
+            usuarioId={user.id}
+            onCampanhaCreated={() => {
+              // Callback após criar campanha
+              console.log('Campanha criada com sucesso!');
+            }}
+          />
 
           <div className="card-actions">
             <button
