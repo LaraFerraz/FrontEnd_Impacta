@@ -147,7 +147,8 @@ const Perfil = () => {
             </div>
           )}
 
-          <button onClick={() => navigate('/editar-perfil')}>
+          <button onClick={() => navigate('/editar-perfil')}
+            className="btn-primary">
             Editar Perfil
           </button>
 
