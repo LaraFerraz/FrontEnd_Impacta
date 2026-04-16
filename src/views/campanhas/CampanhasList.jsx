@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import api from '../../controllers/services/api';
+import { useToast } from '../../controllers/hooks/useToast';
+import Toast from '../components/Toast';
 import CampanhaCard from './CampanhaCard';
 import './CampanhasList.css';
 
 const CampanhasList = () => {
+  const { toasts, showError, removeToast } = useToast();
   const [page, setPage] = useState(1);
-  const limit = 9;
+  const limit = 10;
   const [campanhas, setCampanhas] = useState([]);
   const [pagination, setPagination] = useState({ total: 0, total_paginas: 1 });
   const [loading, setLoading] = useState(true);
@@ -21,27 +24,7 @@ const CampanhasList = () => {
   const [estadoFiltro, setEstadoFiltro] = useState('');
 
   // Carregar campanhas
-  useEffect(() => {
-    carregarCampanhas();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, filtros]);
-
-  // Carregar dados de filtros
-  useEffect(() => {
-    carregarFiltros();
-  }, []);
-
-  // Carregar cidades quando estado de filtro é selecionado
-  useEffect(() => {
-    if (estadoFiltro) {
-      carregarCidadesDoEstado(estadoFiltro);
-    } else {
-      setCidades([]);
-      setFiltros(prev => ({ ...prev, cidade_id: '' }));
-    }
-  }, [estadoFiltro]);
-
-  const carregarCampanhas = async () => {
+  const carregarCampanhas = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
@@ -60,47 +43,45 @@ const CampanhasList = () => {
       }
     } catch (err) {
       console.error('Erro ao carregar campanhas:', err);
-      setError('Erro ao carregar campanhas. Tente novamente.');
+      const errorMsg = 'Erro ao carregar campanhas. Tente novamente.';
+      setError(errorMsg);
+      showError(errorMsg);
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, filtros, showError]);
 
-  const carregarFiltros = async () => {
+  useEffect(() => {
+    carregarCampanhas();
+  }, [carregarCampanhas]);
+
+  // Carregar dados de filtros
+  const carregarFiltros = useCallback(async () => {
     try {
       const [catData, estData] = await Promise.all([
         api.get('/categorias'),
         api.get('/estados/todos')
       ]);
 
-      console.log('📊 Resposta Categorias (CampanhasList):', catData);
-      console.log('📊 Resposta Estados (CampanhasList):', estData);
-
       if (catData && catData.data) {
-        console.log('✅ Categorias carregadas:', catData.data);
         setCategorias(catData.data);
-      } else {
-        console.warn('⚠️ Nenhuma data em catData:', catData);
       }
       
       if (estData?.dados) {
-        console.log('✅ Estados carregados:', estData.dados);
         setEstados(estData.dados);
       } else if (estData?.data) {
-        console.log('✅ Estados carregados:', estData.data);
         setEstados(estData.data);
-      } else {
-        console.warn('⚠️ Nenhuma data em estData:', estData);
       }
     } catch (err) {
-      console.error('❌ Erro ao carregar filtros:', err);
+      console.error('Erro ao carregar filtros:', err);
+      showError('Erro ao carregar filtros');
     }
-  };
+  }, [showError]);
 
-  const carregarCidadesDoEstado = async (estadoId) => {
+  // Carregar cidades quando estado de filtro é selecionado
+  const carregarCidadesDoEstado = useCallback(async (estadoId) => {
     try {
       const response = await api.get(`/cidades/estado/${estadoId}`);
-      console.log('📊 Cidades do estado:', response.data || response);
       
       if (response?.data) {
         setCidades(response.data);
@@ -108,10 +89,27 @@ const CampanhasList = () => {
         setCidades(response);
       }
     } catch (err) {
-      console.error('❌ Erro ao carregar cidades:', err);
+      console.error('Erro ao carregar cidades:', err);
       setCidades([]);
+      showError('Erro ao carregar cidades');
     }
-  };
+  }, [showError]);
+
+  // Efetuar apenas uma vez ao montar o componente
+  useEffect(() => {
+    carregarFiltros();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Carregar cidades quando estado de filtro é selecionado
+  useEffect(() => {
+    if (estadoFiltro) {
+      carregarCidadesDoEstado(estadoFiltro);
+    } else {
+      setCidades([]);
+      setFiltros(prev => ({ ...prev, cidade_id: '' }));
+    }
+  }, [estadoFiltro, carregarCidadesDoEstado]);
 
   const handleFiltroChange = (e) => {
     const { name, value } = e.target;
@@ -124,7 +122,6 @@ const CampanhasList = () => {
 
   const handleEstadoFiltroChange = (e) => {
     const { value } = e.target;
-    console.log('🔄 Estado filtro selecionado:', value);
     setEstadoFiltro(value);
   };
 
@@ -261,6 +258,8 @@ const CampanhasList = () => {
       ) : (
         !loading && <div className="no-results">Nenhuma campanha encontrada com os filtros selecionados.</div>
       )}
+      
+      <Toast toasts={toasts} onRemove={removeToast} />
     </div>
   );
 };

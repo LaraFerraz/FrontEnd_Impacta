@@ -50,34 +50,23 @@ const CadastrarCampanha = ({ usuarioId, onCampanhaCreated }) => {
         api.get('/estados/todos')
       ]);
 
-      console.log('📊 Resposta Categorias:', catData);
-      console.log('📊 Resposta Estados:', estData);
-
       if (catData?.data) {
-        console.log('✅ Categorias carregadas:', catData.data);
         setCategorias(catData.data);
-      } else {
-        console.warn('⚠️ Nenhuma data em catData:', catData);
       }
       
       if (estData?.dados) {
-        console.log('✅ Estados carregados:', estData.dados);
         setEstados(estData.dados);
       } else if (estData?.data) {
-        console.log('✅ Estados carregados:', estData.data);
         setEstados(estData.data);
-      } else {
-        console.warn('⚠️ Nenhuma data em estData:', estData);
       }
     } catch (err) {
-      console.error('❌ Erro ao carregar filtros:', err);
+      console.error('Erro ao carregar filtros:', err);
     }
   };
 
   const carregarCidadesDoEstado = async (estadoId) => {
     try {
       const response = await api.get(`/cidades/estado/${estadoId}`);
-      console.log('📊 Cidades do estado:', response.data || response);
       
       if (response?.data) {
         setCidades(response.data);
@@ -85,7 +74,7 @@ const CadastrarCampanha = ({ usuarioId, onCampanhaCreated }) => {
         setCidades(response);
       }
     } catch (err) {
-      console.error('❌ Erro ao carregar cidades:', err);
+      console.error('Erro ao carregar cidades:', err);
       setCidades([]);
     }
   };
@@ -100,7 +89,6 @@ const CadastrarCampanha = ({ usuarioId, onCampanhaCreated }) => {
 
   const handleEstadoChange = (e) => {
     const { value } = e.target;
-    console.log('🔄 Estado selecionado:', value);
     setEstadoSelecionado(value);
   };
 

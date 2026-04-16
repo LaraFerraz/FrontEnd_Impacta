@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../controllers/contexts/AuthContext';
 import { useToast } from '../../controllers/hooks/useToast';
+import { validateLoginForm } from '../../controllers/utils/validation';
+import { TIMEOUTS, MESSAGES } from '../../controllers/utils/constants';
 import Toast from '../components/Toast';
 import './Login.css';
 
@@ -33,28 +35,10 @@ const Login = () => {
     }
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-    
-    if (!formData.email) {
-      newErrors.email = 'Email é obrigatório';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email inválido';
-    }
-    
-    if (!formData.password) {
-      newErrors.password = 'Senha é obrigatória';
-    } else if (!/(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password = 'Senha deve ter pelo menos 1 letra maiúscula e 1 número';
-    }
-    
-    return newErrors;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const newErrors = validateForm();
+    const newErrors = validateLoginForm(formData);
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -68,20 +52,34 @@ const Login = () => {
       const response = await login(formData.email, formData.password);
       const userName = response.user?.nome?.split(' ')[0] || 'Usuário';
       
-      showSuccess(`Bem-vindo de volta, ${userName}!`);
+      showSuccess(`${MESSAGES.LOGIN.SUCCESS} ${userName}!`);
       
-      setTimeout(() => navigate('/'), 1500);
+      setTimeout(() => navigate('/'), TIMEOUTS.REDIRECT_DELAY);
       
     } catch (error) {
       console.error('Erro no login:', error);
       
-      if (error.response?.data?.field) {
+      // Tratamento de erros com múltiplos campos
+      if (error.response?.data?.errors && Array.isArray(error.response.data.errors)) {
+        const errorObj = {};
+        error.response.data.errors.forEach(err => {
+          errorObj[err.field] = {
+            message: err.message,
+            problema: err.problema
+          };
+        });
+        setErrors(errorObj);
+        showError(error.response.data.message || 'Verifique os erros nos campos abaixo');
+      } else if (error.response?.data?.field) {
         setErrors({ 
-          [error.response.data.field]: error.response.data.message 
+          [error.response.data.field]: {
+            message: error.response.data.message,
+            problema: error.response.data.problema
+          }
         });
         showError(error.response.data.message);
       } else {
-        const errorMsg = error.response?.data?.message || 'Erro ao fazer login. Tente novamente.';
+        const errorMsg = error.response?.data?.message || MESSAGES.LOGIN.ERROR;
         setErrors({ submit: errorMsg });
         showError(errorMsg);
       }
@@ -109,10 +107,19 @@ const Login = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className={errors.email ? 'error' : ''}
+                  className={errors.email ? 'input-error' : ''}
                   placeholder="seu@email.com"
                 />
-                {errors.email && <span className="error-message">{errors.email}</span>}
+                {errors.email && (
+                  <div className="error-container">
+                    <p className="error-message">
+                      {typeof errors.email === 'object' ? errors.email.message : errors.email}
+                    </p>
+                    {typeof errors.email === 'object' && errors.email.problema && (
+                      <p className="error-detail">💡 {errors.email.problema}</p>
+                    )}
+                  </div>
+                )}
               </div>
               
               <div className="form-group">
@@ -123,10 +130,19 @@ const Login = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={errors.password ? 'error' : ''}
+                  className={errors.password ? 'input-error' : ''}
                   placeholder="Sua senha"
                 />
-                {errors.password && <span className="error-message">{errors.password}</span>}
+                {errors.password && (
+                  <div className="error-container">
+                    <p className="error-message">
+                      {typeof errors.password === 'object' ? errors.password.message : errors.password}
+                    </p>
+                    {typeof errors.password === 'object' && errors.password.problema && (
+                      <p className="error-detail">💡 {errors.password.problema}</p>
+                    )}
+                  </div>
+                )}
               </div>
               
               <div className="form-options">

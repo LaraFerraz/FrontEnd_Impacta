@@ -65,11 +65,29 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
   };
 
+  const updateUser = async (userData) => {
+    try {
+      if (!user) throw new Error('Usuário não autenticado');
+      
+      const response = await api.put(`/users/${user.id}`, userData);
+      
+      // Atualizar o usuário no localStorage e no estado
+      const updatedUser = { ...user, ...response.data.data };
+      authService.setCurrentUser(updatedUser);
+      setUser(updatedUser);
+      
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const value = {
     user,
     login,
     register,
     logout,
+    updateUser,
     isAuthenticated,
     loading
   };

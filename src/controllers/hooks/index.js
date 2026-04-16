@@ -1,6 +1,9 @@
 /**
  * Exportação centralizada de hooks customizados
  */
-export { default as useFetch } from './useFetch.js';
-export { default as useForm } from './useForm.js';
-export { default as useToast } from './useToast.js';
+export { useFetch } from './useFetch.js';
+export { useForm } from './useForm.js';
+export { useToast } from './useToast.js';
+export { useCPFValidation } from './useCPFValidation.js';
+export { usePreferences } from './usePreferences.js';
+export { useFavoritos } from './useFavoritos.js';

@@ -114,6 +114,7 @@ class AuthService {
         password: userData.password,
         telefone: userData.telefone,
         cidade: userData.cidade,
+        cpf: userData.cpf,
         interesses: userData.interesses || []
       };
 
@@ -237,6 +238,22 @@ class AuthService {
   getCurrentUser() {
     const userStr = localStorage.getItem('user');
     return userStr ? JSON.parse(userStr) : null;
+  }
+
+  /**
+   * MÉTODO: Atualizar Usuário Atual
+   * ====================================================================
+   * Atualiza dados do usuário no localStorage
+   * Útil após editar perfil ou outras alterações de dados do usuário
+   * 
+   * @param {object} userData - Dados do usuário atualizados
+   * 
+   * Exemplo de uso:
+   * const usuarioAtualizado = { ...user, nome: 'Novo Nome' };
+   * authService.setCurrentUser(usuarioAtualizado);
+   */
+  setCurrentUser(userData) {
+    localStorage.setItem('user', JSON.stringify(userData));
   }
 
   /**

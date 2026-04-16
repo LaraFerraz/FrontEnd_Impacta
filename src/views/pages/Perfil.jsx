@@ -1,18 +1,14 @@
-import React, { useEffect } from 'react';
-import { useAuth } from '../../controllers/contexts/AuthContext';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../controllers/contexts/AuthContext';
 import CadastrarCampanha from '../components/CadastrarCampanha';
+import MinhasCampanhasInscritas from '../components/MinhasCampanhasInscritas';
+import PreferencesEditor from '../../components/PreferencesEditor';
 import './Perfil.css';
 
 const Perfil = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    }
-  }, [user, navigate]);
 
   if (!user) return null;
 
@@ -77,6 +73,15 @@ const Perfil = () => {
                 </p>
               </div>
             )}
+
+            <div className="card-actions-inline">
+              <button
+                className="btn-primary"
+                onClick={() => navigate('/editar-perfil')}
+              >
+                Editar Perfil
+              </button>
+            </div>
           </div>
 
           {user.endereco && (
@@ -147,16 +152,17 @@ const Perfil = () => {
             </div>
           )}
 
-          <button onClick={() => navigate('/editar-perfil')}>
-            Editar Perfil
-          </button>
+          {/* Seção de Preferências com Editor */}
+          <PreferencesEditor usuarioId={user.id} />
+
+          {/* Seção de Campanhas Inscritas */}
+          <MinhasCampanhasInscritas usuarioId={user.id} />
 
           {/* Seção de Cadastro de Campanha */}
           <CadastrarCampanha 
             usuarioId={user.id}
             onCampanhaCreated={() => {
               // Callback após criar campanha
-              console.log('Campanha criada com sucesso!');
             }}
           />
 

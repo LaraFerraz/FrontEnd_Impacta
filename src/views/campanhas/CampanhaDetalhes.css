@@ -276,6 +276,142 @@
   font-weight: 600;
 }
 
+/* Seção de Inscrição */
+.inscricao-section {
+  margin: 25px 0;
+  animation: slideIn 0.4s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.inscricao-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  border-radius: 8px;
+  gap: 20px;
+}
+
+.inscricao-card.nao-inscrito {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  color: white;
+}
+
+.inscricao-card.inscrito {
+  background: linear-gradient(135deg, #2196F3 0%, #1976d2 100%);
+  color: white;
+  border: 2px solid #0d47a1;
+}
+
+.inscricao-info {
+  flex: 1;
+}
+
+.inscricao-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.inscricao-card p {
+  margin: 5px 0;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+.inscricao-card strong {
+  font-weight: 600;
+}
+
+.btn-inscrever,
+.btn-cancelar {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+}
+
+.btn-inscrever {
+  background-color: white;
+  color: #4CAF50;
+}
+
+.btn-inscrever:hover:not(:disabled) {
+  background-color: #f5f5f5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-cancelar {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid white;
+}
+
+.btn-cancelar:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-inscrever:disabled,
+.btn-cancelar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-favorito {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background-color: white;
+  color: #ff6b6b;
+  border: 2px solid #ff6b6b;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.btn-favorito svg {
+  width: 20px;
+  height: 20px;
+}
+
+.btn-favorito:hover:not(:disabled) {
+  background-color: #ff6b6b;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.btn-favorito.favoritado {
+  background-color: #ff6b6b;
+  color: white;
+  border-color: #ff6b6b;
+}
+
+.btn-favorito:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Responsivo */
 @media (max-width: 768px) {
   .campanha-detalhes-container {
@@ -306,4 +442,19 @@
   .servicos-grid {
     grid-template-columns: 1fr;
   }
+
+  .inscricao-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .inscricao-card h3 {
+    font-size: 18px;
+  }
+
+  .btn-inscrever,
+  .btn-cancelar {
+    width: 100%;
+  }
 }
+
