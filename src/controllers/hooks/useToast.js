@@ -1,14 +1,15 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 
 export const useToast = () => {
   const [toasts, setToasts] = useState([]);
+  const toastCounterRef = useRef(0);
 
   const removeToast = useCallback((id) => {
     setToasts(prev => prev.filter(toast => toast.id !== id));
   }, []);
 
   const showToast = useCallback((message, type = 'info', duration = 5000) => {
-    const id = Date.now();
+    const id = `${Date.now()}-${++toastCounterRef.current}`;
     const newToast = { id, message, type };
     
     setToasts(prev => [...prev, newToast]);
