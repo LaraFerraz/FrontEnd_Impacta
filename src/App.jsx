@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { AuthProvider } from './controllers/contexts/AuthContext.jsx';
+import { PreferencesProvider } from './controllers/contexts/PreferencesContext.jsx';
+import { FavoritosProvider } from './controllers/contexts/FavoritosContext.jsx';
 import Header from './views/components/Header.jsx';
 import Footer from './views/components/Footer.jsx';
 import AppRoutes from './routes/AppRoutes.jsx';
@@ -15,11 +17,15 @@ function App() {
     <Router>
       <ScrollToTop />
       <AuthProvider>
-        <div className="App">
-          <Header />
-          <AppRoutes />
-          <Footer />
-        </div>
+        <PreferencesProvider>
+          <FavoritosProvider>
+            <div className="App">
+              <Header />
+              <AppRoutes />
+              <Footer />
+            </div>
+          </FavoritosProvider>
+        </PreferencesProvider>
       </AuthProvider>
     </Router>
   );

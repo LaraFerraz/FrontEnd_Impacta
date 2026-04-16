@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 export const useToast = () => {
   const [toasts, setToasts] = useState([]);
 
-  const showToast = (message, type = 'info', duration = 5000) => {
+  const removeToast = useCallback((id) => {
+    setToasts(prev => prev.filter(toast => toast.id !== id));
+  }, []);
+
+  const showToast = useCallback((message, type = 'info', duration = 5000) => {
     const id = Date.now();
     const newToast = { id, message, type };
     
@@ -12,16 +16,12 @@ export const useToast = () => {
     setTimeout(() => {
       removeToast(id);
     }, duration);
-  };
+  }, [removeToast]);
 
-  const removeToast = (id) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
-  };
-
-  const showSuccess = (message) => showToast(message, 'success');
-  const showError = (message) => showToast(message, 'error');
-  const showInfo = (message) => showToast(message, 'info');
-  const showWarning = (message) => showToast(message, 'warning');
+  const showSuccess = useCallback((message) => showToast(message, 'success'), [showToast]);
+  const showError = useCallback((message) => showToast(message, 'error'), [showToast]);
+  const showInfo = useCallback((message) => showToast(message, 'info'), [showToast]);
+  const showWarning = useCallback((message) => showToast(message, 'warning'), [showToast]);
 
   return {
     toasts,

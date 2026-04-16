@@ -80,6 +80,69 @@
   display: block;
 }
 
+/* ===== ESTILOS DE VALIDAÇÃO (SUCESSO) ===== */
+.form-group input.input-valid {
+  border-color: #27ae60 !important;
+  border-width: 2px;
+  background-color: rgba(39, 174, 96, 0.05);
+}
+
+.form-group input.input-valid:focus {
+  box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.15);
+  border-color: #229954;
+}
+
+.form-group input.input-error {
+  border-color: #e74c3c !important;
+  border-width: 2px;
+  background-color: rgba(231, 76, 60, 0.05);
+}
+
+.form-group input.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
+  border-color: #c0392b;
+}
+
+.success-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px;
+  background-color: rgba(39, 174, 96, 0.08);
+  border-left: 3px solid #27ae60;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px;
+  background-color: rgba(231, 76, 60, 0.08);
+  border-left: 3px solid #e74c3c;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.success-container .success-message {
+  color: #229954;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.error-container .error-message {
+  color: #c0392b;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ===== FIM ESTILOS DE VALIDAÇÃO ===== */
+
 .form-actions {
   display: flex;
   gap: 12px;

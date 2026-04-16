@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../controllers/contexts/AuthContext';
 import { useToast } from '../../controllers/hooks/useToast';
+import { validateCadastroForm, validateCPF } from '../../controllers/utils/validation';
+import { formatCPF, formatPhone } from '../../controllers/utils/formatters';
+import { TIMEOUTS, MESSAGES } from '../../controllers/utils/constants';
 import Toast from '../components/Toast';
 import './Cadastro.css';
 
@@ -24,6 +27,8 @@ const Cadastro = () => {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [cpfErro, setCpfErro] = useState('');
+  const [cpfValido, setCpfValido] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -40,6 +45,30 @@ const Cadastro = () => {
         ...prev,
         [name]: checked
       }));
+    } else if (name === 'cpf') {
+      // Formatar CPF automaticamente
+      const cpfFormatado = formatCPF(value);
+      setFormData(prev => ({
+        ...prev,
+        [name]: cpfFormatado
+      }));
+
+      // ✅ Validar CPF em TEMPO REAL
+      if (cpfFormatado.trim()) {
+        const validacao = validateCPF(cpfFormatado);
+        setCpfErro(validacao.valid ? '' : validacao.message);
+        setCpfValido(validacao.valid);
+      } else {
+        setCpfErro('');
+        setCpfValido(false);
+      }
+    } else if (name === 'telefone') {
+      // Formatar Telefone automaticamente
+      const telefoneFormatado = formatPhone(value);
+      setFormData(prev => ({
+        ...prev,
+        [name]: telefoneFormatado
+      }));
     } else {
       setFormData(prev => ({
         ...prev,
@@ -55,59 +84,10 @@ const Cadastro = () => {
     }
   };
 
-  const validateForm = () => {
-    const newErrors = {};
-
-    // Nome
-    if (!formData.nome.trim()) {
-      newErrors.nome = 'Nome é obrigatório';
-    }
-
-    // Email
-    if (!formData.email) {
-      newErrors.email = 'Email é obrigatório';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email inválido';
-    }
-
-    // Senha
-    if (!formData.password) {
-      newErrors.password = 'Senha é obrigatória';
-    } else if (!/(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      newErrors.password = 'Senha deve ter pelo menos 1 letra maiúscula e 1 número';
-    }
-
-    // Confirmar senha
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Confirmação de senha é obrigatória';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Senhas não coincidem';
-    }
-
-    // Telefone
-    if (!formData.telefone) {
-      newErrors.telefone = 'Telefone é obrigatório';
-    }
-
-    // Cidade
-    if (!formData.cidade) {
-      newErrors.cidade = 'Cidade é obrigatória';
-    }
-
-    // CPF
-    if (!formData.cpf) {
-      newErrors.cpf = 'CPF é obrigatório';
-    } else if (!/^\d{11}$/.test(formData.cpf.replace(/\D/g, ''))) {
-      newErrors.cpf = 'CPF inválido';
-    }
-
-    return newErrors;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newErrors = validateForm();
+    const newErrors = validateCadastroForm(formData);
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -122,17 +102,34 @@ const Cadastro = () => {
       const response = await register(registerData);
       const userName = response.user?.nome?.split(' ')[0] || 'Usuário';
 
-      showSuccess(`Bem-vindo(a), ${userName}! Sua conta foi criada com sucesso!`);
+      showSuccess(`${MESSAGES.CADASTRO.SUCCESS} Bem-vindo(a), ${userName}!`);
 
-      setTimeout(() => navigate('/'), 1500);
+      setTimeout(() => navigate('/'), TIMEOUTS.REDIRECT_DELAY);
     } catch (error) {
-      if (error.response?.data?.field) {
+      // Tratamento de erros com múltiplos campos
+      if (error.response?.data?.errors && Array.isArray(error.response.data.errors)) {
+        const errorObj = {};
+        error.response.data.errors.forEach(err => {
+          // Combinar message e problema para exibição melhor
+          errorObj[err.field] = {
+            message: err.message,
+            problema: err.problema
+          };
+        });
+        setErrors(errorObj);
+        
+        // Mostrar toast com mensagem geral
+        showError(error.response.data.message || 'Verifique os erros nos campos abaixo');
+      } else if (error.response?.data?.field) {
         setErrors({
-          [error.response.data.field]: error.response.data.message
+          [error.response.data.field]: {
+            message: error.response.data.message,
+            problema: error.response.data.problema
+          }
         });
         showError(error.response.data.message);
       } else {
-        const errorMsg = error.response?.data?.message || 'Erro ao criar conta. Tente novamente.';
+        const errorMsg = error.response?.data?.message || MESSAGES.CADASTRO.ERROR;
         setErrors({ submit: errorMsg });
         showError(errorMsg);
       }
@@ -166,28 +163,81 @@ const Cadastro = () => {
               <div className="form-row">
                 <div className="form-group">
                   <label>Nome</label>
-                  <input name="nome" value={formData.nome} onChange={handleChange} />
-                  {errors.nome && <span>{errors.nome}</span>}
+                  <input 
+                    name="nome" 
+                    value={formData.nome} 
+                    onChange={handleChange}
+                    className={errors.nome ? 'input-error' : ''}
+                  />
+                  {errors.nome && (
+                    <div className="error-container">
+                      <p className="error-message">
+                        {typeof errors.nome === 'object' ? errors.nome.message : errors.nome}
+                      </p>
+                      {typeof errors.nome === 'object' && errors.nome.problema && (
+                        <p className="error-detail">💡 {errors.nome.problema}</p>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="form-group">
                   <label>Email</label>
-                  <input name="email" value={formData.email} onChange={handleChange} />
-                  {errors.email && <span>{errors.email}</span>}
+                  <input 
+                    name="email" 
+                    value={formData.email} 
+                    onChange={handleChange}
+                    className={errors.email ? 'input-error' : ''}
+                  />
+                  {errors.email && (
+                    <div className="error-container">
+                      <p className="error-message">
+                        {typeof errors.email === 'object' ? errors.email.message : errors.email}
+                      </p>
+                      {typeof errors.email === 'object' && errors.email.problema && (
+                        <p className="error-detail">💡 {errors.email.problema}</p>
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 
               <div className="form-row">
                 <div className="form-group">
                   <label>Senha</label>
-                  <input type="password" name="password" value={formData.password} onChange={handleChange} />
-                  {errors.password && <span>{errors.password}</span>}
+                  <input 
+                    type="password" 
+                    name="password" 
+                    value={formData.password} 
+                    onChange={handleChange}
+                    className={errors.password ? 'input-error' : ''}
+                  />
+                  {errors.password && (
+                    <div className="error-container">
+                      <p className="error-message">
+                        {typeof errors.password === 'object' ? errors.password.message : errors.password}
+                      </p>
+                      {typeof errors.password === 'object' && errors.password.problema && (
+                        <p className="error-detail">💡 {errors.password.problema}</p>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 <div className="form-group">
                   <label>Confirmar Senha</label>
-                  <input type="password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
-                  {errors.confirmPassword && <span>{errors.confirmPassword}</span>}
+                  <input 
+                    type="password" 
+                    name="confirmPassword" 
+                    value={formData.confirmPassword} 
+                    onChange={handleChange}
+                    className={errors.confirmPassword ? 'input-error' : ''}
+                  />
+                  {errors.confirmPassword && (
+                    <div className="error-container">
+                      <p className="error-message">{errors.confirmPassword}</p>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -199,25 +249,61 @@ const Cadastro = () => {
                   value={formData.cpf}
                   onChange={handleChange}
                   placeholder="000.000.000-00"
-                  className={errors.cpf ? 'error' : ''}
+                  className={cpfErro ? 'input-error' : cpfValido ? 'input-valid' : ''}
                 />
-                {errors.cpf && <span className="error-message">{errors.cpf}</span>}
+                {cpfErro && (
+                  <div className="error-container">
+                    <p className="error-message">{cpfErro}</p>
+                  </div>
+                )}
+                {cpfValido && (
+                  <div className="success-container">
+                    <p className="success-message">CPF válido</p>
+                  </div>
+                )}
               </div>
-
 
               <div className="form-group">
                 <label>Telefone</label>
-                <input name="telefone" value={formData.telefone} onChange={handleChange} />
-                {errors.telefone && <span>{errors.telefone}</span>}
+                <input 
+                  name="telefone" 
+                  value={formData.telefone} 
+                  onChange={handleChange}
+                  placeholder="(11) 9999-9999"
+                  className={errors.telefone ? 'input-error' : ''}
+                />
+                {errors.telefone && (
+                  <div className="error-container">
+                    <p className="error-message">
+                      {typeof errors.telefone === 'object' ? errors.telefone.message : errors.telefone}
+                    </p>
+                    {typeof errors.telefone === 'object' && errors.telefone.problema && (
+                      <p className="error-detail">💡 {errors.telefone.problema}</p>
+                    )}
+                  </div>
+                )}
               </div>
 
               <div className="form-group">
                 <label>Cidade</label>
-                <input name="cidade" value={formData.cidade} onChange={handleChange} />
-                {errors.cidade && <span>{errors.cidade}</span>}
+                <input 
+                  name="cidade" 
+                  value={formData.cidade} 
+                  onChange={handleChange}
+                  className={errors.cidade ? 'input-error' : ''}
+                />
+                {errors.cidade && (
+                  <div className="error-container">
+                    <p className="error-message">{errors.cidade}</p>
+                  </div>
+                )}
               </div>
 
-              {errors.submit && <span>{errors.submit}</span>}
+              {errors.submit && (
+                <div className="error-container form-submit-error">
+                  <p className="error-message">{errors.submit}</p>
+                </div>
+              )}
 
               <button
                 type="submit"

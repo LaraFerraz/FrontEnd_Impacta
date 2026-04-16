@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { useAuth } from '../../controllers/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../controllers/hooks/useToast';
-import './editar-perfil.css';
+import { validateEditarPerfilForm } from '../../controllers/utils/validation';
+import { formatPhone } from '../../controllers/utils/formatters';
+import { TIMEOUTS, MESSAGES } from '../../controllers/utils/constants';
+import './EditarPerfil.css';
 
 const EditarPerfil = () => {
     const { user, updateUser } = useAuth();
@@ -14,49 +17,41 @@ const EditarPerfil = () => {
         email: user?.email || '',
         password: '',
         confirmPassword: '',
-        cpf: user?.cpf || ''
+        cpf: user?.cpf || '',
+        telefone: user?.telefone || ''
     });
 
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
+        const { name, value } = e.target;
+        
+        let updatedValue = value;
+        
+        // Formatar telefone ao digitar
+        if (name === 'telefone') {
+            updatedValue = formatPhone(value);
+        }
+        
         setFormData({
             ...formData,
-            [e.target.name]: e.target.value
+            [name]: updatedValue
         });
-    };
 
-    const validate = () => {
-        const newErrors = {};
-
-        if (!formData.nome) {
-            newErrors.nome = 'Nome obrigatório';
+        // Remover erro quando usuário começa a digitar
+        if (errors[name]) {
+            setErrors(prev => ({
+                ...prev,
+                [name]: ''
+            }));
         }
-
-        if (formData.password) {
-            if (!/(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])/.test(formData.password)) {
-                newErrors.password = 'Senha fraca';
-            }
-
-            if (formData.password !== formData.confirmPassword) {
-                newErrors.confirmPassword = 'Senhas não coincidem';
-            }
-        }
-
-        if (!formData.cpf) {
-            newErrors.cpf = 'CPF obrigatório';
-        } else if (!/^\d{11}$/.test(formData.cpf.replace(/\D/g, ''))) {
-            newErrors.cpf = 'CPF inválido';
-        }
-
-        return newErrors;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const newErrors = validate();
+        const newErrors = validateEditarPerfilForm(formData);
         if (Object.keys(newErrors).length) {
             setErrors(newErrors);
             return;
@@ -65,15 +60,22 @@ const EditarPerfil = () => {
         setLoading(true);
 
         try {
-            const { confirmPassword, ...data } = formData;
+            // Construir objeto com apenas os campos que foram alterados
+            const { confirmPassword, cpf, ...data } = formData;
+            
+            // Remover campos vazios de senha
+            if (!data.password || !data.password.trim()) {
+                delete data.password;
+            }
 
             await updateUser(data);
 
-            showSuccess('Perfil atualizado!');
-            navigate('/perfil');
+            showSuccess(MESSAGES.PERFIL.UPDATE_SUCCESS);
+            setTimeout(() => navigate('/perfil'), TIMEOUTS.REDIRECT_DELAY);
 
         } catch (err) {
-            showError('Erro ao atualizar');
+            showError(MESSAGES.PERFIL.UPDATE_ERROR);
+            console.error('Erro:', err);
         } finally {
             setLoading(false);
         }
@@ -105,8 +107,24 @@ const EditarPerfil = () => {
 
                             <div className="form-group">
                                 <label>CPF</label>
-                                <input name="cpf" value={formData.cpf} onChange={handleChange} />
-                                {errors.cpf && <span className="error-message">{errors.cpf}</span>}
+                                <input 
+                                    name="cpf" 
+                                    value={formData.cpf} 
+                                    disabled
+                                />
+                                <p style={{fontSize: '12px', color: '#666', marginTop: '5px'}}>
+                                    CPF não pode ser alterado
+                                </p>
+                            </div>
+
+                            <div className="form-group">
+                                <label>Telefone</label>
+                                <input 
+                                    name="telefone" 
+                                    value={formData.telefone} 
+                                    onChange={handleChange}
+                                    placeholder="(11) 9999-9999"
+                                />
                             </div>
 
                             <div className="form-group">

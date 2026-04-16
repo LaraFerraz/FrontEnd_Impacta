@@ -323,6 +323,94 @@
   opacity: 0.9;
 }
 
+/* ===== ESTILOS DE ERRO MELHORADOS ===== */
+
+.form-group input.input-error {
+  border-color: #e74c3c !important;
+  border-width: 2px;
+  background-color: rgba(231, 76, 60, 0.05);
+}
+
+.form-group input.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
+  border-color: #c0392b;
+}
+
+.error-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px;
+  background-color: rgba(231, 76, 60, 0.08);
+  border-left: 3px solid #e74c3c;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.error-container .error-message {
+  color: #c0392b;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.error-container .error-detail {
+  color: #e67e22;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.form-submit-error {
+  background-color: rgba(192, 57, 43, 0.1);
+  border-left-color: #c0392b;
+  padding: 12px;
+  text-align: left;
+}
+
+.form-submit-error .error-message {
+  color: #c0392b;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ===== FIM ESTILOS DE ERRO ===== */
+
+/* ===== ESTILOS DE VALIDAÇÃO (SUCESSO) ===== */
+.form-group input.input-valid {
+  border-color: #27ae60 !important;
+  border-width: 2px;
+  background-color: rgba(39, 174, 96, 0.05);
+}
+
+.form-group input.input-valid:focus {
+  box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.15);
+  border-color: #229954;
+}
+
+.success-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px;
+  background-color: rgba(39, 174, 96, 0.08);
+  border-left: 3px solid #27ae60;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.success-container .success-message {
+  color: #229954;
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ===== FIM ESTILOS DE VALIDAÇÃO ===== */
+
 /* Responsividade */
 @media (max-width: 1024px) {
   .cadastro-container {
