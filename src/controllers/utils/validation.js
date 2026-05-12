@@ -90,17 +90,14 @@ export const validateCadastroForm = (formData) => {
     errors.cidade = 'Cidade é obrigatória';
   }
 
-  // CPF (opcional se for vazio, mas se preenchido, deve ser válido)
-  if (formData.cpf?.trim()) {
+  // CPF (obrigatório e deve ser válido)
+  if (!formData.cpf?.trim()) {
+    errors.cpf = 'CPF é obrigatório';
+  } else {
     const cpfValidation = validateCPF(formData.cpf);
     if (!cpfValidation.valid) {
       errors.cpf = cpfValidation.message;
     }
-  }
-
-  // Termos
-  if (!formData.termos) {
-    errors.termos = 'Você deve aceitar os termos de uso';
   }
 
   return errors;

@@ -106,30 +106,44 @@ const Cadastro = () => {
 
       setTimeout(() => navigate('/'), TIMEOUTS.REDIRECT_DELAY);
     } catch (error) {
-      // Tratamento de erros com múltiplos campos
-      if (error.response?.data?.errors && Array.isArray(error.response.data.errors)) {
+      console.error('Erro no registro:', error);
+      
+      // Tratamento para erros com múltiplos campos (validação no backend)
+      if (error.data?.errors && Array.isArray(error.data.errors)) {
         const errorObj = {};
-        error.response.data.errors.forEach(err => {
-          // Combinar message e problema para exibição melhor
+        error.data.errors.forEach(err => {
           errorObj[err.field] = {
             message: err.message,
             problema: err.problema
           };
         });
         setErrors(errorObj);
-        
-        // Mostrar toast com mensagem geral
-        showError(error.response.data.message || 'Verifique os erros nos campos abaixo');
-      } else if (error.response?.data?.field) {
+        showError(error.data.message || 'Verifique os erros nos campos abaixo');
+      } 
+      // Erro 409 Conflict (email ou CPF duplicado)
+      else if (error.status === 409) {
+        const field = error.data?.field || 'email';
         setErrors({
-          [error.response.data.field]: {
-            message: error.response.data.message,
-            problema: error.response.data.problema
+          [field]: {
+            message: error.message,
+            problema: field === 'email' ? 'Este email já está cadastrado' : 'Este CPF já está cadastrado'
           }
         });
-        showError(error.response.data.message);
-      } else {
-        const errorMsg = error.response?.data?.message || MESSAGES.CADASTRO.ERROR;
+        showError(error.message);
+      }
+      // Erro com campo específico
+      else if (error.data?.field) {
+        setErrors({
+          [error.data.field]: {
+            message: error.message,
+            problema: error.data?.problema
+          }
+        });
+        showError(error.message);
+      } 
+      // Erro genérico
+      else {
+        const errorMsg = error.message || MESSAGES.CADASTRO.ERROR;
         setErrors({ submit: errorMsg });
         showError(errorMsg);
       }
