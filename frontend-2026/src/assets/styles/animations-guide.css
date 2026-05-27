@@ -1,0 +1,180 @@
+/* ============================================
+   Boas Práticas de Animações e UX
+   ============================================ */
+
+/* 
+  REGRA OURO: Animações apenas em elementos CLICÁVEIS
+  - Botões (btn-primary, btn-secondary)
+  - Links
+  - Cards clicáveis
+  - Inputs focáveis
+  
+  NÃO animar:
+  - Títulos
+  - Parágrafos
+  - Ícones decorativos
+  - Imagens estáticas
+*/
+
+/* ============================================
+   TIPOS DE ANIMAÇÃO POR ELEMENTO
+   ============================================ */
+
+/* 1. BOTÕES */
+.button-animatable {
+  /* Usar: transform + box-shadow para feedback visual */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.button-animatable:hover {
+  transform: translateY(-2px); /* Elevação leve */
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); /* Sombra aumenta */
+}
+
+.button-animatable:active {
+  transform: translateY(0); /* Volta ao estado normal */
+}
+
+/* 2. LINKS DE NAVEGAÇÃO */
+.link-animatable {
+  /* Usar: color + underline, SEM transform */
+  transition: color 0.3s ease, text-decoration 0.3s ease;
+  position: relative;
+}
+
+.link-animatable::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -4px;
+  left: 0;
+  background-color: currentColor;
+  transition: width 0.3s ease;
+}
+
+.link-animatable:hover::after {
+  width: 100%;
+}
+
+/* 3. CARDS/CONTAINERS */
+.card-animatable {
+  /* Usar: elevação com sombra, transform leve APENAS se interativo */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-animatable:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+}
+
+/* 4. ÍCONES ISOLADOS (NÃO animam) */
+.icon-static {
+  /* NUNCA transform aqui! */
+  transition: color 0.3s ease, fill 0.3s ease;
+}
+
+.icon-static:hover {
+  /* Apenas muda cor, não move */
+  color: var(--laranja-vibrante);
+}
+
+/* 5. INPUTS E FORMS */
+.input-animatable {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid transparent;
+}
+
+.input-animatable:focus {
+  outline: none;
+  border-color: var(--laranja-vibrante);
+  box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.1);
+}
+
+/* ============================================
+   TIMING E EASING
+   ============================================ */
+
+/*
+  RECOMENDAÇÕES:
+  - Hover/Focus rápido: 0.3s (resposta imediata)
+  - Animação de entrada: 0.6-0.8s (mais lenta, elegante)
+  - Animação de saída: 0.3s (rápida)
+  
+  Easing preferido:
+  - cubic-bezier(0.4, 0, 0.2, 1) - Smooth, profissional
+  - ease-out - Para entradas
+  - ease-in - Para saídas
+*/
+
+/* ============================================
+   RED FLAGS - EVITE ISTO
+   ============================================ */
+
+/*
+  ❌ NÃO fazer:
+  - transform: scale() em ícones isolados
+  - transform: rotate() em texto
+  - transform: translateX() em parágrafos
+  - Animar opacity sem motivo (causa lag)
+  - Transições > 0.5s em hover (demora demais)
+  
+  ✅ FAZER:
+  - transform + box-shadow em botões
+  - color change em ícones
+  - elevation em cards
+  - Feedback visual rápido em interações
+*/
+
+/* ============================================
+   CLASSE DE EXEMPLO: COMPONENTE CORRETO
+   ============================================ */
+
+.component-example {
+  padding: 16px 24px;
+  border-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+  
+  /* Transições suaves */
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* Sombra inicial */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.component-example:hover {
+  /* Elevação com sombra aumentada */
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.component-example:active {
+  /* Feedback tátil de clique */
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   ACESSIBILIDADE
+   ============================================ */
+
+/*
+  Manter acessibilidade:
+  - Usar :focus para teclado (não só :hover)
+  - Respeitar prefers-reduced-motion
+  - Contrast mínimo WCAG AA
+  - Animations rápido o suficiente (não > 0.5s)
+*/
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

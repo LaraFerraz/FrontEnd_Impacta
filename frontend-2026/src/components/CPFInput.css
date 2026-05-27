@@ -1,0 +1,102 @@
+/* CPF Input Styles */
+
+.cpf-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.cpf-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.cpf-label .required {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.cpf-input {
+  padding: 0.75rem 1rem;
+  border: 2px solid #ddd;
+  border-radius: 0.375rem;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background-color: #fff;
+}
+
+.cpf-input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.cpf-input:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Estados de validação */
+.cpf-input.input-error {
+  border-color: #e74c3c;
+  background-color: #fff5f5;
+}
+
+.cpf-input.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+}
+
+.cpf-input.input-valid {
+  border-color: #27ae60;
+  background-color: #f5fff5;
+}
+
+.cpf-input.input-valid:focus {
+  box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+}
+
+/* Mensagens de erro e sucesso */
+.error-message {
+  font-size: 0.85rem;
+  color: #e74c3c;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  animation: slideIn 0.3s ease;
+}
+
+.success-message {
+  font-size: 0.85rem;
+  color: #27ae60;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .cpf-input {
+    font-size: 16px;
+  }
+}
