@@ -1,0 +1,21 @@
+{
+  "name": "impacta-2026",
+  "version": "1.0.0",
+  "description": "Impacta 2026 - Frontend + Backend",
+  "private": true,
+  "workspaces": [
+    "BackEnd_Impacta",
+    "frontend-2026"
+  ],
+  "scripts": {
+    "kill:3000": "powershell -File kill-port-3000.ps1",
+    "dev": "npm run kill:3000 && concurrently \"npm run dev --workspace=BackEnd_Impacta\" \"npm run start --workspace=frontend-2026\"",
+    "dev:backend": "npm run dev --workspace=BackEnd_Impacta",
+    "dev:frontend": "npm run kill:3000 && npm run start --workspace=frontend-2026",
+    "build": "npm run build --workspace=frontend-2026",
+    "test": "npm test --workspaces"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
