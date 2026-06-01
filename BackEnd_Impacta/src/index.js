@@ -90,10 +90,19 @@ const startServer = async () => {
     await sequelize.authenticate();
     console.log('✔ Conexão com o banco de dados estabelecida com sucesso.');
 
-    app.listen(PORT, () => {
-      console.log(` Servidor operacional rodando na porta ${PORT}`);
-      console.log(`Health check: http://localhost:${PORT}/api/health`);
-    });
+    const server = app.listen(PORT, () => {
+  console.log(`Servidor operacional rodando na porta ${PORT}`);
+  console.log(`Health check: http://localhost:${PORT}/api/health`);
+});
+
+server.on('error', (err) => {
+  console.error('ERRO NO SERVIDOR:', err);
+});
+
+server.on('close', () => {
+  console.log('SERVIDOR FOI FECHADO');
+});
+
   } catch (error) {
     console.error(' Erro crítico ao iniciar o servidor:', error);
     process.exit(1);
