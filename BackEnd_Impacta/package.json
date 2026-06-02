@@ -9,6 +9,7 @@
     "db:init": "node src/initDb.js",
     "db:populate": "node scripts/populate-db.js",
     "db:verify": "node scripts/verify-data.js",
+    "db:test": "node scripts/test-persistence.js",
     "test": "jest --passWithNoTests --runInBand",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
