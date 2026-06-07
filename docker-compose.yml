@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+
+  backend:
+    build:
+      context: ./BackEnd_Impacta
+    container_name: impacta_backend
+    ports:
+      - "5001:5000"
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASSWORD: impacta123
+      DB_NAME: impacta
+      DB_PORT: 3306
+    depends_on:
+      mysql:
+        condition: service_healthy
+    restart: on-failure
+
+  frontend:
+    build:
+      context: ./frontend-2026
+    container_name: impacta_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend-2026:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+
+  mysql:
+    image: mysql:8.0
+    container_name: impacta_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: impacta123
+      MYSQL_DATABASE: impacta
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+volumes:
+  mysql_data:
+  
