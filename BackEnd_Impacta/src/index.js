@@ -85,18 +85,27 @@ app.use(errorHandler);
 // Inicialização do Servidor (Evita Duplo Bootstrap em Ambiente de Testes)
 // =========================================================================
 
-const startServer = async () => {
+const startServer = async (retries = 10, delay = 3000) => {
   try {
     await sequelize.authenticate();
     console.log('✔ Conexão com o banco de dados estabelecida com sucesso.');
 
-    app.listen(PORT, () => {
-      console.log(` Servidor operacional rodando na porta ${PORT}`);
+    const server = app.listen(PORT, () => {
+      console.log(`Servidor operacional rodando na porta ${PORT}`);
       console.log(`Health check: http://localhost:${PORT}/api/health`);
     });
+
+    server.on('error', (err) => console.error('ERRO NO SERVIDOR:', err));
+    server.on('close', () => console.log('SERVIDOR FOI FECHADO'));
+
   } catch (error) {
-    console.error(' Erro crítico ao iniciar o servidor:', error);
-    process.exit(1);
+    if (retries > 0) {
+      console.warn(`Banco não disponível, tentando novamente em ${delay/1000}s... (${retries} tentativas restantes)`);
+      setTimeout(() => startServer(retries - 1, delay), delay);
+    } else {
+      console.error('Erro crítico ao iniciar o servidor:', error);
+      process.exit(1);
+    }
   }
 };
 
