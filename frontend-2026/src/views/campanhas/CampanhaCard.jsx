@@ -18,25 +18,29 @@ const CampanhaCard = ({ campanha, onDeleteSuccess }) => {
     <div className="campanha-card">
       <div className="card-header">
         <h3 className="titulo">{campanha.titulo}</h3>
-        <span className={getStatusBadge(campanha.status.nome)}>
-          {campanha.status.nome}
-        </span>
+        <span className={getStatusBadge(campanha.status?.nome || "Sem status")}>
+  {campanha.status?.nome || "Sem status"}
+</span>
       </div>
 
-      <p className="descricao">{campanha.descricao.substring(0, 100)}...</p>
+      <p className="descricao">
+  {campanha.descricao
+    ? `${campanha.descricao.substring(0, 100)}...`
+    : "Sem descrição"}
+</p>
 
       <div className="card-meta">
         <div className="meta-item">
           <span className="label">Categoria:</span>
-          <span className="value">{campanha.categoria.nome}</span>
+          {campanha.categoria?.nome || "Sem categoria"}
         </div>
         <div className="meta-item">
           <span className="label">Criador:</span>
-          <span className="value">{campanha.criador.nome}</span>
+          <span className="value">{campanha.criador?.nome || "Sem criador"}</span>
         </div>
         <div className="meta-item">
           <span className="label">Cidade:</span>
-          <span className="value">{campanha.cidade.nome}</span>
+          <span className="value">{campanha.cidade?.nome || "Sem cidade"}</span>
         </div>
       </div>
 
