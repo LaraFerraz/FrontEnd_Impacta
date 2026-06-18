@@ -6,22 +6,20 @@ const { sequelize } = require('./middleware/models');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
-// Alterado para a porta 5000 para evitar colisão e espelhamento com o ecossistema React (3000)
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3001;
 
 // =========================================================================
 // Configurações de Segurança e Middlewares Globais
 // =========================================================================
 
-// Expressão regular calibrada: Permite explicitamente o React (3000) e o próprio backend (5000)
-const allowedOriginsRegex = /^http:\/\/(localhost|127\.0\.0\.1):(3000|5000)$/;
+const allowedOriginsRegex = /^https?:\/\/(localhost|127\.0\.0\.1)(:(3000|5000))?$/;
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Permite requisições sem origem (como ferramentas mobile, Postman ou chamadas server-to-server)
     if (!origin || allowedOriginsRegex.test(origin)) {
       return callback(null, true);
     }
+
     return callback(new Error('CORS não permitido para esta origem'));
   },
   credentials: true,
@@ -32,23 +30,30 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Middleware de Auditoria / Logging Minimalista
+// =========================================================================
+// Log de requisições
+// =========================================================================
+
 app.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
-  return next();
+  console.log(
+    `[${new Date().toISOString()}] ${req.method} ${req.path}`
+  );
+  next();
 });
 
 // =========================================================================
-// Endpoints Operacionais e Verificação de Saúde (Health Check)
+// Health Check
 // =========================================================================
 
-// Corrigido: Alterado de 'router.get' para 'app.get' para evitar o ReferenceError
 app.get('/api/health', (req, res) => {
-  res.status(200).json({ status: 'OK', timestamp: new Date() });
+  res.status(200).json({
+    status: 'OK',
+    timestamp: new Date()
+  });
 });
 
 // =========================================================================
-// Definição do Pipeline de Rotas Globais da API
+// Rotas
 // =========================================================================
 
 app.use('/api/auth', require('./routes/authRoutes'));
@@ -65,45 +70,74 @@ app.use('/api/participacoes', require('./routes/participacoesRoutes'));
 app.use('/api/avaliacoes', require('./routes/avaliacoesRoutes'));
 app.use('/api/favoritos', require('./routes/favoritosRoutes'));
 app.use('/api/servicos', require('./routes/servicosDisponiveisRoutes'));
+app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 
 // =========================================================================
-// Middlewares de Encerramento e Tratamento de Exceções (Ordem Crítica)
+// 404
 // =========================================================================
 
-// Catch 404: Captura requisições para rotas inexistentes e encaminha para o formatador
-app.use((req, res, next) => {
+app.use((req, res) => {
   return res.status(404).json({
     message: 'Rota não encontrada',
     code: 'NOT_FOUND_ERROR'
   });
 });
 
-// Interceptador e Formatador Centralizado de Erros (Deve ser sempre o ÚLTIMO app.use)
+// =========================================================================
+// Tratamento Global de Erros
+// =========================================================================
+
 app.use(errorHandler);
 
 // =========================================================================
-// Inicialização do Servidor (Evita Duplo Bootstrap em Ambiente de Testes)
+// Inicialização do Servidor
 // =========================================================================
 
 const startServer = async (retries = 10, delay = 3000) => {
   try {
+
     await sequelize.authenticate();
+
     console.log('✔ Conexão com o banco de dados estabelecida com sucesso.');
+    console.log('✔ Sincronização automática desativada.');
+
+    // NÃO USAR:
+    // await sequelize.sync({ alter: true });
+    // await sequelize.sync({ force: true });
 
     const server = app.listen(PORT, () => {
       console.log(`Servidor operacional rodando na porta ${PORT}`);
       console.log(`Health check: http://localhost:${PORT}/api/health`);
     });
 
-    server.on('error', (err) => console.error('ERRO NO SERVIDOR:', err));
-    server.on('close', () => console.log('SERVIDOR FOI FECHADO'));
+    server.on('error', (err) => {
+      console.error('ERRO NO SERVIDOR:', err);
+    });
+
+    server.on('close', () => {
+      console.log('SERVIDOR FOI FECHADO');
+    });
 
   } catch (error) {
+
     if (retries > 0) {
-      console.warn(`Banco não disponível, tentando novamente em ${delay/1000}s... (${retries} tentativas restantes)`);
-      setTimeout(() => startServer(retries - 1, delay), delay);
+
+      console.warn(
+        `Banco não disponível, tentando novamente em ${delay / 1000}s... (${retries} tentativas restantes)`
+      );
+
+      setTimeout(
+        () => startServer(retries - 1, delay),
+        delay
+      );
+
     } else {
-      console.error('Erro crítico ao iniciar o servidor:', error);
+
+      console.error(
+        'Erro crítico ao iniciar o servidor:',
+        error
+      );
+
       process.exit(1);
     }
   }
