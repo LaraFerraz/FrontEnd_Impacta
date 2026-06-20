@@ -1,1 +1,25 @@
-node_modules
+# Dependências
+node_modules/
+
+# Variáveis de ambiente (contém senhas e segredos)
+.env
+.env.local
+.env.production
+
+# Certificados HTTPS locais
+nginx/certs/
+
+# Build do React
+frontend-2026/build/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
