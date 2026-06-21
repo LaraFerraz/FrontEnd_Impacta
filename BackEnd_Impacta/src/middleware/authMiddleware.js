@@ -49,7 +49,10 @@ const autorizarProprio = (req, res, next) => {
   const paramId = req.params?.id;
 
   if (!userId || !paramId || String(userId) !== String(paramId)) {
-    return res.status(403).json({ message: 'Acesso negado' });
+    return res.status(403).json({
+  message: 'Acesso negado: Você não tem permissão para alterar ou acessar este perfil',
+  code: 'FORBIDDEN_ERROR'
+});
   }
 
   return next();

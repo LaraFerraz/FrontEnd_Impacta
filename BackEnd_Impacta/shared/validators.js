@@ -5,9 +5,7 @@ const validateEmail = (email) => {
 
   return {
     valid: regex.test(email),
-    message: regex.test(email)
-      ? null
-      : 'Email inválido'
+    message: regex.test(email) ? null : 'Email inválido'
   };
 };
 
@@ -18,6 +16,13 @@ const validateCPF = (cpf) => {
     return {
       valid: false,
       message: 'CPF deve conter 11 dígitos'
+    };
+  }
+
+  if (/^(\d)\1{10}$/.test(cpf)) {
+    return {
+      valid: false,
+      message: 'CPF inválido: sequência de dígitos repetidos'
     };
   }
 
