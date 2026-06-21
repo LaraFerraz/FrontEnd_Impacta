@@ -75,9 +75,9 @@ router.post('/register', validarCadastro, async (req, res, next) => {
     const token = gerarToken(usuarioCompleto);
 
     return res.status(201).json({
-      message: 'Usuário cadastrado com sucesso',
+      message: 'Usuário criado com sucesso',
       token,
-      user: formatarUsuario(usuarioCompleto)
+      data: formatarUsuario(usuarioCompleto)
     });
   } catch (error) {
     return next(error);

@@ -13,9 +13,13 @@
     "dev:backend": "npm run dev --workspace=BackEnd_Impacta",
     "dev:frontend": "npm run kill:3000 && npm run start --workspace=frontend-2026",
     "build": "npm run build --workspace=frontend-2026",
-    "test": "npm test --workspaces"
+    "test": "npm test --workspaces",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
+    "concurrently": "^8.2.2",
+    "husky": "^9.1.7"
   }
 }
