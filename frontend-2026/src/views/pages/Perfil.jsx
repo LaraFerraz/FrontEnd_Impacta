@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../controllers/contexts/AuthContext';
 import CadastrarCampanha from '../components/CadastrarCampanha';
 import MinhasCampanhasInscritas from '../components/MinhasCampanhasInscritas';
+import MinhasCampanhasCriadas from '../components/MinhasCampanhasCriadas';
+import MinhasAvaliacoes from '../components/MinhasAvaliacoes';
 import PreferencesEditor from '../../components/PreferencesEditor';
 import './Perfil.css';
 
 const Perfil = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [refreshCampanhasCriadas, setRefreshCampanhasCriadas] = useState(0);
 
   if (!user) return null;
 
@@ -87,33 +90,28 @@ const Perfil = () => {
           {user.endereco && (
             <div className="card-section">
               <h2>Endereço</h2>
-
               <div className="info-group">
                 <label>Logradouro</label>
                 <p className="info-value">{user.endereco}</p>
               </div>
-
               {user.numero && (
                 <div className="info-group">
                   <label>Número</label>
                   <p className="info-value">{user.numero}</p>
                 </div>
               )}
-
               {user.complemento && (
                 <div className="info-group">
                   <label>Complemento</label>
                   <p className="info-value">{user.complemento}</p>
                 </div>
               )}
-
               {user.bairro && (
                 <div className="info-group">
                   <label>Bairro</label>
                   <p className="info-value">{user.bairro}</p>
                 </div>
               )}
-
               {user.cep && (
                 <div className="info-group">
                   <label>CEP</label>
@@ -128,21 +126,18 @@ const Perfil = () => {
           {user.pais && (
             <div className="card-section">
               <h2>Localização</h2>
-
               {user.pais && (
                 <div className="info-group">
                   <label>País</label>
                   <p className="info-value">{user.pais}</p>
                 </div>
               )}
-
               {user.estado && (
                 <div className="info-group">
                   <label>Estado</label>
                   <p className="info-value">{user.estado}</p>
                 </div>
               )}
-
               {user.cidade && (
                 <div className="info-group">
                   <label>Cidade</label>
@@ -152,17 +147,18 @@ const Perfil = () => {
             </div>
           )}
 
-          {/* Seção de Preferências com Editor */}
           <PreferencesEditor usuarioId={user.id} />
 
-          {/* Seção de Campanhas Inscritas */}
           <MinhasCampanhasInscritas usuarioId={user.id} />
 
-          {/* Seção de Cadastro de Campanha */}
-          <CadastrarCampanha 
+          <MinhasCampanhasCriadas usuarioId={user.id} refreshTrigger={refreshCampanhasCriadas} />
+
+          <MinhasAvaliacoes usuarioId={user.id} />
+
+          <CadastrarCampanha
             usuarioId={user.id}
             onCampanhaCreated={() => {
-              // Callback após criar campanha
+              setRefreshCampanhasCriadas(prev => prev + 1);
             }}
           />
 

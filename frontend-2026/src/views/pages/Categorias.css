@@ -1,0 +1,256 @@
+.categorias-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.categorias-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.categorias-header h1 {
+  font-size: 28px;
+  color: #1a1a2e;
+  margin: 0 0 6px 0;
+}
+
+.categorias-header p {
+  color: #666;
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Botão nova categoria */
+.btn-nova-categoria {
+  padding: 12px 22px;
+  background-color: #e84343;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-nova-categoria:hover {
+  background-color: #c0392b;
+  transform: translateY(-2px);
+}
+
+/* Card do formulário */
+.categoria-form-card {
+  background: #fff;
+  border: 2px solid #e84343;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: 0 4px 16px rgba(232, 67, 67, 0.12);
+}
+
+.categoria-form-card h2 {
+  margin: 0 0 18px 0;
+  font-size: 18px;
+  color: #1a1a2e;
+}
+
+.categoria-form .form-group {
+  margin-bottom: 16px;
+}
+
+.categoria-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+  font-size: 14px;
+}
+
+.categoria-form input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.categoria-form input:focus {
+  outline: none;
+  border-color: #e84343;
+}
+
+.form-acoes {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.btn-salvar {
+  padding: 10px 22px;
+  background-color: #e84343;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-salvar:hover:not(:disabled) {
+  background-color: #c0392b;
+}
+
+.btn-salvar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-cancelar {
+  padding: 10px 22px;
+  background-color: #f5f5f5;
+  color: #555;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-cancelar:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}
+
+/* Estados da lista */
+.categorias-loading,
+.categorias-erro,
+.categorias-vazio {
+  text-align: center;
+  padding: 50px 20px;
+  color: #666;
+  font-size: 16px;
+}
+
+.categorias-erro {
+  color: #c62828;
+}
+
+.categorias-vazio p {
+  margin-bottom: 20px;
+}
+
+/* Grid de cards */
+.categorias-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.categoria-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 16px 20px;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.categoria-card:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.categoria-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.categoria-nome {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1a1a2e;
+}
+
+.categoria-projetos {
+  font-size: 13px;
+  color: #888;
+}
+
+.categoria-card-acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-editar-cat,
+.btn-excluir-cat {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btn-editar-cat {
+  background-color: #fff3e0;
+  border-color: #ffb74d;
+}
+
+.btn-editar-cat:hover {
+  background-color: #e65100;
+  color: white;
+}
+
+.btn-excluir-cat {
+  background-color: #ffebee;
+  border-color: #ef9a9a;
+}
+
+.btn-excluir-cat:hover:not(:disabled) {
+  background-color: #c62828;
+  color: white;
+}
+
+.btn-excluir-cat:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  .categorias-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-nova-categoria {
+    width: 100%;
+    text-align: center;
+  }
+
+  .form-acoes {
+    flex-direction: column;
+  }
+
+  .btn-salvar,
+  .btn-cancelar {
+    width: 100%;
+    text-align: center;
+  }
+}

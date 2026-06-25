@@ -46,7 +46,7 @@ export const validateLoginForm = (formData) => {
   const errors = {};
   if (!formData.email) {
     errors.email = 'Email é obrigatório';
-  } else if (!validateEmail(formData.email).valid) {
+  } else if (!validateEmail(formData.email)) {
     errors.email = 'Email inválido';
   }
   if (!formData.password) {
@@ -63,7 +63,7 @@ export const validateCadastroForm = (formData) => {
   if (!formData.nome?.trim()) errors.nome = 'Nome é obrigatório';
   if (!formData.email) {
     errors.email = 'Email é obrigatório';
-  } else if (!validateEmail(formData.email).valid) {
+  } else if (!validateEmail(formData.email)) {
     errors.email = 'Email inválido';
   }
   if (!formData.password) {

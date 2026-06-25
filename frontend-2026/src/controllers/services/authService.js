@@ -61,7 +61,7 @@ class AuthService {
         
         // 3. ARMAZENAR DADOS DO USUÁRIO
         // Salva informações do usuário para usar na interface
-        localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem('user', JSON.stringify(response.user || response.data || response));
       }
 
       return response;
@@ -126,7 +126,7 @@ class AuthService {
       if (response.token) {
         setTokenStorage(response.token);
         api.setToken(response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
+        localStorage.setItem('user', JSON.stringify(response.user || response.data || response));
       }
 
       return response;
@@ -236,9 +236,18 @@ class AuthService {
    * }
    */
   getCurrentUser() {
-    const userStr = localStorage.getItem('user');
-    return userStr ? JSON.parse(userStr) : null;
+  const userStr = localStorage.getItem('user');
+  if (!userStr || userStr === 'undefined' || userStr === 'null') {
+    return null;
   }
+  try {
+    return JSON.parse(userStr);
+  } catch (error) {
+    console.warn('Dados de usuário corrompidos no localStorage, limpando...', error);
+    localStorage.removeItem('user');
+    return null;
+  }
+}
 
   /**
    * MÉTODO: Atualizar Usuário Atual
@@ -315,3 +324,4 @@ class AuthService {
 const authService = new AuthService();
 
 export default authService;
+
