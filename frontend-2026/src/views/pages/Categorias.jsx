@@ -91,7 +91,7 @@ const Categorias = () => {
       await carregarCategorias();
     } catch (error) {
       console.error('Erro ao excluir categoria:', error);
-      showToast(error.message || 'Erro ao excluir categoria', 'error');
+      showToast('Não é possível excluir uma categoria que possui campanhas vinculadas.', 'error');
     } finally {
       setExcluindoId(null);
     }
