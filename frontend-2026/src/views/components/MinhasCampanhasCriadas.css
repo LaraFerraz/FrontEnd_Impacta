@@ -1,0 +1,76 @@
+/* MinhasCampanhasCriadas - estilos extras (reaproveita MinhasCampanhasInscritas.css) */
+
+.campanha-criada-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.btn-editar-card,
+.btn-excluir-card {
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.btn-editar-card {
+  background-color: #fff3e0;
+  color: #e65100;
+  border-color: #ffb74d;
+}
+
+.btn-editar-card:hover:not(:disabled) {
+  background-color: #e65100;
+  color: white;
+}
+
+.btn-excluir-card {
+  background-color: #ffebee;
+  color: #c62828;
+  border-color: #ef9a9a;
+}
+
+.btn-excluir-card:hover:not(:disabled) {
+  background-color: #c62828;
+  color: white;
+}
+
+.btn-editar-card:disabled,
+.btn-excluir-card:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-voltar-edicao {
+  padding: 8px 16px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-voltar-edicao:hover {
+  background-color: #da190b;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .campanha-criada-acoes {
+    flex-direction: column;
+  }
+
+  .btn-editar-card,
+  .btn-excluir-card {
+    width: 100%;
+    text-align: center;
+  }
+}

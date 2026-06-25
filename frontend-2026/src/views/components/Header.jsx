@@ -19,32 +19,42 @@ const Header = () => {
                <h2>IMPACTA</h2>
             </Link>
           </div>
-          
+
           <ul className="nav-links">
             <li>
-              <Link 
-                to="/" 
+              <Link
+                to="/"
                 className={location.pathname === '/' ? 'active' : ''}
               >
                 Início
               </Link>
             </li>
             <li>
-              <Link 
-                to="/campanhas" 
+              <Link
+                to="/campanhas"
                 className={location.pathname === '/campanhas' || location.pathname.startsWith('/campanhas/') ? 'active' : ''}
               >
                 Campanhas
               </Link>
             </li>
             <li>
-              <Link 
-                to="/sobre" 
+              <Link
+                to="/sobre"
                 className={location.pathname === '/sobre' ? 'active' : ''}
               >
                 Sobre
               </Link>
             </li>
+            {user && (
+              <li>
+                <Link
+                  to="/categorias"
+                  className={location.pathname === '/categorias' ? 'active' : ''}
+                >
+                  Categorias
+                </Link>
+              </li>
+            )}
           </ul>
 
           <div className="auth-buttons">

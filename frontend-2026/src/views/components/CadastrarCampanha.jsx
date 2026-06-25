@@ -2,7 +2,31 @@ import React, { useState, useEffect } from 'react';
 import api from '../../controllers/services/api';
 import './CadastrarCampanha.css';
 
-const CadastrarCampanha = ({ usuarioId, onCampanhaCreated }) => {
+/**
+ * Componente de Cadastro/Edição de Campanha.
+ *
+ * Modo CRIAÇÃO (padrão): usado dentro da página de Perfil.
+ *   <CadastrarCampanha usuarioId={user.id} onCampanhaCreated={...} />
+ *
+ * Modo EDIÇÃO: passe a campanha existente em `campanhaParaEditar`.
+ * Nesse modo o formulário já vem aberto e pré-preenchido, o submit
+ * faz PUT em vez de POST, e os botões/textos mudam para refletir edição.
+ *   <CadastrarCampanha
+ *      usuarioId={user.id}
+ *      campanhaParaEditar={campanha}
+ *      onCampanhaUpdated={...}
+ *      onCancelEdit={...}
+ *   />
+ */
+const CadastrarCampanha = ({
+  usuarioId,
+  onCampanhaCreated,
+  campanhaParaEditar = null,
+  onCampanhaUpdated,
+  onCancelEdit
+}) => {
+  const modoEdicao = !!campanhaParaEditar;
+
   const [formData, setFormData] = useState({
     // Projeto
     titulo: '',
@@ -27,11 +51,49 @@ const CadastrarCampanha = ({ usuarioId, onCampanhaCreated }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  const [expandeForm, setExpandeForm] = useState(false);
+  // No modo edição o formulário já começa aberto
+  const [expandeForm, setExpandeForm] = useState(modoEdicao);
+
+  // Formata uma data ISO (ex: "2026-07-01T00:00:00.000Z") para o formato
+  // que o <input type="date"> espera (yyyy-MM-dd)
+  const paraInputDate = (data) => {
+    if (!data) return '';
+    return new Date(data).toISOString().split('T')[0];
+  };
 
   useEffect(() => {
     carregarFiltros();
   }, []);
+
+  // Pré-popula o formulário quando entra em modo edição
+  // (ou quando a campanha a editar é trocada)
+  useEffect(() => {
+    if (campanhaParaEditar) {
+      const infos = campanhaParaEditar.informacoes || {};
+      setFormData({
+        titulo: campanhaParaEditar.titulo || '',
+        descricao: campanhaParaEditar.descricao || '',
+        categoria_id: campanhaParaEditar.categoria?.id || campanhaParaEditar.categoria_id || '',
+        cidade_id: campanhaParaEditar.cidade?.id || campanhaParaEditar.cidade_id || '',
+        data_inicio: paraInputDate(campanhaParaEditar.data_inicio),
+        data_fim: paraInputDate(campanhaParaEditar.data_fim),
+        meta_participantes: campanhaParaEditar.meta_participantes || '',
+        objetivos: infos.objetivos || '',
+        publico_alvo: infos.publico_alvo || '',
+        impacto_esperado: infos.impacto_esperado || '',
+        regras: infos.regras || '',
+        observacoes: infos.observacoes || ''
+      });
+      setExpandeForm(true);
+
+      // Se a cidade já vier com o estado embutido, usa para já
+      // carregar a lista de cidades certa no select
+      if (campanhaParaEditar.cidade?.estado_id) {
+        setEstadoSelecionado(campanhaParaEditar.cidade.estado_id);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [campanhaParaEditar]);
 
   // Carregar cidades quando estado é selecionado
   useEffect(() => {
@@ -107,7 +169,41 @@ const CadastrarCampanha = ({ usuarioId, onCampanhaCreated }) => {
         return;
       }
 
-      // Criar Projeto
+      if (modoEdicao) {
+        // ===== MODO EDIÇÃO: PUT no projeto existente =====
+        await api.put(`/projetos/${campanhaParaEditar.id}`, {
+          titulo: formData.titulo,
+          descricao: formData.descricao,
+          categoria_id: parseInt(formData.categoria_id),
+          cidade_id: parseInt(formData.cidade_id),
+          data_inicio: formData.data_inicio,
+          data_fim: formData.data_fim,
+          meta_participantes: formData.meta_participantes ? parseInt(formData.meta_participantes) : null
+        });
+
+        // Atualiza (ou cria) as informações detalhadas da campanha
+        if (formData.objetivos || formData.publico_alvo || formData.impacto_esperado ||
+            formData.regras || formData.observacoes) {
+          await api.post('/info-campanha', {
+            projeto_id: campanhaParaEditar.id,
+            objetivos: formData.objetivos || null,
+            publico_alvo: formData.publico_alvo || null,
+            impacto_esperado: formData.impacto_esperado || null,
+            regras: formData.regras || null,
+            observacoes: formData.observacoes || null
+          });
+        }
+
+        setSuccess('Campanha atualizada com sucesso!');
+
+        setTimeout(() => {
+          if (onCampanhaUpdated) onCampanhaUpdated();
+        }, 1200);
+
+        return;
+      }
+
+      // ===== MODO CRIAÇÃO: POST de um novo projeto =====
       const projetoResponse = await api.post('/projetos', {
         titulo: formData.titulo,
         descricao: formData.descricao,
@@ -161,18 +257,26 @@ const CadastrarCampanha = ({ usuarioId, onCampanhaCreated }) => {
         if (onCampanhaCreated) onCampanhaCreated();
       }, 2000);
     } catch (err) {
-      console.error('Erro ao criar campanha:', err);
-      setError(err.message || 'Erro ao criar campanha');
+      console.error(modoEdicao ? 'Erro ao atualizar campanha:' : 'Erro ao criar campanha:', err);
+      setError(err.message || (modoEdicao ? 'Erro ao atualizar campanha' : 'Erro ao criar campanha'));
     } finally {
       setLoading(false);
     }
   };
 
+  const handleCancelar = () => {
+    if (modoEdicao) {
+      if (onCancelEdit) onCancelEdit();
+      return;
+    }
+    setExpandeForm(false);
+  };
+
   return (
     <div className="cadastrar-campanha-container">
       <div className="cadastrar-header">
-        <h2>📢 Cadastre sua Campanha</h2>
-        <p>Compartilhe sua iniciativa e engaje a comunidade</p>
+        <h2>{modoEdicao ? '✏️ Editar Campanha' : '📢 Cadastre sua Campanha'}</h2>
+        <p>{modoEdicao ? 'Atualize as informações da sua campanha' : 'Compartilhe sua iniciativa e engaje a comunidade'}</p>
       </div>
 
       {error && <div className="alert alert-error">{error}</div>}
@@ -388,12 +492,14 @@ const CadastrarCampanha = ({ usuarioId, onCampanhaCreated }) => {
               className="btn-submit"
               disabled={loading}
             >
-              {loading ? 'Criando...' : 'Criar Campanha'}
+              {loading
+                ? (modoEdicao ? 'Salvando...' : 'Criando...')
+                : (modoEdicao ? 'Salvar Alterações' : 'Criar Campanha')}
             </button>
             <button
               type="button"
               className="btn-cancel"
-              onClick={() => setExpandeForm(false)}
+              onClick={handleCancelar}
               disabled={loading}
             >
               Cancelar

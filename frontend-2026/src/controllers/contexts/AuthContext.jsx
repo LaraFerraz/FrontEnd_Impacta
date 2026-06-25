@@ -40,7 +40,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await authService.login(email, password);
-      setUser(response.user);
+      setUser(response.user || response.data || response);
       setIsAuthenticated(true);
       return response;
     } catch (error) {
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const response = await authService.register(userData);
-      setUser(response.user);
+      setUser(response.user || response.data || response);
       setIsAuthenticated(true);
       return response;
     } catch (error) {
@@ -66,21 +66,26 @@ export const AuthProvider = ({ children }) => {
   };
 
   const updateUser = async (userData) => {
-    try {
-      if (!user) throw new Error('Usuário não autenticado');
-      
-      const response = await api.put(`/users/${user.id}`, userData);
-      
-      // Atualizar o usuário no localStorage e no estado
-      const updatedUser = { ...user, ...response.data.data };
-      authService.setCurrentUser(updatedUser);
-      setUser(updatedUser);
-      
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
+  try {
+    if (!user) throw new Error('Usuário não autenticado');
+    
+    const response = await api.put(`/users/${user.id}`, userData);
+    
+    // O backend retorna { message: "...", data: { id, nome, email, ... } }
+    const dadosAtualizados = response.data?.data || response.data;
+    
+    // Mescla os dados novos com os dados atuais do usuário
+    const updatedUser = { ...user, ...dadosAtualizados };
+    
+    // Salva no localStorage e atualiza o estado
+    authService.setCurrentUser(updatedUser);
+    setUser(updatedUser);
+    
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
   const value = {
     user,

@@ -29,7 +29,6 @@ const EditarPerfil = () => {
         
         let updatedValue = value;
         
-        // Formatar telefone ao digitar
         if (name === 'telefone') {
             updatedValue = formatPhone(value);
         }
@@ -39,7 +38,6 @@ const EditarPerfil = () => {
             [name]: updatedValue
         });
 
-        // Remover erro quando usuário começa a digitar
         if (errors[name]) {
             setErrors(prev => ({
                 ...prev,
@@ -60,10 +58,10 @@ const EditarPerfil = () => {
         setLoading(true);
 
         try {
-            // Construir objeto com apenas os campos que foram alterados
-            const { confirmPassword, cpf, ...data } = formData;
+            // Remove campos que não devem ser enviados ao backend
+            const { confirmPassword, cpf, email, ...data } = formData;
             
-            // Remover campos vazios de senha
+            // Remove senha se não foi preenchida
             if (!data.password || !data.password.trim()) {
                 delete data.password;
             }

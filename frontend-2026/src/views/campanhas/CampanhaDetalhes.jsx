@@ -5,6 +5,7 @@ import participacoesService from '../../controllers/services/participacoesServic
 import { useToast } from '../../controllers/hooks/useToast';
 import useFavoritos from '../../controllers/hooks/useFavoritos';
 import RatingComponent from './RatingComponent';
+import CadastrarCampanha from '../components/CadastrarCampanha';
 import './CampanhaDetalhes.css';
 
 const CampanhaDetalhes = () => {
@@ -21,6 +22,8 @@ const CampanhaDetalhes = () => {
   const [inscricaoData, setInscricaoData] = useState(null);
   const [isFavorited, setIsFavorited] = useState(false);
   const [loadingFavorito, setLoadingFavorito] = useState(false);
+  const [editando, setEditando] = useState(false);
+  const [excluindo, setExcluindo] = useState(false);
 
   useEffect(() => {
     carregarDetalhes();
@@ -166,6 +169,30 @@ const CampanhaDetalhes = () => {
     }
   };
 
+  const handleExcluir = async () => {
+    if (!window.confirm('Tem certeza que deseja excluir esta campanha? Essa ação não pode ser desfeita.')) {
+      return;
+    }
+
+    setExcluindo(true);
+    try {
+      await api.delete(`/projetos/${id}`);
+      showToast('Campanha excluída com sucesso', 'success');
+      navigate('/campanhas');
+    } catch (err) {
+      console.error('Erro ao excluir campanha:', err);
+      showToast(err.message || 'Erro ao excluir a campanha', 'error');
+    } finally {
+      setExcluindo(false);
+    }
+  };
+
+  const handleCampanhaAtualizada = async () => {
+    setEditando(false);
+    showToast('Campanha atualizada com sucesso!', 'success');
+    await carregarDetalhes();
+  };
+
   const formatarData = (data) => {
     if (!data) return '-';
     return new Date(data).toLocaleDateString('pt-BR');
@@ -184,6 +211,25 @@ const CampanhaDetalhes = () => {
   if (loading) return <div className="loading-full">Carregando...</div>;
   if (error) return <div className="error-full">{error}</div>;
   if (!campanha) return <div className="error-full">Campanha não encontrada</div>;
+
+  const ehCriador = usuario?.id === campanha.criador.id;
+
+  // Modo edição: substitui a página de detalhes pelo formulário pré-preenchido
+  if (editando) {
+    return (
+      <div className="campanha-detalhes-container">
+        <button onClick={() => setEditando(false)} className="btn-voltar">
+          ← Voltar para os detalhes
+        </button>
+        <CadastrarCampanha
+          usuarioId={usuario?.id}
+          campanhaParaEditar={campanha}
+          onCampanhaUpdated={handleCampanhaAtualizada}
+          onCancelEdit={() => setEditando(false)}
+        />
+      </div>
+    );
+  }
 
   const infos = campanha.informacoes;
   const mediaAvaliacoes = campanha.avaliacoes?.length > 0
@@ -214,10 +260,28 @@ const CampanhaDetalhes = () => {
           </svg>
           {loadingFavorito ? '...' : isFavorited ? 'Favoritado' : 'Favoritar'}
         </button>
+
+        {ehCriador && (
+          <div className="acoes-criador">
+            <button
+              onClick={() => setEditando(true)}
+              className="btn-editar-campanha"
+            >
+              ✏️ Editar
+            </button>
+            <button
+              onClick={handleExcluir}
+              disabled={excluindo}
+              className="btn-excluir-campanha"
+            >
+              {excluindo ? 'Excluindo...' : '🗑️ Excluir'}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Seção de Inscrição */}
-      {usuario?.id !== campanha.criador.id && (
+      {!ehCriador && (
         <div className="inscricao-section">
           {usuarioInscrito ? (
             <div className="inscricao-card inscrito">
