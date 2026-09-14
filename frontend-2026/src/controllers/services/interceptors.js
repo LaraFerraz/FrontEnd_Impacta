@@ -50,9 +50,9 @@ export const authorizationInterceptor = (options = {}) => {
   // Adiciona token no header se existir
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
-    console.debug('✅ Token autorização adicionado à requisição');
+    console.debug('Token de autorização adicionado à requisição');
   } else {
-    console.debug('⚠️  Nenhum token encontrado - requisição sem autorização');
+    console.debug('Nenhum token encontrado - requisição sem autorização');
   }
 
   return {
@@ -99,7 +99,7 @@ export const responseInterceptor = async (response) => {
     }
   } catch (error) {
     // Erro ao parsear JSON
-    console.error('❌ Erro ao parsear resposta JSON:', error);
+    console.error('Erro ao parsear resposta JSON:', error);
     data = {
       message: 'Erro ao processar resposta do servidor',
       status: response.status,
@@ -108,7 +108,7 @@ export const responseInterceptor = async (response) => {
 
   // Se resposta foi sucesso (status 2xx), retorna os dados
   if (response.ok) {
-    console.debug(`✅ Resposta bem-sucedida: ${response.status} ${response.statusText}`);
+    console.debug(`Resposta bem-sucedida: ${response.status} ${response.statusText}`);
     return data;
   }
 
@@ -137,6 +137,7 @@ export const responseInterceptor = async (response) => {
  * - Log de erros
  * 
  * Tipos de erro tratados:
+ * - 400 Bad Request: Validação de campos (nome, email, cpf, telefone, senha)
  * - 401 Unauthorized: Token expirado/inválido → logout automático
  * - 403 Forbidden: Permissões insuficientes
  * - 404 Not Found: Recurso não encontrado
@@ -160,8 +161,8 @@ export const errorInterceptor = async (error) => {
 
   // Erro 401: Token expirado ou inválido
   if (status === 401) {
-    console.warn('⚠️  [401] Token expirado ou inválido');
-    console.warn('📋 Ação: Removendo sessão do usuário');
+    console.warn('[401] Token expirado ou inválido');
+    console.warn('Ação: Removendo sessão do usuário');
 
     // Remove token do localStorage
     removeToken();
@@ -182,7 +183,7 @@ export const errorInterceptor = async (error) => {
 
   // Erro 403: Acesso proibido (permissões insuficientes)
   if (status === 403) {
-    console.error('❌ [403] Acesso proibido - Permissões insuficientes');
+    console.error('[403] Acesso proibido - Permissões insuficientes');
     const error = new Error('Você não tem permissão para acessar este recurso');
     error.status = 403;
     throw error;
@@ -190,42 +191,59 @@ export const errorInterceptor = async (error) => {
 
   // Erro 404: Recurso não encontrado
   if (status === 404) {
-    console.warn('⚠️  [404] Recurso não encontrado');
+    console.warn('[404] Recurso não encontrado');
     const error = new Error('O recurso solicitado não foi encontrado');
     error.status = 404;
     throw error;
   }
 
-  // Erro 409: Conflito (ex: email já existe)
+  // Erro 400: Bad Request (validação de campos, ex: validarCadastro no backend)
+  if (status === 400) {
+    console.warn('[400] Dados inválidos');
+    const errorMsg = error.data?.message || 'Dados inválidos. Verifique os campos';
+    const err400 = new Error(errorMsg);
+    err400.status = 400;
+    err400.data = error.data;
+    // Normaliza: o backend sempre manda os erros por campo em data.errors
+    // ([{ field, message }]). Expor também em .errors deixa o consumo
+    // consistente entre 400, 409 e 422 sem precisar saber onde cada status
+    // guardou o array.
+    err400.errors = error.data?.errors;
+    throw err400;
+  }
+
+  // Erro 409: Conflito (ex: email ou CPF já existe - violação de unicidade)
   if (status === 409) {
-    console.warn('⚠️  [409] Conflito nos dados');
+    console.warn('[409] Conflito nos dados');
     const errorMsg = error.data?.message || 'Conflito: Verifique os dados enviados';
     const err409 = new Error(errorMsg);
     err409.status = 409;
     err409.data = error.data;
+    err409.errors = error.data?.errors;
     throw err409;
   }
 
   // Erro 422: Unprocessable Entity (validação falhou)
   if (status === 422) {
-    console.warn('⚠️  [422] Validação falhou');
+    console.warn('[422] Validação falhou');
     const errorMsg = error.data?.message || 'Dados inválidos. Verifique os campos';
     const err422 = new Error(errorMsg);
     err422.status = 422;
+    err422.data = error.data;
     err422.errors = error.data?.errors;
     throw err422;
   }
 
   // Erro 5xx: Erro do servidor
   if (status >= 500) {
-    console.error(`❌ [${status}] Erro do servidor`);
+    console.error(`[${status}] Erro do servidor`);
     const err = new Error('Erro no servidor. Tente novamente mais tarde');
     err.status = status;
     throw err;
   }
 
   // Erro genérico
-  console.error('❌ Erro na requisição:', error);
+  console.error('Erro na requisição:', error);
   const errGeneric = new Error(error.message || 'Erro desconhecido na requisição');
   errGeneric.status = error.status || 0;
   throw errGeneric;
@@ -280,7 +298,7 @@ export const fetchWithTimeout = (url, options = {}, timeout = 10000) => {
  */
 export const logRequestInterceptor = (method, url, options) => {
   if (process.env.NODE_ENV === 'development') {
-    console.group(`📤 ${method} ${url}`);
+    console.group(`Requisição: ${method} ${url}`);
     console.log('Headers:', options.headers);
     if (options.body) {
       try {
@@ -310,7 +328,7 @@ export const logRequestInterceptor = (method, url, options) => {
  */
 export const logResponseInterceptor = (method, url, data, duration) => {
   if (process.env.NODE_ENV === 'development') {
-    console.group(`📥 ${method} ${url} (${duration}ms)`);
+    console.group(`Resposta: ${method} ${url} (${duration}ms)`);
     console.log('Response:', data);
     console.groupEnd();
   }

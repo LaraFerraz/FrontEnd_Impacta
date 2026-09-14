@@ -16,6 +16,43 @@
   transform: translateY(-4px);
 }
 
+.campanha-card-imagem-wrapper {
+  width: calc(100% + 40px);
+  margin: -20px -20px 14px -20px;
+  height: 160px;
+  border-radius: 12px 12px 0 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.campanha-card-imagem {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.campanha-card:hover .campanha-card-imagem,
+.campanha-card:hover .foto-carrossel-imagem {
+  transform: scale(1.08);
+}
+
+.campanha-card-imagem-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  color: #81c784;
+}
+
+.campanha-card-imagem-placeholder svg {
+  width: 42px;
+  height: 42px;
+}
+
 .card-header {
   display: flex;
   justify-content: space-between;

@@ -7,6 +7,7 @@ import './Categorias.css';
 const Categorias = () => {
   const { user } = useAuth();
   const { showToast } = useToast();
+  const ehAdmin = user?.tipo?.id === 1 || user?.tipo?.nome === 'Admin';
 
   const [categorias, setCategorias] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -101,18 +102,24 @@ const Categorias = () => {
     <div className="categorias-container">
       <div className="categorias-header">
         <div>
-          <h1>🏷️ Gerenciar Categorias</h1>
-          <p>Categorias organizam as campanhas do sistema</p>
+          <h1>Gerenciar Categorias</h1>
+          <p>
+            {ehAdmin
+              ? 'Categorias organizam as campanhas do sistema'
+              : 'Categorias organizam as campanhas do sistema (somente leitura)'}
+          </p>
         </div>
-        <button className="btn-nova-categoria" onClick={abrirFormCriacao}>
-          + Nova Categoria
-        </button>
+        {ehAdmin && (
+          <button className="btn-nova-categoria" onClick={abrirFormCriacao}>
+            + Nova Categoria
+          </button>
+        )}
       </div>
 
-      {/* Formulário inline de criar/editar */}
-      {mostrarForm && (
+      {/* Formulário inline de criar/editar - só admin */}
+      {ehAdmin && mostrarForm && (
         <div className="categoria-form-card">
-          <h2>{editando ? '✏️ Editar Categoria' : '➕ Nova Categoria'}</h2>
+          <h2>{editando ? 'Editar Categoria' : 'Nova Categoria'}</h2>
           <form onSubmit={handleSubmit} className="categoria-form">
             <div className="form-group">
               <label htmlFor="nome-categoria">Nome da Categoria *</label>
@@ -147,9 +154,11 @@ const Categorias = () => {
       ) : categorias.length === 0 ? (
         <div className="categorias-vazio">
           <p>Nenhuma categoria cadastrada ainda.</p>
-          <button className="btn-nova-categoria" onClick={abrirFormCriacao}>
-            Criar primeira categoria
-          </button>
+          {ehAdmin && (
+            <button className="btn-nova-categoria" onClick={abrirFormCriacao}>
+              Criar primeira categoria
+            </button>
+          )}
         </div>
       ) : (
         <div className="categorias-grid">
@@ -162,21 +171,34 @@ const Categorias = () => {
                 </span>
               </div>
               <div className="categoria-card-acoes">
-                <button
-                  onClick={() => abrirFormEdicao(cat)}
-                  className="btn-editar-cat"
-                  title="Editar"
-                >
-                  ✏️
-                </button>
-                <button
-                  onClick={() => handleExcluir(cat)}
-                  disabled={excluindoId === cat.id}
-                  className="btn-excluir-cat"
-                  title="Excluir"
-                >
-                  {excluindoId === cat.id ? '...' : '🗑️'}
-                </button>
+                {ehAdmin && (
+                  <>
+                    <button
+                      onClick={() => abrirFormEdicao(cat)}
+                      className="btn-editar-cat"
+                      title="Editar"
+                    >
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => handleExcluir(cat)}
+                      disabled={excluindoId === cat.id}
+                      className="btn-excluir-cat"
+                      title="Excluir"
+                    >
+                      {excluindoId === cat.id ? (
+                        '...'
+                      ) : (
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M3 6h18" />
+                          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                        </svg>
+                      )}
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           ))}

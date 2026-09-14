@@ -87,12 +87,40 @@ export const AuthProvider = ({ children }) => {
   }
 };
 
+  /**
+   * Envia uma nova foto de perfil (arquivo de imagem) e atualiza o
+   * usuário em memória/localStorage com o caminho retornado pelo backend.
+   *
+   * @param {File} arquivo - Arquivo de imagem escolhido pelo usuário
+   */
+  const atualizarFoto = async (arquivo) => {
+    try {
+      if (!user) throw new Error('Usuário não autenticado');
+
+      const formData = new FormData();
+      formData.append('foto', arquivo);
+
+      const response = await api.uploadFile(`/users/${user.id}/foto`, formData);
+
+      const dadosAtualizados = response.data?.data || response.data;
+      const updatedUser = { ...user, ...dadosAtualizados };
+
+      authService.setCurrentUser(updatedUser);
+      setUser(updatedUser);
+
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const value = {
     user,
     login,
     register,
     logout,
     updateUser,
+    atualizarFoto,
     isAuthenticated,
     loading
   };

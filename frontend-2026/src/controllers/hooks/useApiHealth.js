@@ -34,7 +34,7 @@ export const useApiHealth = () => {
 
         if (response.ok) {
           const data = await response.json();
-          console.log('✅ API está saudável:', data);
+          console.log('API está saudável:', data);
           setIsHealthy(true);
           setError(null);
           setIsChecking(false);
@@ -43,14 +43,14 @@ export const useApiHealth = () => {
           throw new Error(`Status ${response.status}`);
         }
       } catch (err) {
-        console.warn(`⚠️ API ainda não está disponível (tentativa ${attempts + 1}):`, err.message);
+        console.warn(`API ainda não está disponível (tentativa ${attempts + 1}):`, err.message);
         
         const newAttempts = attempts + 1;
         setAttempts(newAttempts);
         
         if (newAttempts >= 30) {
           // Após 30 tentativas (30 segundos), só avisa mas não bloqueia
-          console.error('❌ API não respondeu após 30 tentativas');
+          console.error('API não respondeu após 30 tentativas');
           setError(`API indisponível - ${err.message}`);
           setIsHealthy(false);
           setIsChecking(false);

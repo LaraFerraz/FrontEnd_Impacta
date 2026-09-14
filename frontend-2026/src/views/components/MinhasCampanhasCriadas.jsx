@@ -151,14 +151,62 @@ const MinhasCampanhasCriadas = ({ usuarioId, refreshTrigger = 0 }) => {
           <div className="campanhas-grid">
             {campanhas.map((campanha) => (
               <div key={campanha.id} className="campanha-inscrita-card">
+                {campanha.imagem ? (
+                  <img
+                    src={campanha.imagem}
+                    alt={campanha.titulo}
+                    style={{
+                      width: '100%',
+                      height: '120px',
+                      objectFit: 'cover',
+                      borderRadius: '8px',
+                      marginBottom: '10px'
+                    }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: '100%',
+                      height: '120px',
+                      borderRadius: '8px',
+                      marginBottom: '10px',
+                      background: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#81c784',
+                      fontSize: '13px'
+                    }}
+                  >
+                    Sem foto de capa
+                  </div>
+                )}
                 <div className="card-header">
                   <h3>{campanha.titulo}</h3>
-                  <span
-                    className="status-badge"
-                    style={{ backgroundColor: getStatusColor(campanha.status?.nome) }}
-                  >
-                    {campanha.status?.nome || 'Sem status'}
-                  </span>
+                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                    <span
+                      className="status-badge"
+                      style={{
+                        backgroundColor: campanha.aprovado
+                          ? '#2ecc71'
+                          : campanha.reprovado
+                            ? '#e53935'
+                            : '#ffa500'
+                      }}
+                    >
+                      {campanha.aprovado
+                        ? 'Aprovada'
+                        : campanha.reprovado
+                          ? 'Reprovada'
+                          : 'Pendente de aprovação'}
+                    </span>
+                    <span
+                      className="status-badge"
+                      style={{ backgroundColor: getStatusColor(campanha.status?.nome) }}
+                    >
+                      {campanha.status?.nome || 'Sem status'}
+                    </span>
+                  </div>
                 </div>
 
                 <p className="descricao">
@@ -200,7 +248,7 @@ const MinhasCampanhasCriadas = ({ usuarioId, refreshTrigger = 0 }) => {
                     disabled={excluindoId === campanha.id}
                     className="btn-excluir-card"
                   >
-                    {excluindoId === campanha.id ? 'Excluindo...' : '🗑️ Excluir'}
+                    {excluindoId === campanha.id ? 'Excluindo...' : 'Excluir'}
                   </button>
                 </div>
               </div>

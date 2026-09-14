@@ -75,6 +75,7 @@
 }
 
 .community-icon {
+  color: var(--branco);
   font-size: 120px;
   background: linear-gradient(135deg, var(--amarelo-solar), var(--laranja-vibrante));
   border-radius: 50%;
@@ -96,6 +97,10 @@
 
 .service-icons span {
   position: absolute;
+  color: var(--laranja-vibrante);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 40px;
   background-color: var(--branco);
   border-radius: 50%;

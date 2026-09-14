@@ -69,7 +69,7 @@ const MeusFavoritos = () => {
                 <div key={favorito.id} className="favorito-item">
                   <div className="favorito-header">
                     <h3>{favorito.projeto?.titulo || 'Campanha removida'}</h3>
-                    <span className="favorito-badge">❤️ Favoritado</span>
+                    <span className="favorito-badge">Favoritado</span>
                   </div>
 
                   <p className="favorito-description">
@@ -85,7 +85,7 @@ const MeusFavoritos = () => {
 
                     {favorito.projeto?.cidade && (
                       <span className="favorito-location">
-                        📍 {favorito.projeto.cidade.nome}
+                        {favorito.projeto.cidade.nome}
                       </span>
                     )}
                   </div>

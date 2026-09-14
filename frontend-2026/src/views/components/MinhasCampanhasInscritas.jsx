@@ -81,7 +81,7 @@ const MinhasCampanhasInscritas = ({ usuarioId }) => {
   return (
     <div className="minhas-campanhas-container">
       <div className="minhas-campanhas-header">
-        <h2>📋 Minhas Campanhas Inscritas</h2>
+        <h2>Minhas Campanhas Inscritas</h2>
         <p className="subtitulo">Acompanhe as campanhas em que você está participando</p>
       </div>
 

@@ -235,3 +235,59 @@
     width: 100%;
   }
 }
+
+/* Galeria de fotos (múltiplas fotos da campanha) */
+.galeria-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.galeria-preview-item {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f0f0f0;
+}
+
+.galeria-preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.galeria-preview-nova {
+  outline: 2px solid #4CAF50;
+  outline-offset: 2px;
+}
+
+.galeria-preview-remover {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.galeria-preview-remover:hover:not(:disabled) {
+  background: #e53935;
+}
+
+.galeria-preview-remover:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}

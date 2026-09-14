@@ -116,7 +116,7 @@ const Login = () => {
                       {typeof errors.email === 'object' ? errors.email.message : errors.email}
                     </p>
                     {typeof errors.email === 'object' && errors.email.problema && (
-                      <p className="error-detail">💡 {errors.email.problema}</p>
+                      <p className="error-detail">{errors.email.problema}</p>
                     )}
                   </div>
                 )}
@@ -139,7 +139,7 @@ const Login = () => {
                       {typeof errors.password === 'object' ? errors.password.message : errors.password}
                     </p>
                     {typeof errors.password === 'object' && errors.password.problema && (
-                      <p className="error-detail">💡 {errors.password.problema}</p>
+                      <p className="error-detail">{errors.password.problema}</p>
                     )}
                   </div>
                 )}
@@ -192,15 +192,31 @@ const Login = () => {
               </p>
               <div className="community-benefits">
                 <div className="benefit">
-                  <span className="benefit-icon">🤝</span>
+                  <span className="benefit-icon">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17 20h5v-2a4 4 0 0 0-3-3.87M9 20H4v-2a4 4 0 0 1 3-3.87" />
+                      <circle cx="9" cy="7" r="4" />
+                      <path d="M15 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                  </span>
                   <span>Conecte-se com voluntários</span>
                 </div>
                 <div className="benefit">
-                  <span className="benefit-icon">📊</span>
+                  <span className="benefit-icon">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="18" y1="20" x2="18" y2="10" />
+                      <line x1="12" y1="20" x2="12" y2="4" />
+                      <line x1="6" y1="20" x2="6" y2="14" />
+                    </svg>
+                  </span>
                   <span>Acompanhe seu impacto</span>
                 </div>
                 <div className="benefit">
-                  <span className="benefit-icon">🌟</span>
+                  <span className="benefit-icon">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <polygon points="12 2 15 9 22 9.5 17 14.5 18.5 21.5 12 18 5.5 21.5 7 14.5 2 9.5 9 9" />
+                    </svg>
+                  </span>
                   <span>Descubra novas oportunidades</span>
                 </div>
               </div>

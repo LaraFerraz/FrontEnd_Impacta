@@ -1,4 +1,4 @@
-import { API_CONFIG } from '../../config/api.config';
+import { API_CONFIG, getToken } from '../../config/api.config';
 import {
   authorizationInterceptor,
   responseInterceptor,
@@ -14,11 +14,11 @@ import {
  * ====================================================================
  * 
  * Este arquivo centraliza todas as requisições HTTP com:
- * 1. ✅ Authorization Interceptor - Token JWT automático
- * 2. ✅ Response Interceptor - Valida e processa respostas
- * 3. ✅ Error Interceptor - Trata erros (401, 403, timeout, etc)
- * 4. ✅ Timeout Handler - Evita requisições penduradas
- * 5. ✅ Request/Response Logging - Debug em desenvolvimento
+ * 1. Authorization Interceptor - Token JWT automático
+ * 2. Response Interceptor - Valida e processa respostas
+ * 3. Error Interceptor - Trata erros (401, 403, timeout, etc)
+ * 4. Timeout Handler - Evita requisições penduradas
+ * 5. Request/Response Logging - Debug em desenvolvimento
  * 
  * VANTAGENS:
  * - Sem dependências externas (nativo do JavaScript)
@@ -272,6 +272,56 @@ class ApiService {
   }
 
   /**
+   * MÉTODO: uploadFile
+   * Envia um arquivo (imagem de campanha, foto de perfil) via multipart/form-data.
+   *
+   * IMPORTANTE: não usa o authorizationInterceptor padrão porque ele fixa
+   * 'Content-Type': 'application/json' - com FormData o navegador precisa
+   * definir o Content-Type sozinho (multipart/form-data; boundary=...).
+   * Por isso montamos os headers manualmente, só com o Authorization.
+   *
+   * @param {string} endpoint - Rota da API (ex: '/projetos/5/imagem')
+   * @param {FormData} formData - FormData já com o arquivo anexado
+   * @returns {Promise<object>} Resposta do servidor
+   *
+   * Exemplo:
+   * const formData = new FormData();
+   * formData.append('imagem', arquivo);
+   * const resultado = await api.uploadFile('/projetos/5/imagem', formData);
+   */
+  async uploadFile(endpoint, formData, config = {}) {
+    try {
+      const url = `${API_CONFIG.baseURL}${endpoint}`;
+      const startTime = performance.now();
+      const token = getToken();
+
+      const headers = { ...(config.headers || {}) };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const options = {
+        method: 'POST',
+        body: formData,
+        ...config,
+        headers,
+      };
+
+      logRequestInterceptor('POST', url, options);
+
+      const response = await fetchWithTimeout(url, options, API_CONFIG.timeout);
+      const responseData = await responseInterceptor(response);
+
+      const duration = performance.now() - startTime;
+      logResponseInterceptor('POST', url, responseData, duration);
+
+      return responseData;
+    } catch (error) {
+      return this._handleError(error);
+    }
+  }
+
+  /**
    * MÉTODO: REQUEST (Customizado)
    * Faz requisições com configuração totalmente personalizada
    * 
@@ -361,7 +411,7 @@ class ApiService {
     if (token) {
       const { setToken } = require('../../config/api.config');
       setToken(token);
-      console.log('✅ Token atualizado');
+      console.log('Token atualizado');
     }
   }
 
@@ -381,7 +431,7 @@ class ApiService {
     removeToken();
     localStorage.removeItem('user');
     localStorage.removeItem('userData');
-    console.log('✅ Token removido');
+    console.log('Token removido');
   }
 
   /**

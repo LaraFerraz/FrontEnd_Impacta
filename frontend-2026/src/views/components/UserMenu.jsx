@@ -48,23 +48,32 @@ const UserMenu = () => {
         onClick={() => setIsOpen(!isOpen)}
         title={`Perfil de ${user.nome}`}
       >
-        <svg 
-          className="user-icon" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          stroke="currentColor" 
-          strokeWidth="2"
-        >
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-          <circle cx="12" cy="7" r="4"></circle>
-        </svg>
+        {user.foto ? (
+          <img src={user.foto} alt={user.nome} className="user-avatar-foto" />
+        ) : (
+          <svg 
+            className="user-icon" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        )}
       </button>
 
       {isOpen && (
         <div className="user-dropdown">
           <div className="user-dropdown-header">
-            <p className="user-name">{user.nome}</p>
-            <p className="user-email">{user.email}</p>
+            {user.foto && (
+              <img src={user.foto} alt={user.nome} className="user-dropdown-foto" />
+            )}
+            <div>
+              <p className="user-name">{user.nome}</p>
+              <p className="user-email">{user.email}</p>
+            </div>
           </div>
           
           <hr className="dropdown-divider" />

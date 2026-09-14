@@ -6,6 +6,7 @@ import { useToast } from '../../controllers/hooks/useToast';
 import useFavoritos from '../../controllers/hooks/useFavoritos';
 import RatingComponent from './RatingComponent';
 import CadastrarCampanha from '../components/CadastrarCampanha';
+import FotoCarrossel from '../components/FotoCarrossel';
 import './CampanhaDetalhes.css';
 
 const CampanhaDetalhes = () => {
@@ -24,6 +25,7 @@ const CampanhaDetalhes = () => {
   const [loadingFavorito, setLoadingFavorito] = useState(false);
   const [editando, setEditando] = useState(false);
   const [excluindo, setExcluindo] = useState(false);
+  const [fotoAmpliadaIndice, setFotoAmpliadaIndice] = useState(null);
 
   useEffect(() => {
     carregarDetalhes();
@@ -159,7 +161,7 @@ const CampanhaDetalhes = () => {
         // Adicionar favorito
         await addFavorito(usuario.id, parseInt(id));
         setIsFavorited(true);
-        showToast('Adicionado aos favoritos! ❤️', 'success');
+        showToast('Adicionado aos favoritos!', 'success');
       }
     } catch (error) {
       console.error('Erro ao atualizar favorito:', error);
@@ -208,11 +210,28 @@ const CampanhaDetalhes = () => {
     return statusMap[statusNome] || '#999';
   };
 
+  const abrirFotoAmpliada = (indice) => setFotoAmpliadaIndice(indice);
+  const fecharFotoAmpliada = () => setFotoAmpliadaIndice(null);
+  const irParaProximaFoto = (e) => {
+    e.stopPropagation();
+    setFotoAmpliadaIndice((atual) => (atual + 1) % fotosCampanha.length);
+  };
+  const irParaFotoAnterior = (e) => {
+    e.stopPropagation();
+    setFotoAmpliadaIndice((atual) => (atual - 1 + fotosCampanha.length) % fotosCampanha.length);
+  };
+
   if (loading) return <div className="loading-full">Carregando...</div>;
   if (error) return <div className="error-full">{error}</div>;
   if (!campanha) return <div className="error-full">Campanha não encontrada</div>;
 
   const ehCriador = usuario?.id === campanha.criador.id;
+
+  // Capa primeiro, depois as fotos da galeria — mesma ordem exibida no card.
+  const fotosCampanha = [
+    ...(campanha.imagem ? [campanha.imagem] : []),
+    ...((campanha.imagens || []).map((img) => img.caminho))
+  ];
 
   // Modo edição: substitui a página de detalhes pelo formulário pré-preenchido
   if (editando) {
@@ -238,6 +257,15 @@ const CampanhaDetalhes = () => {
 
   return (
     <div className="campanha-detalhes-container">
+      {fotosCampanha.length > 0 && (
+        <FotoCarrossel
+          fotos={fotosCampanha}
+          altBase={campanha.titulo}
+          wrapperClassName="campanha-detalhes-imagem-wrapper"
+          onFotoClick={abrirFotoAmpliada}
+        />
+      )}
+
       {/* Header */}
       <div className="detalhes-header">
         <button onClick={() => navigate('/campanhas')} className="btn-voltar">
@@ -267,14 +295,14 @@ const CampanhaDetalhes = () => {
               onClick={() => setEditando(true)}
               className="btn-editar-campanha"
             >
-              ✏️ Editar
+              Editar
             </button>
             <button
               onClick={handleExcluir}
               disabled={excluindo}
               className="btn-excluir-campanha"
             >
-              {excluindo ? 'Excluindo...' : '🗑️ Excluir'}
+              {excluindo ? 'Excluindo...' : 'Excluir'}
             </button>
           </div>
         )}
@@ -443,6 +471,40 @@ const CampanhaDetalhes = () => {
               </div>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Lightbox da galeria de fotos */}
+      {fotoAmpliadaIndice !== null && fotosCampanha.length > 0 && (
+        <div className="lightbox-overlay" onClick={fecharFotoAmpliada}>
+          <button className="lightbox-fechar" onClick={fecharFotoAmpliada} title="Fechar">
+            ×
+          </button>
+
+          {fotosCampanha.length > 1 && (
+            <button className="lightbox-nav lightbox-anterior" onClick={irParaFotoAnterior} title="Foto anterior">
+              ‹
+            </button>
+          )}
+
+          <img
+            src={fotosCampanha[fotoAmpliadaIndice]}
+            alt={`Foto ${fotoAmpliadaIndice + 1} da campanha`}
+            className="lightbox-imagem"
+            onClick={(e) => e.stopPropagation()}
+          />
+
+          {fotosCampanha.length > 1 && (
+            <button className="lightbox-nav lightbox-proxima" onClick={irParaProximaFoto} title="Próxima foto">
+              ›
+            </button>
+          )}
+
+          {fotosCampanha.length > 1 && (
+            <div className="lightbox-contador">
+              {fotoAmpliadaIndice + 1} / {fotosCampanha.length}
+            </div>
+          )}
         </div>
       )}
     </div>

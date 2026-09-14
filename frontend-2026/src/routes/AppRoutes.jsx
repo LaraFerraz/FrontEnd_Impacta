@@ -12,6 +12,7 @@ import CampanhaDetalhesPage from '../views/pages/CampanhaDetalhesPage.jsx';
 import MeusFavoritos from '../views/pages/MeusFavoritos.jsx';
 import ProtectedRoute from '../components/ProtectedRoute.jsx';
 import Categorias from '../views/pages/Categorias.jsx';
+import AprovarCampanhas from '../views/pages/AprovarCampanhas.jsx';
 
 const AppRoutes = () => {
   return (
@@ -27,6 +28,7 @@ const AppRoutes = () => {
       <Route path="*" element={<NotFound />} />
       <Route path="/editar-perfil" element={<ProtectedRoute><EditarPerfil /></ProtectedRoute>} />
       <Route path="/categorias" element={<ProtectedRoute><Categorias /></ProtectedRoute>} />
+      <Route path="/aprovar-campanhas" element={<ProtectedRoute><AprovarCampanhas /></ProtectedRoute>} />
     </Routes>
   );
 };

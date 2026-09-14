@@ -55,6 +55,16 @@ const Header = () => {
                 </Link>
               </li>
             )}
+            {(user?.tipo?.id === 1 || user?.tipo?.nome === 'Admin') && (
+              <li>
+                <Link
+                  to="/aprovar-campanhas"
+                  className={location.pathname === '/aprovar-campanhas' ? 'active' : ''}
+                >
+                  Aprovar Campanhas
+                </Link>
+              </li>
+            )}
           </ul>
 
           <div className="auth-buttons">

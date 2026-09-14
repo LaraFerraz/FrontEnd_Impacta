@@ -1,18 +1,21 @@
 {
   "name": "impact_2026",
-  "version": "1.0.0",
-  "description": "API Corporativa de Gerenciamento de Campanhas e Projetos - Impacta 2026",
-  "main": "src/index.js",
+  "version": "2.0.0",
+  "description": "API Corporativa de Gerenciamento de Campanhas e Projetos - Impacta 2026 (TypeScript)",
+  "main": "dist/index.js",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
-    "db:init": "node src/initDb.js",
-    "db:populate": "node scripts/populate-db.js",
-    "db:verify": "node scripts/verify-data.js",
-    "db:test": "node scripts/test-persistence.js",
+    "start": "node dist/index.js",
+    "build": "tsc -p tsconfig.json",
+    "dev": "nodemon --watch src --ext ts --exec ts-node src/index.ts",
+    "db:reset": "ts-node src/scripts/resetDb.ts",
+    "db:add-imagens": "ts-node src/scripts/addImagemProjetoTable.ts",
+    "db:add-reprovado": "ts-node src/scripts/addReprovadoColumn.ts",
+    "db:populate": "ts-node src/scripts/populateDb.ts",
     "test": "jest --passWithNoTests --runInBand",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "lint": "eslint \"src/**/*.ts\"",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [
     "express",
@@ -20,6 +23,7 @@
     "mysql",
     "jest",
     "jwt",
+    "typescript",
     "api"
   ],
   "author": "Impacta Dev Team",
@@ -30,14 +34,28 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
     "mysql2": "^3.22.5",
-    "object-assign": "^4.1.1",
     "sequelize": "^6.37.7"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/jest": "^29.5.13",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.10.2",
+    "@types/supertest": "^6.0.2",
+    "@typescript-eslint/eslint-plugin": "^8.18.0",
+    "@typescript-eslint/parser": "^8.18.0",
+    "eslint": "^8.57.1",
     "jest": "^29.7.0",
     "nodemon": "^3.1.14",
     "sequelize-cli": "^6.6.5",
-    "supertest": "^6.3.4"
+    "supertest": "^6.3.4",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
   }
 }

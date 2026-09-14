@@ -31,10 +31,18 @@ const ProtectedRoute = ({ children }) => {
         <div style={{
           textAlign: 'center'
         }}>
-          <div style={{
-            fontSize: '24px',
-            marginBottom: '16px'
-          }}>⏳</div>
+          <div
+            style={{
+              width: '32px',
+              height: '32px',
+              margin: '0 auto 16px',
+              borderRadius: '50%',
+              border: '3px solid #ddd',
+              borderTopColor: '#f57c00',
+              animation: 'protected-route-spin 0.8s linear infinite'
+            }}
+          />
+          <style>{'@keyframes protected-route-spin { to { transform: rotate(360deg); } }'}</style>
           <p>Verificando autenticação...</p>
         </div>
       </div>

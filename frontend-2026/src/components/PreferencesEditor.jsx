@@ -7,6 +7,7 @@ const PreferencesEditor = ({ usuarioId }) => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState('success');
 
   useEffect(() => {
     const loadData = async () => {
@@ -34,16 +35,19 @@ const PreferencesEditor = ({ usuarioId }) => {
         const preferenceToRemove = userPreferences.find(p => p.categoria_id === categoriaId);
         if (preferenceToRemove) {
           await removePreference(usuarioId, preferenceToRemove.id);
-          setMessage('✅ Preferência removida');
+          setMessageType('success');
+          setMessage('Preferência removida');
         }
       } else {
         await addPreference(usuarioId, categoriaId);
-        setMessage('✅ Preferência adicionada');
+        setMessageType('success');
+        setMessage('Preferência adicionada');
       }
 
       setTimeout(() => setMessage(''), 2000);
     } catch (err) {
-      setMessage('❌ Erro ao atualizar');
+      setMessageType('error');
+      setMessage('Erro ao atualizar');
       console.error('Erro:', err);
     } finally {
       setSaving(false);
@@ -64,7 +68,7 @@ const PreferencesEditor = ({ usuarioId }) => {
       <p className="preferences-subtitle">Selecione as categorias que você gostaria de acompanhar</p>
 
       {message && (
-        <div className={`preferences-message ${message.includes('❌') ? 'error' : 'success'}`}>
+        <div className={`preferences-message ${messageType === 'error' ? 'error' : 'success'}`}>
           {message}
         </div>
       )}

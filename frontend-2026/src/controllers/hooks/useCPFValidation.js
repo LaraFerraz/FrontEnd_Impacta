@@ -15,7 +15,7 @@ export const useCPFValidation = () => {
     if (cpfLimpo.length !== 11) {
       return {
         valido: false,
-        erro: `❌ CPF deve ter 11 dígitos (você informou ${cpfLimpo.length})`
+        erro: `CPF deve ter 11 dígitos (você informou ${cpfLimpo.length})`
       };
     }
 
@@ -23,7 +23,7 @@ export const useCPFValidation = () => {
     if (/^(\d)\1{10}$/.test(cpfLimpo)) {
       return {
         valido: false,
-        erro: '❌ CPF inválido: todos os dígitos são iguais'
+        erro: 'CPF inválido: todos os dígitos são iguais'
       };
     }
 
@@ -49,7 +49,7 @@ export const useCPFValidation = () => {
     if (!primeiroDigitoValido || !segundoDigitoValido) {
       return {
         valido: false,
-        erro: '❌ CPF inválido: dígito(s) verificador(es) incorreto(s)'
+        erro: 'CPF inválido: dígito(s) verificador(es) incorreto(s)'
       };
     }
 

@@ -11,6 +11,8 @@ services:
     image: mysql:8.0
     container_name: impacta_mysql
     restart: always
+    ports:
+      - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -30,6 +32,8 @@ services:
       context: ./BackEnd_Impacta
     container_name: impacta_backend
     restart: on-failure
+    ports:
+      - "3001:3001"
     environment:
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
@@ -56,6 +60,10 @@ services:
       context: ./frontend-2026
     container_name: impacta_frontend
     restart: on-failure
+    environment:
+      WDS_SOCKET_HOST: localhost
+      WDS_SOCKET_PORT: 443
+      WDS_SOCKET_PATH: /ws
     depends_on:
       - backend
     networks:

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../controllers/contexts/AuthContext';
 import { useToast } from '../../controllers/hooks/useToast';
-import { validateCadastroForm, validateCPF } from '../../controllers/utils/validation';
+import { validateCadastroForm, validateCPFDetalhado } from '../../controllers/utils/validation';
 import { formatCPF, formatPhone } from '../../controllers/utils/formatters';
 import { TIMEOUTS, MESSAGES } from '../../controllers/utils/constants';
 import Toast from '../components/Toast';
@@ -53,9 +53,9 @@ const Cadastro = () => {
         [name]: cpfFormatado
       }));
 
-      // ✅ Validar CPF em TEMPO REAL
+      // Validar CPF em TEMPO REAL
       if (cpfFormatado.trim()) {
-        const validacao = validateCPF(cpfFormatado);
+        const validacao = validateCPFDetalhado(cpfFormatado);
         setCpfErro(validacao.valid ? '' : validacao.message);
         setCpfValido(validacao.valid);
       } else {
@@ -107,41 +107,53 @@ const Cadastro = () => {
       setTimeout(() => navigate('/'), TIMEOUTS.REDIRECT_DELAY);
     } catch (error) {
       console.error('Erro no registro:', error);
-      
-      // Tratamento para erros com múltiplos campos (validação no backend)
-      if (error.data?.errors && Array.isArray(error.data.errors)) {
+
+      // O backend sempre retorna os erros por campo em um array no formato
+      // [{ field, message }], seja em erro 400 (validação), 409 (conflito -
+      // email/CPF duplicado) ou 422. O interceptor normaliza isso tanto em
+      // error.errors quanto em error.data.errors, então checamos os dois
+      // para cobrir qualquer coluna do cadastro (nome, email, senha, cpf,
+      // telefone), não só um campo isolado.
+      const fieldErrors = error.errors || error.data?.errors;
+
+      if (Array.isArray(fieldErrors) && fieldErrors.length > 0) {
         const errorObj = {};
-        error.data.errors.forEach(err => {
+        fieldErrors.forEach(err => {
+          if (!err?.field) return;
           errorObj[err.field] = {
             message: err.message,
             problema: err.problema
           };
         });
         setErrors(errorObj);
-        showError(error.data.message || 'Verifique os erros nos campos abaixo');
-      } 
-      // Erro 409 Conflict (email ou CPF duplicado)
-      else if (error.status === 409) {
-        const field = error.data?.field || 'email';
+
+        // O campo CPF tem sua própria área de erro (feedback em tempo real
+        // enquanto o usuário digita). Reaproveitamos o mesmo estado aqui
+        // para que um erro vindo do servidor (ex: "CPF já está em uso")
+        // também apareça embaixo do campo CPF, e não fique só no toast.
+        if (errorObj.cpf) {
+          setCpfErro(errorObj.cpf.message);
+          setCpfValido(false);
+        }
+
+        showError(error.data?.message || error.message || 'Verifique os erros nos campos abaixo');
+      }
+      // Erro com campo específico isolado (formatos legados/alternativos)
+      else if (error.data?.field) {
+        const field = error.data.field;
         setErrors({
           [field]: {
-            message: error.message,
-            problema: field === 'email' ? 'Este email já está cadastrado' : 'Este CPF já está cadastrado'
-          }
-        });
-        showError(error.message);
-      }
-      // Erro com campo específico
-      else if (error.data?.field) {
-        setErrors({
-          [error.data.field]: {
             message: error.message,
             problema: error.data?.problema
           }
         });
+        if (field === 'cpf') {
+          setCpfErro(error.message);
+          setCpfValido(false);
+        }
         showError(error.message);
-      } 
-      // Erro genérico
+      }
+      // Erro genérico (sem informação de campo)
       else {
         const errorMsg = error.message || MESSAGES.CADASTRO.ERROR;
         setErrors({ submit: errorMsg });
@@ -189,7 +201,7 @@ const Cadastro = () => {
                         {typeof errors.nome === 'object' ? errors.nome.message : errors.nome}
                       </p>
                       {typeof errors.nome === 'object' && errors.nome.problema && (
-                        <p className="error-detail">💡 {errors.nome.problema}</p>
+                        <p className="error-detail">{errors.nome.problema}</p>
                       )}
                     </div>
                   )}
@@ -209,7 +221,7 @@ const Cadastro = () => {
                         {typeof errors.email === 'object' ? errors.email.message : errors.email}
                       </p>
                       {typeof errors.email === 'object' && errors.email.problema && (
-                        <p className="error-detail">💡 {errors.email.problema}</p>
+                        <p className="error-detail">{errors.email.problema}</p>
                       )}
                     </div>
                   )}
@@ -232,7 +244,7 @@ const Cadastro = () => {
                         {typeof errors.password === 'object' ? errors.password.message : errors.password}
                       </p>
                       {typeof errors.password === 'object' && errors.password.problema && (
-                        <p className="error-detail">💡 {errors.password.problema}</p>
+                        <p className="error-detail">{errors.password.problema}</p>
                       )}
                     </div>
                   )}
@@ -292,7 +304,7 @@ const Cadastro = () => {
                       {typeof errors.telefone === 'object' ? errors.telefone.message : errors.telefone}
                     </p>
                     {typeof errors.telefone === 'object' && errors.telefone.problema && (
-                      <p className="error-detail">💡 {errors.telefone.problema}</p>
+                      <p className="error-detail">{errors.telefone.problema}</p>
                     )}
                   </div>
                 )}

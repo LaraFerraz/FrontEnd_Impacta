@@ -51,6 +51,15 @@ const CadastrarCampanha = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [imagemArquivo, setImagemArquivo] = useState(null);
+  const [imagemPreview, setImagemPreview] = useState(campanhaParaEditar?.imagem || null);
+  // Galeria de fotos (além da capa): fotos que já existiam (modo edição,
+  // vêm com id pra permitir excluir) + fotos novas ainda não enviadas.
+  const [galeriaExistente, setGaleriaExistente] = useState(campanhaParaEditar?.imagens || []);
+  const [galeriaNovaArquivos, setGaleriaNovaArquivos] = useState([]);
+  const [galeriaNovaPreviews, setGaleriaNovaPreviews] = useState([]);
+  const [removendoGaleriaId, setRemovendoGaleriaId] = useState(null);
+  const MAX_FOTOS_GALERIA = 6;
   // No modo edição o formulário já começa aberto
   const [expandeForm, setExpandeForm] = useState(modoEdicao);
 
@@ -85,6 +94,7 @@ const CadastrarCampanha = ({
         observacoes: infos.observacoes || ''
       });
       setExpandeForm(true);
+      setGaleriaExistente(campanhaParaEditar.imagens || []);
 
       // Se a cidade já vier com o estado embutido, usa para já
       // carregar a lista de cidades certa no select
@@ -149,6 +159,125 @@ const CadastrarCampanha = ({
     }));
   };
 
+  const handleImagemChange = (e) => {
+    const arquivo = e.target.files?.[0];
+    if (!arquivo) return;
+
+    const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!tiposPermitidos.includes(arquivo.type)) {
+      setError('Formato de imagem inválido. Envie um arquivo .jpg, .jpeg, .png ou .webp');
+      e.target.value = '';
+      return;
+    }
+    if (arquivo.size > 5 * 1024 * 1024) {
+      setError('Imagem muito grande. Tamanho máximo: 5MB');
+      e.target.value = '';
+      return;
+    }
+
+    setError('');
+    setImagemArquivo(arquivo);
+    setImagemPreview(URL.createObjectURL(arquivo));
+  };
+
+  // Seleção de várias fotos para a galeria de uma vez. Valida cada arquivo
+  // e respeita o limite total (existentes + já selecionadas + novas).
+  const handleGaleriaChange = (e) => {
+    const arquivosSelecionados = Array.from(e.target.files || []);
+    if (arquivosSelecionados.length === 0) return;
+
+    const tiposPermitidos = ['image/jpeg', 'image/png', 'image/webp'];
+    const totalAtual = galeriaExistente.length + galeriaNovaArquivos.length;
+
+    if (totalAtual + arquivosSelecionados.length > MAX_FOTOS_GALERIA) {
+      setError(`Limite de ${MAX_FOTOS_GALERIA} fotos na galeria (você já tem ${totalAtual}).`);
+      e.target.value = '';
+      return;
+    }
+
+    const arquivosValidos = [];
+    for (const arquivo of arquivosSelecionados) {
+      if (!tiposPermitidos.includes(arquivo.type)) {
+        setError(`"${arquivo.name}" tem formato inválido. Envie apenas .jpg, .jpeg, .png ou .webp`);
+        e.target.value = '';
+        return;
+      }
+      if (arquivo.size > 5 * 1024 * 1024) {
+        setError(`"${arquivo.name}" é muito grande. Tamanho máximo: 5MB`);
+        e.target.value = '';
+        return;
+      }
+      arquivosValidos.push(arquivo);
+    }
+
+    setError('');
+    setGaleriaNovaArquivos(prev => [...prev, ...arquivosValidos]);
+    setGaleriaNovaPreviews(prev => [
+      ...prev,
+      ...arquivosValidos.map(arquivo => URL.createObjectURL(arquivo))
+    ]);
+    e.target.value = '';
+  };
+
+  // Remove uma foto nova (ainda não enviada) antes do submit.
+  const handleRemoverGaleriaNova = (indice) => {
+    setGaleriaNovaPreviews(prev => {
+      URL.revokeObjectURL(prev[indice]);
+      return prev.filter((_, i) => i !== indice);
+    });
+    setGaleriaNovaArquivos(prev => prev.filter((_, i) => i !== indice));
+  };
+
+  // Remove uma foto que já estava salva na galeria (só existe em modo
+  // edição). Exclui direto no servidor, já que a foto já foi persistida.
+  const handleRemoverGaleriaExistente = async (imagem) => {
+    if (!modoEdicao) return;
+    if (!window.confirm('Remover esta foto da galeria?')) return;
+
+    setRemovendoGaleriaId(imagem.id);
+    try {
+      await api.delete(`/projetos/${campanhaParaEditar.id}/imagens/${imagem.id}`);
+      setGaleriaExistente(prev => prev.filter(img => img.id !== imagem.id));
+    } catch (err) {
+      console.error('Erro ao remover foto da galeria:', err);
+      setError('Erro ao remover a foto. Tente novamente.');
+    } finally {
+      setRemovendoGaleriaId(null);
+    }
+  };
+
+  // Envia as fotos novas da galeria pro projeto já criado/atualizado.
+  // Assim como a capa, não bloqueia o fluxo principal se falhar.
+  const enviarGaleriaSePresente = async (projetoId) => {
+    if (galeriaNovaArquivos.length === 0) return;
+    try {
+      const formDataGaleria = new FormData();
+      galeriaNovaArquivos.forEach(arquivo => formDataGaleria.append('imagens', arquivo));
+      await api.uploadFile(`/projetos/${projetoId}/imagens`, formDataGaleria);
+      galeriaNovaPreviews.forEach(url => URL.revokeObjectURL(url));
+      setGaleriaNovaArquivos([]);
+      setGaleriaNovaPreviews([]);
+    } catch (err) {
+      console.error('Erro ao enviar fotos da galeria:', err);
+      setError('Campanha salva, mas houve um erro ao enviar as fotos da galeria. Tente novamente na edição.');
+    }
+  };
+
+  // Envia a imagem selecionada pro projeto já criado/atualizado.
+  // Não bloqueia o fluxo principal se falhar - a campanha em si já foi
+  // salva com sucesso, só a imagem que não subiu.
+  const enviarImagemSePresente = async (projetoId) => {
+    if (!imagemArquivo) return;
+    try {
+      const formDataImagem = new FormData();
+      formDataImagem.append('imagem', imagemArquivo);
+      await api.uploadFile(`/projetos/${projetoId}/imagem`, formDataImagem);
+    } catch (err) {
+      console.error('Erro ao enviar imagem da campanha:', err);
+      setError('Campanha salva, mas houve um erro ao enviar a imagem. Tente enviar novamente na edição.');
+    }
+  };
+
   const handleEstadoChange = (e) => {
     const { value } = e.target;
     setEstadoSelecionado(value);
@@ -195,6 +324,8 @@ const CadastrarCampanha = ({
         }
 
         setSuccess('Campanha atualizada com sucesso!');
+        await enviarImagemSePresente(campanhaParaEditar.id);
+        await enviarGaleriaSePresente(campanhaParaEditar.id);
 
         setTimeout(() => {
           if (onCampanhaUpdated) onCampanhaUpdated();
@@ -236,7 +367,10 @@ const CadastrarCampanha = ({
         });
       }
 
-      setSuccess('Campanha criada com sucesso!');
+      setSuccess('Campanha criada com sucesso! Ela ficará visível ao público após aprovação de um administrador.');
+      await enviarImagemSePresente(projetoId);
+      await enviarGaleriaSePresente(projetoId);
+
       setFormData({
         titulo: '',
         descricao: '',
@@ -251,6 +385,11 @@ const CadastrarCampanha = ({
         regras: '',
         observacoes: ''
       });
+      setImagemArquivo(null);
+      setImagemPreview(null);
+      setGaleriaExistente([]);
+      setGaleriaNovaArquivos([]);
+      setGaleriaNovaPreviews([]);
       setExpandeForm(false);
 
       setTimeout(() => {
@@ -275,7 +414,7 @@ const CadastrarCampanha = ({
   return (
     <div className="cadastrar-campanha-container">
       <div className="cadastrar-header">
-        <h2>{modoEdicao ? '✏️ Editar Campanha' : '📢 Cadastre sua Campanha'}</h2>
+        <h2>{modoEdicao ? 'Editar Campanha' : 'Cadastre sua Campanha'}</h2>
         <p>{modoEdicao ? 'Atualize as informações da sua campanha' : 'Compartilhe sua iniciativa e engaje a comunidade'}</p>
       </div>
 
@@ -320,6 +459,85 @@ const CadastrarCampanha = ({
                 rows="4"
                 required
               />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="imagem">Imagem de Capa (opcional)</label>
+              {imagemPreview && (
+                <img
+                  src={imagemPreview}
+                  alt="Prévia da imagem"
+                  style={{
+                    width: '100%',
+                    maxHeight: '200px',
+                    objectFit: 'cover',
+                    borderRadius: '8px',
+                    marginBottom: '10px'
+                  }}
+                />
+              )}
+              <input
+                type="file"
+                id="imagem"
+                name="imagem"
+                accept="image/jpeg,image/png,image/webp"
+                onChange={handleImagemChange}
+              />
+              <small style={{ color: '#888', display: 'block', marginTop: '4px' }}>
+                Formatos aceitos: JPG, PNG ou WEBP. Tamanho máximo: 5MB.
+              </small>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="galeria">
+                Galeria de Fotos (opcional) — até {MAX_FOTOS_GALERIA} fotos, aparecem na página da campanha
+              </label>
+
+              {(galeriaExistente.length > 0 || galeriaNovaPreviews.length > 0) && (
+                <div className="galeria-preview-grid">
+                  {galeriaExistente.map((imagem) => (
+                    <div key={`existente-${imagem.id}`} className="galeria-preview-item">
+                      <img src={imagem.caminho} alt="Foto da galeria" />
+                      <button
+                        type="button"
+                        className="galeria-preview-remover"
+                        onClick={() => handleRemoverGaleriaExistente(imagem)}
+                        disabled={removendoGaleriaId === imagem.id}
+                        title="Remover foto"
+                      >
+                        {removendoGaleriaId === imagem.id ? '...' : '×'}
+                      </button>
+                    </div>
+                  ))}
+                  {galeriaNovaPreviews.map((url, indice) => (
+                    <div key={`nova-${url}`} className="galeria-preview-item galeria-preview-nova">
+                      <img src={url} alt="Nova foto da galeria" />
+                      <button
+                        type="button"
+                        className="galeria-preview-remover"
+                        onClick={() => handleRemoverGaleriaNova(indice)}
+                        title="Remover foto"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <input
+                type="file"
+                id="galeria"
+                name="galeria"
+                accept="image/jpeg,image/png,image/webp"
+                multiple
+                onChange={handleGaleriaChange}
+                disabled={galeriaExistente.length + galeriaNovaArquivos.length >= MAX_FOTOS_GALERIA}
+              />
+              <small style={{ color: '#888', display: 'block', marginTop: '4px' }}>
+                Você pode selecionar várias fotos de uma vez. Restam{' '}
+                {Math.max(0, MAX_FOTOS_GALERIA - galeriaExistente.length - galeriaNovaArquivos.length)} vaga(s).
+              </small>
             </div>
 
             <div className="form-row">

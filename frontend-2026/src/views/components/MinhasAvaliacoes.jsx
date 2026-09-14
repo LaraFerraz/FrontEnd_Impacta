@@ -128,7 +128,7 @@ const MinhasAvaliacoes = ({ usuarioId }) => {
                   disabled={excluindoId === avaliacao.id}
                   className="btn-excluir-card"
                 >
-                  {excluindoId === avaliacao.id ? 'Excluindo...' : '🗑️ Excluir'}
+                  {excluindoId === avaliacao.id ? 'Excluindo...' : 'Excluir'}
                 </button>
               </div>
             </div>
