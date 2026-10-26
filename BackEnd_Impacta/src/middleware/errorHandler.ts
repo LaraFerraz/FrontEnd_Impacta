@@ -34,8 +34,6 @@ const handleSequelizeValidationError = (error: SequelizeValidationError, res: Re
 
 const handleSequelizeUniqueConstraintError = (error: UniqueConstraintError, res: Response): Response => {
   const field = error.fields ? Object.keys(error.fields)[0] : 'campo';
-  // Prefere a mensagem customizada definida no model (ex: "Email já está em
-  // uso") em vez de um texto genérico — é o que aparece pro usuário.
   const mensagemEspecifica = error.errors?.[0]?.message || `${field} já está registrado no sistema`;
 
   return respond(res, 409, {
@@ -121,3 +119,5 @@ export const errorHandler = (
     errors: [{ message: isProduction ? 'Algo deu errado' : message }]
   });
 };
+
+console.log('>>> errorHandler.ts terminou de carregar, tipo:', typeof errorHandler);

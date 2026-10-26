@@ -2,7 +2,6 @@ import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
 import multer, { FileFilterCallback } from 'multer';
-import { Request } from 'express';
 import { ValidationError } from '../utils/errors';
 
 /**
@@ -36,7 +35,12 @@ const criarStorage = (subpasta: string): multer.StorageEngine => {
   });
 };
 
-const filtroDeImagem = (_req: Request, file: Express.Multer.File, cb: FileFilterCallback): void => {
+// Tipamos o request como `Express.Request` (namespace global, o mesmo que
+// o multer usa internamente) em vez de importar `Request` de 'express'.
+// Isso evita o erro de "dois tipos Request incompatíveis" quando o
+// gerenciador de pacotes instala uma cópia duplicada de @types/express
+// dentro do node_modules do backend (comum em monorepos com workspaces).
+const filtroDeImagem = (_req: Express.Request, file: Express.Multer.File, cb: FileFilterCallback): void => {
   const extensao = path.extname(file.originalname).toLowerCase();
   const extensaoValida = EXTENSOES_PERMITIDAS.includes(extensao);
   const mimeValido = MIME_TYPES_PERMITIDOS.includes(file.mimetype);

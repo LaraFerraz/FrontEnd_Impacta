@@ -105,7 +105,8 @@ export const createApp = (): Express => {
   // Tratamento global de erros (deve ser o último middleware registrado)
   // ===========================================================================
 
-  app.use(errorHandler);
+  console.log('DEBUG errorHandler:', typeof errorHandler, errorHandler);
+app.use(errorHandler);
 
   return app;
 };

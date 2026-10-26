@@ -54,6 +54,20 @@ export const uploadFoto = async (req: Request, res: Response, next: NextFunction
   }
 };
 
+/**
+ * PATCH /api/users/:id/tipo — exclusiva de admin (ver middleware ehAdmin na rota).
+ * Corpo: { tipo_usuario_id: number }
+ */
+export const updateTipo = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  try {
+    const idUsuarioLogado = Number(req.usuario?.id);
+    const usuario = await usuarioService.updateTipoUsuario(String(req.params.id), req.body?.tipo_usuario_id, idUsuarioLogado);
+    res.json({ message: 'Tipo de usuário atualizado com sucesso', data: usuario });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const remove = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     await usuarioService.deleteUsuario(String(req.params.id));

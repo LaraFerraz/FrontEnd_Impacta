@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { Usuario, Cidade, TipoUsuario } from '../models';
-import { NotFoundError } from '../utils/errors';
+import { NotFoundError, ValidationError } from '../utils/errors';
 import { extractPagination, buildPaginationMeta, PaginationMeta } from '../utils/pagination';
 import { caminhoPublico, removerArquivoAntigo } from '../middleware/uploadMiddleware';
 
@@ -85,6 +85,48 @@ export const atualizarFotoPerfil = async (id: string, nomeArquivo: string): Prom
 
   removerArquivoAntigo(usuario.foto);
   usuario.foto = caminhoPublico('perfis', nomeArquivo);
+  await usuario.save();
+
+  return getUsuarioPerfilCompleto(id);
+};
+
+/**
+ * Altera o tipo (admin/cliente) de um usuário. Rota exclusiva de admin
+ * (checagem feita em userRoutes.ts pelo middleware ehAdmin) — é o único
+ * caminho funcional para promover alguém a admin dentro da aplicação,
+ * já que o cadastro público sempre cria tipo_usuario_id = 2 (Cliente).
+ *
+ * Regra de negócio: um admin não pode remover o próprio privilégio de
+ * admin (evita o cenário de o último admin se rebaixar e ninguém mais
+ * conseguir gerenciar tipos de usuário).
+ */
+export const updateTipoUsuario = async (
+  id: string,
+  tipoUsuarioId: unknown,
+  idUsuarioLogado: number
+): Promise<Usuario> => {
+  const tipoId = Number(tipoUsuarioId);
+
+  if (!tipoUsuarioId || Number.isNaN(tipoId)) {
+    throw new ValidationError([{ field: 'tipo_usuario_id', message: 'O campo tipo_usuario_id é obrigatório e deve ser numérico' }]);
+  }
+
+  const tipo = await TipoUsuario.findByPk(tipoId);
+  if (!tipo) {
+    throw new ValidationError([{ field: 'tipo_usuario_id', message: 'Tipo de usuário inexistente' }]);
+  }
+
+  const usuario = await Usuario.findByPk(id);
+  if (!usuario) {
+    throw new NotFoundError('Usuário não encontrado');
+  }
+
+  const ADMIN_TIPO_ID = 1;
+  if (Number(id) === idUsuarioLogado && usuario.tipo_usuario_id === ADMIN_TIPO_ID && tipoId !== ADMIN_TIPO_ID) {
+    throw new ValidationError([{ field: 'tipo_usuario_id', message: 'Você não pode remover seu próprio privilégio de administrador' }]);
+  }
+
+  usuario.tipo_usuario_id = tipoId;
   await usuario.save();
 
   return getUsuarioPerfilCompleto(id);
