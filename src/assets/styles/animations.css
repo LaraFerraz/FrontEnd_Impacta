@@ -1,0 +1,158 @@
+/* ============================================
+   ANIMAÇÕES GLOBAIS - UX Focada
+   ============================================ */
+
+/* Keyframes para Transições Suaves */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Animação para underline em links */
+@keyframes underlineExpand {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Animação de pulso para feedback visual */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 195, 0, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 195, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 195, 0, 0);
+  }
+}
+
+/* Animação de glow para elementos em foco */
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(255, 195, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 195, 0, 0.6);
+  }
+}
+
+/* Animação de bounce leve para elementos clicáveis */
+@keyframes softBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* Rotação para loading/spinners */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Animação de shimmer para skeleton loading */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+/* ============================================
+   CLASSES REUTILIZÁVEIS
+   ============================================ */
+
+/* Entrada suave para componentes */
+.fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.slide-in-up {
+  animation: slideInUp 0.6s ease-out forwards;
+}
+
+.slide-in-down {
+  animation: slideInDown 0.6s ease-out forwards;
+}
+
+.scale-in {
+  animation: scaleIn 0.5s ease-out forwards;
+}
+
+/* Transição padrão para elementos interativos */
+.interactive-element {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+/* Estilos para elementos NON-clicáveis (sem movimento) */
+.non-interactive {
+  /* Sem transições de transform */
+  transition: color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Feedback visual sutil para hover sem movimento */
+.hover-subtle {
+  transition: color 0.3s ease, text-shadow 0.3s ease, box-shadow 0.3s ease;
+}

@@ -1,0 +1,158 @@
+/* CampanhaCard Styles */
+.campanha-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-left: 4px solid #4CAF50;
+}
+
+.campanha-card:hover {
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-4px);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.campanha-card .titulo {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+  flex: 1;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.status-planejamento {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.status-badge.status-em-andamento {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge.status-concluída {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.status-badge.status-cancelada {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.campanha-card .descricao {
+  color: #555;
+  font-size: 14px;
+  margin: 10px 0;
+  flex-grow: 1;
+  line-height: 1.5;
+}
+
+.card-meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin: 15px 0;
+  padding: 12px 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+}
+
+.meta-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+}
+
+.meta-item .label {
+  font-weight: 600;
+  color: #666;
+}
+
+.meta-item .value {
+  color: #2c3e50;
+}
+
+.card-dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 10px 0;
+  font-size: 12px;
+}
+
+.date-item {
+  display: flex;
+  align-items: center;
+  color: #888;
+}
+
+.date-item small {
+  display: block;
+}
+
+.meta-participantes {
+  background-color: #f5f5f5;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin: 10px 0;
+  font-size: 12px;
+  color: #666;
+}
+
+.btn-detalhes {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  transition: background-color 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-detalhes:hover {
+  background-color: #45a049;
+}
+
+@media (max-width: 768px) {
+  .campanha-card {
+    padding: 15px;
+  }
+
+  .campanha-card .titulo {
+    font-size: 16px;
+  }
+
+  .card-dates {
+    grid-template-columns: 1fr;
+  }
+}
