@@ -1,202 +1,115 @@
-# 🌟 Impact - Plataforma de Voluntariado
+# Impacta
 
-Uma plataforma web moderna desenvolvida em React para conectar pessoas interessadas em trabalho voluntário e serviços comunitários.
+Plataforma de campanhas e participação social. Projeto containerizado com Docker (Frontend React, Backend Node/Express, MySQL e Nginx como proxy reverso com HTTPS).
 
-## 🎨 Paleta de Cores
+## Pré-requisitos
 
-- **Amarelo Solar**: `#FFC300`
-- **Laranja Vibrante**: `#FF7A00`  
-- **Branco**: `#FFFFFF`
-- **Cinza Claro**: `#F7F7F7`
+Antes de rodar o projeto, instale:
 
-## 📁 Estrutura de Pastas (MVC)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) (e deixe ele aberto/rodando)
+- [mkcert](https://github.com/FiloSottile/mkcert) (para gerar o certificado HTTPS local)
 
-```
-src/
-├── models/                  # Modelos de dados (Model)
-│   └── (modelos futuros)
-├── views/                   # Interface do usuário (View)
-│   ├── components/          # Componentes reutilizáveis
-│   ├── layouts/             # Layouts (Header, Footer)
-│   │   ├── Header.js
-│   │   ├── Header.css
-│   │   ├── Footer.js
-│   │   └── Footer.css
-│   └── pages/               # Páginas da aplicação
-│       ├── Home.js
-│       ├── Home.css
-│       ├── Login.js
-│       ├── Login.css
-│       ├── Cadastro.js
-│       └── Cadastro.css
-├── controllers/             # Lógica de controle (Controller)
-│   ├── contexts/            # Contextos React (Estado Global)
-│   │   ├── AuthContext.js
-│   │   └── index.js
-│   ├── hooks/               # Custom hooks (Lógica Reutilizável)
-│   │   ├── useFetch.js
-│   │   ├── useForm.js
-│   │   └── index.js
-│   ├── services/            # Serviços de API
-│   │   ├── api.js
-│   │   ├── authService.js
-│   │   ├── userService.js
-│   │   └── index.js
-│   └── utils/               # Funções utilitárias
-│       ├── validation.js
-│       └── formatters.js
-├── routes/                  # Configuração de rotas
-│   └── AppRoutes.js
-├── config/                  # Configurações da aplicação
-│   └── api.config.js
-├── assets/                  # Recursos estáticos
-│   └── styles/              # Estilos globais
-│       ├── colors.css
-│       ├── App.css
-│       └── index.css
-├── App.js                   # Componente principal
-└── index.js                 # Ponto de entrada
+No Windows, instale o mkcert via PowerShell (como administrador):
+
+```powershell
+winget install FiloSottile.mkcert
 ```
 
-## 🚀 Funcionalidades
+Depois **feche e abra o PowerShell novamente** e rode:
 
-### ✅ Implementadas
-- ✅ Página inicial com apresentação dos serviços
-- ✅ Sistema de cadastro de usuários
-- ✅ Sistema de login
-- ✅ Navegação responsiva
-- ✅ Design moderno e acessível
-- ✅ Validação de formulários
-
-### 🔄 Em Desenvolvimento
-- 🔄 Página de serviços detalhada
-- 🔄 Página sobre
-- 🔄 Dashboard do usuário
-- 🔄 Sistema de projetos
-- 🔄 Integração com backend
-
-## 🛠️ Tecnologias Utilizadas
-
-- **React 19.2.4**
-- **React Router DOM** - Navegação entre páginas
-- **CSS3** - Estilização com variáveis CSS customizadas
-- **JavaScript ES6+**
-
-## 📦 Instalação e Execução
-
-### Pré-requisitos
-- Node.js (versão 14 ou superior)
-- npm ou yarn
-
-### Passos para execução
-
-1. **Clone o repositório**
-   ```bash
-   git clone [url-do-repositorio]
-   cd backend-2026
-   ```
-
-2. **Instale as dependências**
-   ```bash
-   npm install
-   ```
-
-3. **Execute o projeto**
-   ```bash
-   npm start
-   ```
-
-4. **Acesse o aplicativo**
-   - Abra [http://localhost:3000](http://localhost:3000) no seu navegador
-
-## 📋 Scripts Disponíveis
-
-- `npm start` - Executa o app em modo de desenvolvimento
-- `npm test` - Executa os testes
-- `npm run build` - Cria a build de produção
-- `npm run eject` - Remove as abstrações do Create React App (irreversível)
-
-## 🗂️ Estrutura do Projeto
-
-```
-src/
-├── components/          # Componentes reutilizáveis
-│   ├── Header.js       # Cabeçalho/Navegação
-│   ├── Header.css
-│   ├── Footer.js       # Rodapé
-│   └── Footer.css
-├── pages/              # Páginas principais
-│   ├── Home.js         # Página inicial
-│   ├── Home.css
-│   ├── Login.js        # Página de login
-│   ├── Login.css
-│   ├── Cadastro.js     # Página de cadastro
-│   └── Cadastro.css
-├── styles/             # Estilos globais
-│   └── colors.css      # Variáveis de cores
-├── App.js              # Componente principal
-├── App.css             # Estilos gerais
-└── index.js            # Ponto de entrada
+```powershell
+mkcert -install
 ```
 
-## 🎯 Próximos Passos
+## Configuração inicial (só na primeira vez)
 
-1. **Integração Backend**
-   - Configurar APIs para autenticação
-   - Sistema de gerenciamento de usuários
-   - Base de dados para projetos
+### 1. Clonar o repositório
 
-2. **Funcionalidades Avançadas**
-   - Sistema de notificações
-   - Chat entre voluntários
-   - Sistema de avaliações
-   - Geolocalização de projetos
+```powershell
+git clone <url-do-repositorio>
+cd Impacta
+```
 
-3. **Otimizações**
-   - PWA (Progressive Web App)
-   - Lazy loading de componentes
-   - Otimização de performance
+### 2. Criar o arquivo `.env`
 
-## 🤝 Como Contribuir
+Copie o arquivo de exemplo:
 
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
-3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
-4. Push para a branch (`git push origin feature/AmazingFeature`)
-5. Abra um Pull Request
+```powershell
+copy .env.example .env
+```
 
-## 📝 Licença
+O `.env` já vem com valores padrão prontos para rodar localmente — não precisa alterar nada para desenvolvimento.
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+### 3. Gerar o certificado HTTPS local
 
-## 📞 Contato
+```powershell
+mkdir nginx\certs
+cd nginx\certs
+mkcert -key-file key.pem -cert-file cert.pem localhost 127.0.0.1
+cd ..\..
+```
 
-Projeto desenvolvido para conectar e fortalecer comunidades através do voluntariado.
+Isso cria os arquivos `nginx/certs/cert.pem` e `nginx/certs/key.pem`, necessários para o Nginx servir HTTPS.
 
----
+> Esses arquivos **não vão para o Git** (estão no `.gitignore`). Cada pessoa que clonar o projeto precisa gerar o seu próprio certificado seguindo este passo.
 
-**Desenvolvido com ❤️ para transformar comunidades**
+## Rodando o projeto
 
-### Code Splitting
+Na raiz do projeto, rode:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```powershell
+docker-compose up --build
+```
 
-### Analyzing the Bundle Size
+Aguarde os containers subirem (MySQL, Backend, Frontend e Nginx). Quando aparecer `webpack compiled successfully` no log do frontend, o projeto está pronto.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Acesse no navegador:
 
-### Making a Progressive Web App
+```
+https://localhost
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+> No primeiro acesso, o navegador pode mostrar um aviso de certificado. Isso é esperado (é um certificado local). Clique em "Avançado" → "Continuar para localhost".
 
-### Advanced Configuration
+## Parando o projeto
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```powershell
+docker-compose down
+```
 
-### Deployment
+## Rodando novamente (depois da primeira vez)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Não precisa repetir a configuração inicial. Basta:
 
-### `npm run build` fails to minify
+```powershell
+docker-compose up
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Problemas comuns
+
+**Erro de porta 80/443 em uso:**
+Feche o XAMPP, Skype ou qualquer outro programa que possa estar usando essas portas.
+
+**Alterações no `.env` do frontend não aparecem:**
+O React precisa recompilar para ler o `.env`. Rode:
+```powershell
+docker-compose build --no-cache frontend
+docker-compose up
+```
+
+**Erro de cache corrompido no build:**
+```powershell
+docker builder prune -f
+docker-compose up --build
+```
+
+## Estrutura do projeto
+
+```
+Impacta/
+├── BackEnd_Impacta/    # API Node.js + Express + Sequelize
+├── frontend-2026/      # Aplicação React
+├── nginx/               # Configuração do proxy reverso e certificados HTTPS
+├── docker-compose.yml
+└── .env.example
+```

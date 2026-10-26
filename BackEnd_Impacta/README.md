@@ -1,0 +1,113 @@
+# Impacta Backend — TypeScript
+
+Reescrita completa do backend do Impacta em TypeScript, migrando da estrutura
+original em JavaScript (Express + Sequelize) para uma arquitetura em camadas
+**Route → Controller → Service → Model**, com tipagem estrita habilitada
+(`strict: true`, sem `any` implícito), conforme RNF06.
+
+## Como rodar
+
+```bash
+npm install
+cp .env.example .env   # preencha com suas credenciais reais
+npm run dev             # desenvolvimento (ts-node + nodemon)
+npm run build            # compila para dist/
+npm start                 # produção (roda o build compilado)
+npm test                   # testes (Jest + ts-jest)
+npm run lint                # ESLint
+npm run typecheck            # tsc --noEmit
+```
+
+## Arquitetura
+
+```
+src/
+  config/       # variáveis de ambiente e conexão Sequelize
+  models/       # entidades Sequelize tipadas (InferAttributes/InferCreationAttributes)
+  types/        # DTOs e augmentação do Express (req.usuario)
+  validators/   # validação de entrada (cadastro, login, atualização)
+  utils/        # erros customizados, paginação, helpers de CRUD genérico
+  services/     # regra de negócio, isolada de HTTP — testável sem supertest
+  controllers/  # tradução HTTP <-> Service
+  routes/       # definição de endpoints + middlewares
+  app.ts        # montagem do Express (CORS, rotas, error handler)
+  index.ts      # bootstrap (conexão com banco + listen)
+```
+
+Entidades de referência simples (`Status_campanha`, `Status_participacao`,
+`Status_servico`) usam uma **factory genérica**
+(`utils/simpleLookupFactory.ts` + `utils/simpleLookupController.ts`) em vez de
+repetir a mesma lógica de CRUD três vezes.
+
+## O que foi corrigido em relação ao projeto original
+
+1. **`JWT_SECRET` sem fallback hardcoded.** O projeto original tinha um
+   segredo fixo duplicado em `authRoutes.js` e `authMiddleware.js`, usado como
+   fallback em desenvolvimento. Agora a aplicação falha explicitamente
+   (fail-fast) se a variável de ambiente não estiver definida, em qualquer
+   ambiente.
+2. **Autorização por dono do recurso centralizada.** `autorizarProprio` e
+   `autorizarProprioNoBody` (em `authMiddleware.ts`) substituem a checagem
+   manual duplicada em várias rotas (perfil, participações, favoritos).
+3. **Paginação com limite máximo.** `utils/pagination.ts` trava `limit` em
+   100, evitando que `?limit=999999` force uma consulta pesada.
+4. **RF07 implementado de fato.** A documentação do projeto e os diagramas de
+   atividade/sequência descrevem que não deve ser possível registrar
+   participação em campanha encerrada, e que a existência da campanha deve
+   ser validada — mas o `participacoesRoutes.js` original nunca implementava
+   essa checagem. Agora isso é uma regra de negócio explícita em
+   `participacaoService.ts`, com um `BusinessRuleError` (422) dedicado.
+5. **Bug crítico: `status_id` da campanha ativa estava errado.** Tanto o
+   código JS original quanto a primeira versão desta migração tinham
+   `STATUS_CAMPANHA_ATIVA` hardcoded como `1`. O dump real do banco mostrou
+   que `Status_campanha` é `1 = Planejamento, 2 = Em Andamento, 3 =
+   Concluida, 4 = Cancelada` — ou seja, o id correto da campanha ativa é
+   **2**, não 1. Corrigido e centralizado em
+   `src/utils/businessConstants.ts` (evita esse "número mágico" espalhado em
+   3 arquivos diferentes). Validado com teste unitário e também
+   end-to-end contra um MySQL real (ver seção de testes abaixo).
+6. **CRUD para os três `Status_*`.** Não existiam rotas para gerenciar
+   `Status_campanha`, `Status_participacao` e `Status_servico` no projeto
+   original (só podiam ser alterados direto no banco). Adicionadas por
+   consistência com as demais entidades de referência.
+7. **Consistência de autenticação em `Info_campanha`.** Rotas de escrita
+   passaram a exigir `autenticar`, alinhando com o padrão usado em todas as
+   outras entidades.
+8. **`ts-node` não carregava a augmentação de tipos do Express
+   (`req.usuario`).** `tsc --noEmit`/`tsc -p` passavam limpos porque
+   verificam todo o `include` do `tsconfig`, mas `ts-node` (usado em `npm run
+   dev`) só compila arquivos alcançados via `require`, então nunca
+   encontrava `src/types/express.d.ts`. Isso quebraria `npm run dev` para
+   qualquer pessoa que fosse rodar o projeto. Corrigido com `"ts-node": {
+   "files": true }` no `tsconfig.json`. Só foi detectado rodando a aplicação
+   de verdade, não apenas checando tipos.
+
+## Scripts de banco de dados
+
+Substituem os antigos `scripts/populate-db.js`/`reset-db.sql`, que estavam
+desatualizados (criavam só 6 das 16 tabelas, com nomes de coluna que não
+existem nos models atuais).
+
+```bash
+npm run db:reset      # recria o schema inteiro a partir dos models Sequelize
+npm run db:populate   # popula com os dados reais do dump (27 estados, 72
+                       # cidades, 12 categorias, 10 projetos de exemplo etc)
+```
+
+O seed usa os mesmos dados de um dump real fornecido, mas gera hashes bcrypt
+válidos para os usuários de teste (o dump tinha o placeholder inválido
+`$2b$10$YourHashedPasswordHere`, que não é um hash utilizável). Senha padrão
+dos usuários de teste: `Impacta@123`.
+
+**Estes dois scripts, o build, o lint e os 17 testes automatizados foram
+verificados de ponta a ponta contra uma instância MySQL/MariaDB real**
+(schema criado, dados populados, login testado, e a regra RF07 confirmada
+bloqueando/permitindo participação corretamente conforme o `status_id` real
+de cada campanha).
+
+
+## Segurança
+
+- `.env` **nunca** deve ser commitado (já está no `.gitignore`). Se você
+  recebeu um `.env` com credenciais reais em algum backup/zip, rotacione o
+  `JWT_SECRET` e a senha do banco antes de reutilizá-las.
